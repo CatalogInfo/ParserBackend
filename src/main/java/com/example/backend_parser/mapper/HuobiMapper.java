@@ -33,8 +33,11 @@ public class HuobiMapper extends Mapper {
             String symbol = String.valueOf(symbolObject.get("dn"));
             String baseAsset = String.valueOf(symbolObject.get("bcdn"));
             String quoteAsset = String.valueOf(symbolObject.get("qcdn"));
+            String state = String.valueOf(symbolObject.get("state"));
 
-            baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+            if(resolvedQuoteAssets.contains(quoteAsset.toUpperCase()) && state.equals("online")) {
+                baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+            }
         }
 
         return baseQuoteList;

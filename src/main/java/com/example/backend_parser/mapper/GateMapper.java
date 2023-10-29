@@ -22,7 +22,9 @@ public class GateMapper extends Mapper {
             String baseAsset = String.valueOf(symbolObject.get("base"));
             String quoteAsset = String.valueOf(symbolObject.get("quote"));
 
-            baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+            if(resolvedQuoteAssets.contains(quoteAsset.toUpperCase())) {
+                baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+            }
         }
 
         return baseQuoteList;

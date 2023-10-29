@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mapper {
+    List<String> resolvedQuoteAssets = new ArrayList<>();
+
     public Token mapResponseToToken(String response, String symbol) {
         BidsAsks orderBook = mapOrderBook(response);
         BidAsk bidAsk = PriceCalculator.calculatePriceForLiquidity(2000, orderBook);
@@ -37,7 +39,9 @@ public class Mapper {
             String baseAsset = String.valueOf(symbolObject.get("baseAsset"));
             String quoteAsset = String.valueOf(symbolObject.get("quoteAsset"));
 
-            baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+            if(resolvedQuoteAssets.contains(quoteAsset.toUpperCase())) {
+                baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+            }
         }
 
         return baseQuoteList;

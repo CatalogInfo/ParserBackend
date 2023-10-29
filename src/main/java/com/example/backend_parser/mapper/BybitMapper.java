@@ -35,7 +35,9 @@ public class BybitMapper extends Mapper {
             String baseAsset = String.valueOf(symbolObject.get("baseCoin"));
             String quoteAsset = String.valueOf(symbolObject.get("quoteCoin"));
 
-            baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+            if(resolvedQuoteAssets.contains(quoteAsset.toUpperCase())) {
+                baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+            }
         }
 
         return baseQuoteList;
