@@ -3,6 +3,7 @@ package com.example.backend_parser.controller;
 import com.example.backend_parser.mapper.BybitMapper;
 import com.example.backend_parser.mapper.Mapper;
 import com.example.backend_parser.models.BaseQuote;
+import com.example.backend_parser.service.Service;
 import com.example.backend_parser.service.ServiceEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bybit")
-@CrossOrigin(origins = "http://localhost:5174")
-public class BybitEndpoint {
-
+public class BybitEndpoint extends BaseEndpoint {
     static final String ORDER_BOOK_URL = "https://api.bybit.com/v5/market/orderbook?category=spot&symbol=";
     static final String TRADING_PAIRS_URL = "https://api.bybit.com/v5/market/instruments-info?category=spot";
     static final Mapper MAPPER = new BybitMapper();
     static final String ADDITIONAL_URL_PARAMS = "&limit=50";
+    static final int DELAY_TIME = 100;
 
     ServiceEntity bybitService = new ServiceEntity(ORDER_BOOK_URL, TRADING_PAIRS_URL, MAPPER, ADDITIONAL_URL_PARAMS);
 
@@ -26,10 +26,13 @@ public class BybitEndpoint {
         return bybitService.parseTradingPairs();
     }
 
-    @PostMapping("/order_books")
-    public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
-
-        return bybitService.parseOrderBooks(symbols, 100);
+    @Override
+    protected Service getService() {
+        return bybitService;
     }
 
+    @Override
+    protected int getDelayTime() {
+        return DELAY_TIME;
+    }
 }

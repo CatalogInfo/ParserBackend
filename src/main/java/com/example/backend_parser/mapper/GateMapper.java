@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GateMapper extends Mapper {
-
     @Override
     public List<BaseQuote> mapBaseQuote(String response) {
         JSONArray symbols = new JSONArray(response);

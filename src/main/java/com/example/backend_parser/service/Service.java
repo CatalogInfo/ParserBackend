@@ -41,6 +41,7 @@ public abstract class Service {
 
         return mapper.mapResponseToToken(response, symbol);
     }
+
     private List<Token> runParseForOrderBooks(List<String> symbols, int time) {
         List<Thread> threads = getThreads();
         List<Token> tokens = new ArrayList<>();
@@ -53,7 +54,6 @@ public abstract class Service {
 
             t.start();
             threads.add(t);
-            System.out.println("dceee");
 
             ThreadUtils.sleepOnTime(time);
         }

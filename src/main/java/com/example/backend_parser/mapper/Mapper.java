@@ -22,6 +22,7 @@ public class Mapper {
 
     protected BidsAsks mapOrderBook(String response) {
         JSONObject obj = new JSONObject(response);
+
         JSONArray bids = new JSONArray(String.valueOf(obj.get("bids")));
         JSONArray asks = new JSONArray(String.valueOf(obj.get("asks")));
 
@@ -67,6 +68,7 @@ public class Mapper {
     protected Order getOrder(JSONArray array) {
         double price = Double.parseDouble(String.valueOf(array.get(0)));
         double amount = Double.parseDouble(String.valueOf(array.get(1)));
+
         return new Order(price, amount);
     }
 }
