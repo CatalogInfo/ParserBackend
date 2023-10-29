@@ -6,10 +6,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Mapper {
-    List<String> resolvedQuoteAssets = new ArrayList<>();
+    List<String> resolvedQuoteAssets = Arrays.asList("USDT");
 
     public Token mapResponseToToken(String response, String symbol) {
         BidsAsks orderBook = mapOrderBook(response);
