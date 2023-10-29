@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/binance")
+@CrossOrigin(origins = "http://localhost:5174")
 public class BinanceEndpoint {
 
     static final String ORDER_BOOK_URL = "https://api4.binance.com/api/v3/depth?symbol=";

@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bybit")
+@CrossOrigin(origins = "http://localhost:5174")
 public class BybitEndpoint {
 
     static final String ORDER_BOOK_URL = "https://api.bybit.com/v5/market/orderbook?category=spot&symbol=";

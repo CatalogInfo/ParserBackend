@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/gate")
+@CrossOrigin(origins = "http://localhost:5174")
 public class GateEndpoint {
 
     static final String ORDER_BOOK_URL = "https://api.gateio.ws/api/v4/spot/order_book?currency_pair=";

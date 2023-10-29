@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/okx")
+@CrossOrigin(origins = "http://localhost:5174")
 public class OkxEndpoint {
 
     static final String ORDER_BOOK_URL = "https://www.okx.com/api/v5/market/books?instId=";

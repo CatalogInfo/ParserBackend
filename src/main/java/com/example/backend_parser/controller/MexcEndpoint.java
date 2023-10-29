@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/mexc")
+@CrossOrigin(origins = "http://localhost:5174")
 public class MexcEndpoint {
 
     static final String ORDER_BOOK_URL = "https://api.mexc.com/api/v3/depth?symbol=";

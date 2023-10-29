@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/huobi")
+@CrossOrigin(origins = "http://localhost:5174")
 public class HuobiEndpoint {
 
     static final String ORDER_BOOK_URL = "https://api.huobi.pro/market/depth?symbol=";

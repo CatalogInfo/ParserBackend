@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bitrue")
+@CrossOrigin(origins = "http://localhost:5174")
 public class BitrueEndpoint {
 
     static final String ORDER_BOOK_URL = "https://openapi.bitrue.com/api/v1/depth?symbol=";
