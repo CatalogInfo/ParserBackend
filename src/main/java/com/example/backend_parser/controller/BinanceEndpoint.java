@@ -16,17 +16,17 @@ public class BinanceEndpoint {
     static final String TRADING_PAIRS_URL = "https://api4.binance.com/api/v3/exchangeInfo";
     static final Mapper MAPPER = new BinanceMapper();
 
-    ServiceEntity gateService = new ServiceEntity(ORDER_BOOK_URL, TRADING_PAIRS_URL, MAPPER);
+    ServiceEntity binanceService = new ServiceEntity(ORDER_BOOK_URL, TRADING_PAIRS_URL, MAPPER);
 
     @GetMapping("/trading_pairs")
     public HttpEntity<String> getTradingPairs(){
-        return gateService.parseTradingPairs();
+        return binanceService.parseTradingPairs();
     }
 
     @PostMapping("/order_books")
     public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
 
-        return gateService.parseOrderBooks(symbols, 1000);
+        return binanceService.parseOrderBooks(symbols, 1000);
     }
 
 }

@@ -8,11 +8,13 @@ import com.example.backend_parser.models.Token;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class GateMapper extends Mapper {
+public class BybitMapper extends Mapper {
     protected BidsAsks mapOrderBook(String response) {
         JSONObject obj = new JSONObject(response);
-        JSONArray bids = new JSONArray(String.valueOf(obj.get("bids")));
-        JSONArray asks = new JSONArray(String.valueOf(obj.get("asks")));
+        JSONObject tick = new JSONObject(String.valueOf(obj.get("result")));
+
+        JSONArray bids = new JSONArray(String.valueOf(tick.get("b")));
+        JSONArray asks = new JSONArray(String.valueOf(tick.get("a")));
 
         return convertJSONArrayToBidsAsks(bids, asks);
     }

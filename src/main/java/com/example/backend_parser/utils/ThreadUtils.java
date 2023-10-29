@@ -10,15 +10,6 @@ public class ThreadUtils {
         }
     }
 
-    public static boolean areThreadsAlive(List<Thread> threads) {
-        for(Thread thread : threads) {
-            if(thread.isAlive()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static void join(Thread thread) {
         try {
             thread.join();

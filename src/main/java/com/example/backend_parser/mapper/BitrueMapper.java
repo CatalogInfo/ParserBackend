@@ -8,7 +8,7 @@ import com.example.backend_parser.models.Token;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class GateMapper extends Mapper {
+public class BitrueMapper extends Mapper {
     protected BidsAsks mapOrderBook(String response) {
         JSONObject obj = new JSONObject(response);
         JSONArray bids = new JSONArray(String.valueOf(obj.get("bids")));

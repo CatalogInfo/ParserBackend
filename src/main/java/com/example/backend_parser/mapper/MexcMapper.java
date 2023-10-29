@@ -7,8 +7,9 @@ import com.example.backend_parser.models.Order;
 import com.example.backend_parser.models.Token;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
-public class GateMapper extends Mapper {
+public class MexcMapper extends Mapper {
     protected BidsAsks mapOrderBook(String response) {
         JSONObject obj = new JSONObject(response);
         JSONArray bids = new JSONArray(String.valueOf(obj.get("bids")));
@@ -16,4 +17,5 @@ public class GateMapper extends Mapper {
 
         return convertJSONArrayToBidsAsks(bids, asks);
     }
+
 }
