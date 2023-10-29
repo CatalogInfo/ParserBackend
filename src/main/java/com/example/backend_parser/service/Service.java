@@ -1,6 +1,7 @@
 package com.example.backend_parser.service;
 
 import com.example.backend_parser.mapper.Mapper;
+import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.utils.ThreadUtils;
@@ -10,8 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Service {
-    public HttpEntity<String> parseTradingPairs() {
-        return new HttpEntity<>(RequestMaker.getRequest(getTradingPairsUrl()));
+    public HttpEntity<List<BaseQuote>> parseTradingPairs() {
+        Mapper mapper = getMapper();
+        return new HttpEntity<>(mapper.mapBaseQuote(RequestMaker.getRequest(getTradingPairsUrl())));
     }
 
     public HttpEntity<?> parseOrderBooks(List<String> symbols, int time) {

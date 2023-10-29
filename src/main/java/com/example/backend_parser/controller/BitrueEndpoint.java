@@ -1,6 +1,7 @@
 package com.example.backend_parser.controller;
 
 import com.example.backend_parser.mapper.Mapper;
+import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.service.ServiceEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class BitrueEndpoint {
     ServiceEntity bitrueService = new ServiceEntity(ORDER_BOOK_URL, TRADING_PAIRS_URL, MAPPER);
 
     @GetMapping("/trading_pairs")
-    public HttpEntity<String> getTradingPairs(){
+    public HttpEntity<List<BaseQuote>> getTradingPairs(){
         return bitrueService.parseTradingPairs();
     }
 

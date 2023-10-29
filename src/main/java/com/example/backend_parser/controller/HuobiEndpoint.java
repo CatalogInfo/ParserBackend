@@ -2,6 +2,7 @@ package com.example.backend_parser.controller;
 
 import com.example.backend_parser.mapper.HuobiMapper;
 import com.example.backend_parser.mapper.Mapper;
+import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.service.ServiceEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class HuobiEndpoint {
     ServiceEntity huobiService = new ServiceEntity(ORDER_BOOK_URL, TRADING_PAIRS_URL, MAPPER, ADDITIONAL_URL_PARAMS);
 
     @GetMapping("/trading_pairs")
-    public HttpEntity<String> getTradingPairs(){
+    public HttpEntity<List<BaseQuote>> getTradingPairs(){
         return huobiService.parseTradingPairs();
     }
 

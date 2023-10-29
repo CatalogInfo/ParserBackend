@@ -1,12 +1,12 @@
 package com.example.backend_parser.mapper;
 
 import com.example.backend_parser.calculations.PriceCalculator;
-import com.example.backend_parser.models.BidAsk;
-import com.example.backend_parser.models.BidsAsks;
-import com.example.backend_parser.models.Order;
-import com.example.backend_parser.models.Token;
+import com.example.backend_parser.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Mapper {
     public Token mapResponseToToken(String response, String symbol) {
@@ -22,6 +22,25 @@ public class Mapper {
         JSONArray asks = new JSONArray(String.valueOf(obj.get("asks")));
 
         return convertJSONArrayToBidsAsks(bids, asks);
+    }
+
+    public List<BaseQuote> mapBaseQuote(String response) {
+        JSONObject obj = new JSONObject(response);
+        JSONArray symbols = new JSONArray(String.valueOf(obj.get("symbols")));
+
+        List<BaseQuote> baseQuoteList = new ArrayList<>();
+
+        for(int i = 0; i < symbols.length(); i ++) {
+            JSONObject symbolObject = new JSONObject(String.valueOf(symbols.get(i)));
+
+            String symbol = String.valueOf(symbolObject.get("symbol"));
+            String baseAsset = String.valueOf(symbolObject.get("baseAsset"));
+            String quoteAsset = String.valueOf(symbolObject.get("quoteAsset"));
+
+            baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+        }
+
+        return baseQuoteList;
     }
     protected BidsAsks convertJSONArrayToBidsAsks(JSONArray bids, JSONArray asks) {
         BidsAsks bidsAsks = new BidsAsks();
