@@ -6,8 +6,9 @@ import com.example.backend_parser.models.BidsAsks;
 import com.example.backend_parser.models.Order;
 import com.example.backend_parser.models.Token;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
-public abstract class Mapper {
+public class Mapper {
     public Token mapResponseToToken(String response, String symbol) {
         BidsAsks orderBook = mapOrderBook(response);
         BidAsk bidAsk = PriceCalculator.calculatePriceForLiquidity(2000, orderBook);
@@ -15,8 +16,13 @@ public abstract class Mapper {
         return new Token(symbol, bidAsk.getBid(), bidAsk.getAsk());
     }
 
-    protected abstract BidsAsks mapOrderBook(String response);
+    protected BidsAsks mapOrderBook(String response) {
+        JSONObject obj = new JSONObject(response);
+        JSONArray bids = new JSONArray(String.valueOf(obj.get("bids")));
+        JSONArray asks = new JSONArray(String.valueOf(obj.get("asks")));
 
+        return convertJSONArrayToBidsAsks(bids, asks);
+    }
     protected BidsAsks convertJSONArrayToBidsAsks(JSONArray bids, JSONArray asks) {
         BidsAsks bidsAsks = new BidsAsks();
 

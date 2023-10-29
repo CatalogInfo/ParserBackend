@@ -2,7 +2,6 @@ package com.example.backend_parser.controller;
 
 import com.example.backend_parser.mapper.HuobiMapper;
 import com.example.backend_parser.mapper.Mapper;
-import com.example.backend_parser.mapper.MexcMapper;
 import com.example.backend_parser.service.ServiceEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;

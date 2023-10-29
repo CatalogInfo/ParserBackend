@@ -1,6 +1,5 @@
 package com.example.backend_parser.controller;
 
-import com.example.backend_parser.mapper.BitrueMapper;
 import com.example.backend_parser.mapper.BybitMapper;
 import com.example.backend_parser.mapper.Mapper;
 import com.example.backend_parser.service.ServiceEntity;
