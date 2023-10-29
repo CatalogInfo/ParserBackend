@@ -28,7 +28,7 @@ public class GateEndpoint {
     @PostMapping("/order_books")
     public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
 
-        return gateService.parseOrderBooks(symbols, 1000);
+        return gateService.parseOrderBooks(symbols, 20);
     }
 
 }

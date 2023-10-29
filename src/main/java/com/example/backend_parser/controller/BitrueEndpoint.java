@@ -26,7 +26,7 @@ public class BitrueEndpoint {
     @PostMapping("/order_books")
     public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
 
-        return bitrueService.parseOrderBooks(symbols, 1000);
+        return bitrueService.parseOrderBooks(symbols, 100);
     }
 
 }

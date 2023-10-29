@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/binance")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = {"http://localhost:5174", "http://localhost:5173"})
 public class BinanceEndpoint {
 
     static final String ORDER_BOOK_URL = "https://api4.binance.com/api/v3/depth?symbol=";
@@ -27,7 +27,7 @@ public class BinanceEndpoint {
     @PostMapping("/order_books")
     public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
 
-        return binanceService.parseOrderBooks(symbols, 1000);
+        return binanceService.parseOrderBooks(symbols, 100);
     }
 
 }

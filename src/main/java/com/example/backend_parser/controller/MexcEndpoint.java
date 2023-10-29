@@ -27,7 +27,7 @@ public class MexcEndpoint {
     @PostMapping("/order_books")
     public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
 
-        return mexcService.parseOrderBooks(symbols, 1000);
+        return mexcService.parseOrderBooks(symbols, 100);
     }
 
 }

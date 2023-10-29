@@ -29,7 +29,7 @@ public class HuobiEndpoint {
     @PostMapping("/order_books")
     public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
 
-        return huobiService.parseOrderBooks(symbols, 1000);
+        return huobiService.parseOrderBooks(symbols, 200);
     }
 
 }

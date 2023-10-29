@@ -29,7 +29,7 @@ public class BybitEndpoint {
     @PostMapping("/order_books")
     public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
 
-        return bybitService.parseOrderBooks(symbols, 1000);
+        return bybitService.parseOrderBooks(symbols, 100);
     }
 
 }

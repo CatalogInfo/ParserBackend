@@ -29,7 +29,7 @@ public class OkxEndpoint {
     @PostMapping("/order_books")
     public HttpEntity<?> getOrderBooks(@RequestBody List<String> symbols) {
 
-        return okxService.parseOrderBooks(symbols, 1000);
+        return okxService.parseOrderBooks(symbols, 200);
     }
 
 }
