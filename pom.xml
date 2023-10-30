@@ -46,7 +46,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-meta</artifactId>
+            <version>5.5.0</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

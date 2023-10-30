@@ -28,11 +28,13 @@ public class Telegram extends TelegramLongPollingBot {
 
     public static ArrayList<String> chatID = new ArrayList<String>() {{
         add("549368505");
+        add("639191552");
     }};
 
     public void sendMessage(String message) throws IOException, InterruptedException {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatID.get(0));
+//        sendMessage.setChatId(chatID.get(0));
+        sendMessage.setChatId(chatID.get(1));
         sendMessage.setText(message);
 
         try {
