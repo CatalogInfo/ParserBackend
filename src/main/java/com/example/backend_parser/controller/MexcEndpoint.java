@@ -15,7 +15,7 @@ public class MexcEndpoint extends BaseEndpoint {
     static final String ORDER_BOOK_URL = "https://api.mexc.com/api/v3/depth?symbol=";
     static final String TRADING_PAIRS_URL = "https://api.mexc.com/api/v3/exchangeInfo";
     static final Mapper MAPPER = new Mapper();
-    static final int DELAY_TIME = 200;
+    static final int DELAY_TIME = 100;
 
     ServiceEntity mexcService = new ServiceEntity(ORDER_BOOK_URL, TRADING_PAIRS_URL, MAPPER);
 

@@ -10,6 +10,7 @@ import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 
 public class RequestMaker {
     public static String getRequest(String url) {
@@ -20,6 +21,8 @@ public class RequestMaker {
             HttpGet httpGet = new HttpGet(url);
             HttpResponse httpResponse = httpclient.execute(httpGet);
 
+            isRequestWorked(httpResponse.getStatusLine().getStatusCode());
+            
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
@@ -47,5 +50,16 @@ public class RequestMaker {
         }
 
         return RequestUtils.readFromConnection(inputStream);
+    }
+
+    private static void isRequestWorked(int responseCode) throws Exception{
+
+        if(responseCode == 429){
+            throw new Exception("LIMIT REACHED");
+        }
+
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new Exception("NOT WORKED");
+        }
     }
 }

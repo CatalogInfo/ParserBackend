@@ -3,11 +3,11 @@ package com.example.backend_parser.mapper;
 import com.example.backend_parser.calculations.PriceCalculator;
 import com.example.backend_parser.models.*;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Mapper {
@@ -22,6 +22,10 @@ public class Mapper {
 
     protected BidsAsks mapOrderBook(String response) {
         JSONObject obj = new JSONObject(response);
+
+        if (!obj.has("bids") || !obj.has("asks")) {
+            return new BidsAsks();
+        }
 
         JSONArray bids = new JSONArray(String.valueOf(obj.get("bids")));
         JSONArray asks = new JSONArray(String.valueOf(obj.get("asks")));
