@@ -1,6 +1,6 @@
 package com.example.backend_parser.service;
 
-import com.example.backend_parser.mapper.Mapper;
+import com.example.backend_parser.mapper.base.IMapper;
 import com.example.backend_parser.models.Token;
 
 import java.util.ArrayList;
@@ -11,16 +11,16 @@ public class ServiceEntity extends Service {
     private final List<Token> tokens = new ArrayList<>();
     private final String tradingPairsUrl;
     private final String orderBookUrl;
-    private final Mapper mapper;
+    private final IMapper mapper;
     private String additionalUrlParams = "";
 
-    public ServiceEntity(String orderBookUrl, String tradingPairsUrl, Mapper mapper) {
+    public ServiceEntity(String orderBookUrl, String tradingPairsUrl, IMapper mapper) {
         this.orderBookUrl = orderBookUrl;
         this.tradingPairsUrl = tradingPairsUrl;
         this.mapper = mapper;
     }
 
-    public ServiceEntity(String orderBookUrl, String tradingPairsUrl, Mapper mapper, String additionalUrlParams) {
+    public ServiceEntity(String orderBookUrl, String tradingPairsUrl, IMapper mapper, String additionalUrlParams) {
         this.orderBookUrl = orderBookUrl;
         this.tradingPairsUrl = tradingPairsUrl;
         this.mapper = mapper;
@@ -40,7 +40,7 @@ public class ServiceEntity extends Service {
         return this.additionalUrlParams;
     }
     @Override
-    Mapper getMapper() {
+    IMapper getMapper() {
         return this.mapper;
     }
     @Override

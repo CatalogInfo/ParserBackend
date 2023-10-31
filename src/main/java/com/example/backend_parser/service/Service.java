@@ -1,6 +1,6 @@
 package com.example.backend_parser.service;
 
-import com.example.backend_parser.mapper.Mapper;
+import com.example.backend_parser.mapper.base.IMapper;
 import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.RequestMaker;
@@ -12,13 +12,13 @@ import java.util.List;
 
 public abstract class Service {
     public HttpEntity<List<BaseQuote>> parseTradingPairs() {
-        Mapper mapper = getMapper();
-        return new HttpEntity<>(mapper.mapBaseQuote(RequestMaker.getRequest(getTradingPairsUrl())));
+        IMapper mapper = getMapper();
+        return new HttpEntity<>(mapper.convertBaseQuote(RequestMaker.getRequest(getTradingPairsUrl())));
     }
 
-    public HttpEntity<?> parseOrderBooks(List<String> symbols, int time) {
+    public HttpEntity<?> parseOrderBooks(List<String> symbols, int time, int minAmount) {
         if(getThreads().isEmpty()) {
-            new Thread(() -> getTokens().addAll(runParseForOrderBooks(symbols, time))).start();
+            new Thread(() -> getTokens().addAll(runParseForOrderBooks(symbols, time, minAmount))).start();
         }
 
         if(!getTokens().isEmpty()) {
@@ -36,19 +36,19 @@ public abstract class Service {
         return RequestMaker.getRequest(getOrderBookUrl() + symbol + getAdditionalUrlParams());
     }
 
-    private Token parseOrderBookForSymbol(String symbol, Mapper mapper) {
+    private Token parseOrderBookForSymbol(String symbol, IMapper mapper, int minAmount) {
         String response = getOrderBookForSymbol(symbol);
 
-        return mapper.mapResponseToToken(response, symbol);
+        return mapper.convertResponseToToken(response, symbol, minAmount);
     }
 
-    private List<Token> runParseForOrderBooks(List<String> symbols, int time) {
+    private List<Token> runParseForOrderBooks(List<String> symbols, int time, int minAmount) {
         List<Thread> threads = getThreads();
         List<Token> tokens = new ArrayList<>();
 
         for(String symbol : symbols) {
             Thread t = new Thread(() -> {
-                Token token = parseOrderBookForSymbol(symbol, getMapper());
+                Token token = parseOrderBookForSymbol(symbol, getMapper(), minAmount);
                 tokens.add(token);
             });
 
@@ -73,5 +73,5 @@ public abstract class Service {
     abstract String getAdditionalUrlParams();
     abstract List<Thread> getThreads();
     abstract List<Token> getTokens();
-    abstract Mapper getMapper();
+    abstract IMapper getMapper();
 }
