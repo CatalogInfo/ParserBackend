@@ -6,7 +6,6 @@ public class ThreadUtils {
     public static void waitTillThreadsExecuted(List<Thread> threads) {
         for(int i = 0; i < threads.size(); i ++) {
             join(threads.get(i));
-            sleepOnTime(100);
         }
     }
 

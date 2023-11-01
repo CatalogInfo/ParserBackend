@@ -10,12 +10,13 @@ import org.springframework.http.HttpEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Service {
+public abstract class Service implements IExchangeService{
+    @Override
     public HttpEntity<List<BaseQuote>> parseTradingPairs() {
         IMapper mapper = getMapper();
         return new HttpEntity<>(mapper.convertBaseQuote(RequestMaker.getRequest(getTradingPairsUrl())));
     }
-
+    @Override
     public HttpEntity<?> parseOrderBooks(List<String> symbols, int time, int minAmount) {
         if(getThreads().isEmpty()) {
             new Thread(() -> getTokens().addAll(runParseForOrderBooks(symbols, time, minAmount))).start();
@@ -49,7 +50,10 @@ public abstract class Service {
         for(String symbol : symbols) {
             Thread t = new Thread(() -> {
                 Token token = parseOrderBookForSymbol(symbol, getMapper(), minAmount);
-                tokens.add(token);
+                synchronized (tokens) {
+                    tokens.add(token);
+                }
+
             });
 
             t.start();

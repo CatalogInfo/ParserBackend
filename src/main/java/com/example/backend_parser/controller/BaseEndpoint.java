@@ -2,6 +2,7 @@ package com.example.backend_parser.controller;
 
 
 import com.example.backend_parser.models.BaseQuote;
+import com.example.backend_parser.service.IExchangeService;
 import com.example.backend_parser.service.Service;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public abstract class BaseEndpoint {
     static final int MIN_AMOUNT = 2000;
 
     @GetMapping("/trading_pairs")
-    public HttpEntity<List<BaseQuote>> getTradingPairs(){
+    public HttpEntity<List<BaseQuote>> getTradingPairs() {
         return getService().parseTradingPairs();
     }
 
@@ -26,7 +27,7 @@ public abstract class BaseEndpoint {
         return getService().parseOrderBooks(symbols, getDelayTime(), minAmount);
     }
 
-    protected abstract Service getService();
+    protected abstract IExchangeService getService();
 
     protected abstract int getDelayTime();
 

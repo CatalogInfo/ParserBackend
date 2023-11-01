@@ -21,7 +21,7 @@ public class RequestMaker {
             HttpGet httpGet = new HttpGet(url);
             HttpResponse httpResponse = httpclient.execute(httpGet);
 
-            isRequestWorked(httpResponse.getStatusLine().getStatusCode());
+            isRequestWorked(httpResponse.getStatusLine().getStatusCode(), url);
             
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
@@ -52,13 +52,14 @@ public class RequestMaker {
         return RequestUtils.readFromConnection(inputStream);
     }
 
-    private static void isRequestWorked(int responseCode) throws Exception{
+    private static void isRequestWorked(int responseCode, String url) throws Exception {
 
         if(responseCode == 429){
             throw new Exception("LIMIT REACHED");
         }
 
         if (responseCode != HttpURLConnection.HTTP_OK) {
+            System.out.println(url);
             throw new Exception("NOT WORKED");
         }
     }

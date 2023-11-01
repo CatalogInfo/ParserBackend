@@ -2,11 +2,13 @@ package com.example.backend_parser.service;
 
 import com.example.backend_parser.mapper.base.IMapper;
 import com.example.backend_parser.models.Token;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceEntity extends Service {
+@Getter
+public class ExchangeService extends Service {
     private final List<Thread> threads = new ArrayList<>();
     private final List<Token> tokens = new ArrayList<>();
     private final String tradingPairsUrl;
@@ -14,13 +16,13 @@ public class ServiceEntity extends Service {
     private final IMapper mapper;
     private String additionalUrlParams = "";
 
-    public ServiceEntity(String orderBookUrl, String tradingPairsUrl, IMapper mapper) {
+    public ExchangeService(String orderBookUrl, String tradingPairsUrl, IMapper mapper) {
         this.orderBookUrl = orderBookUrl;
         this.tradingPairsUrl = tradingPairsUrl;
         this.mapper = mapper;
     }
 
-    public ServiceEntity(String orderBookUrl, String tradingPairsUrl, IMapper mapper, String additionalUrlParams) {
+    public ExchangeService(String orderBookUrl, String tradingPairsUrl, IMapper mapper, String additionalUrlParams) {
         this.orderBookUrl = orderBookUrl;
         this.tradingPairsUrl = tradingPairsUrl;
         this.mapper = mapper;

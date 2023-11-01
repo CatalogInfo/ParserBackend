@@ -1,7 +1,6 @@
 package com.example.backend_parser.mapper.base;
 
 import com.example.backend_parser.calculations.PriceCalculator;
-import com.example.backend_parser.mapper.base.KeysMapper;
 import com.example.backend_parser.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.backend_parser.utils.JsonUtils.getJSONArray;
 import static com.example.backend_parser.utils.JsonUtils.getJSONObject;
 import static com.example.backend_parser.utils.JsonUtils.getValue;
 
