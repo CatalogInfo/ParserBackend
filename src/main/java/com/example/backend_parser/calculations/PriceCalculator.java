@@ -30,7 +30,7 @@ public class PriceCalculator {
 
         for(Order order : orders) {
             if (amountInUsdt > liquidity) {
-                break;
+                return calculateFinalPrice(tokensAmount, amountInUsdt);
             }
             double price = order.getPrice();
             double amount = order.getAmount();
@@ -39,7 +39,7 @@ public class PriceCalculator {
             amountInUsdt = amountInUsdt + (amount * price);
         }
 
-        return calculateFinalPrice(tokensAmount, amountInUsdt);
+        return 0;
     }
     private static double calculateFinalPrice(double tokensAmount, double amountInUsdt) {
         return amountInUsdt/tokensAmount;

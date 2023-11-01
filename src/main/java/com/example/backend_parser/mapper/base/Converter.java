@@ -23,13 +23,13 @@ public class Converter extends Obtainer {
         BidsAsks bidsAsks = new BidsAsks();
 
         for(int i = 0; i < bids.length(); i ++) {
-            JSONArray orderJsonArray = new JSONArray(String.valueOf(bids.get(i)));
-            bidsAsks.addOrderToBids(getOrder(orderJsonArray));
+            JSONArray orderBids = new JSONArray(String.valueOf(bids.get(i)));
+            bidsAsks.addOrderToBids(getOrder(orderBids));
         }
 
         for(int i = 0; i < asks.length(); i ++) {
-            JSONArray orderJsonArray = new JSONArray(String.valueOf(asks.get(i)));
-            bidsAsks.addOrderToAsks(getOrder(orderJsonArray));
+            JSONArray orderAsks = new JSONArray(String.valueOf(asks.get(i)));
+            bidsAsks.addOrderToAsks(getOrder(orderAsks));
         }
 
         return bidsAsks;

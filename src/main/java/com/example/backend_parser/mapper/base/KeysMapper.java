@@ -9,8 +9,8 @@ public class KeysMapper {
     private String symbolKey = "symbol";
     private String baseKey = "baseAsset";
     private String quoteKey = "quoteAsset";
-    private String asksKey = "asks";
     private String bidsKey = "bids";
+    private String asksKey = "asks";
 
     public KeysMapper(String symbolKey, String baseKey, String quoteKey) {
         this.symbolKey = symbolKey;
@@ -18,8 +18,8 @@ public class KeysMapper {
         this.quoteKey = quoteKey;
     }
 
-    public KeysMapper(String asksKey, String bidsKey) {
-        this.asksKey = asksKey;
+    public KeysMapper(String bidsKey, String asksKey) {
         this.bidsKey = bidsKey;
+        this.asksKey = asksKey;
     }
 }

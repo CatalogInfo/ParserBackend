@@ -29,16 +29,18 @@ public class Telegram extends TelegramLongPollingBot {
     public static List<String> chatID = Arrays.asList("549368505", "639191552");
 
     public void sendMessage(String message) {
+        for(int i = 0; i < chatID.size(); i ++) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatID.get(0));
-//        sendMessage.setChatId(chatID.get(1));
+        sendMessage.setChatId(chatID.get(i));
         sendMessage.setText(message);
         sendMessage.enableHtml(true);
-
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+        }
+
+
     }
 }
