@@ -1,11 +1,15 @@
 package com.example.backend_parser.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "ban_list")
+@NoArgsConstructor
+@AllArgsConstructor
 public class BanToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
