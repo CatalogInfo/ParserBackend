@@ -5,8 +5,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +12,19 @@ public class Telegram extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        String message_text = update.getMessage().getText();
+
+        System.out.println(message_text);
+        SendMessage message = new SendMessage() // Create a message object object
+                .builder()
+                .chatId("549368505")
+                .text("Хуле баним?Все должно было работать...")
+                .build();
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -26,7 +37,7 @@ public class Telegram extends TelegramLongPollingBot {
         return "5390306395:AAEe8Y1XzdgF8PvooDvet9Ul98Jy2kSUQIE";
     }
 
-    public static List<String> chatID = Arrays.asList("549368505", "639191552");
+    public static List<String> chatID = Arrays.asList("549368505", "639191552", "1664722747");
 
     public void sendMessage(String message) {
         for(int i = 0; i < chatID.size(); i ++) {
