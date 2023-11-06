@@ -1,11 +1,5 @@
 package com.example.backend_parser.Telegram;
 
-import com.example.backend_parser.request.RequestMaker;
-import com.example.backend_parser.service.BanTokenService;
-import com.example.backend_parser.service.IBanTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -19,7 +13,9 @@ public class Telegram extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         String message_text = update.getMessage().getText();
-        TelegramService.commandsHandler(message_text);
+        String chat_id = String.valueOf(update.getMessage().getChatId());
+
+        TelegramService.commandsHandler(message_text, chat_id);
     }
 
     @Override
@@ -32,13 +28,17 @@ public class Telegram extends TelegramLongPollingBot {
         return "5390306395:AAEe8Y1XzdgF8PvooDvet9Ul98Jy2kSUQIE";
     }
 
-    public static List<String> chatID = Arrays.asList("549368505");
-    //, "639191552", "1664722747"
+    public static List<String> chatID = Arrays.asList("549368505", "639191552", "1664722747");
 
     public void sendMessage(String message) {
         for(int i = 0; i < chatID.size(); i ++) {
+            sendMessageById(message, chatID.get(i));
+        }
+    }
+
+    public void sendMessageById(String message, String chatId) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatID.get(i));
+        sendMessage.setChatId(chatId);
         sendMessage.setText(message);
         sendMessage.enableHtml(true);
         try {
@@ -46,8 +46,5 @@ public class Telegram extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        }
-
-
     }
 }

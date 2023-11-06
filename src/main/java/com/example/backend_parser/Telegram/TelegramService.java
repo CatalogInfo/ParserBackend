@@ -26,9 +26,9 @@ public class TelegramService {
         }
     }
 
-    public static void commandsHandler(String messageText) {
+    public static void commandsHandler(String messageText, String chatId) {
         if(!defineIsCommand(messageText)) {
-            getTelegram().sendMessage("команда говна, смотри инструкцию: /info");
+            getTelegram().sendMessageById("команда говна, смотри инструкцию: /info", chatId);
         }
 
         if(defineIsCommand(messageText)) {
@@ -37,16 +37,16 @@ public class TelegramService {
                 BanCommand banCommand = getCommandBlocks(messageText);
 
                 RequestMaker.getRequest("http://localhost:8080/ban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
-                getTelegram().sendMessage("чтобы разбанить - /unban " + banCommand.getExchange() + " " + banCommand.getToken());
+                getTelegram().sendMessageById("чтобы разбанить - /unban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
             } else if (messageText.startsWith("/unban")) {
                 BanCommand banCommand = getCommandBlocks(messageText);
 
                 RequestMaker.getRequest("http://localhost:8080/unban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
-                getTelegram().sendMessage("чтобы забанить - /ban " + banCommand.getExchange() + " " + banCommand.getToken());
+                getTelegram().sendMessageById("чтобы забанить - /ban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
             } else if (messageText.equals("/info")) {
-                getTelegram().sendMessage("чтобы  забанить токен на бирже: напиши /ban exchange TOKENUSDT" + "\n"
+                getTelegram().sendMessageById("чтобы  забанить токен на бирже: напиши /ban exchange TOKENUSDT" + "\n"
                 + "чтобы  разбанить токен на бирже: напиши /unban exchange TOKENUSDT" + "\n"
-                + "*Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT капсом и вместе");
+                + "*Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT капсом и вместе", chatId);
             }
         }
 
