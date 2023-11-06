@@ -1,16 +1,9 @@
 package com.example.backend_parser.controller;
 
-import com.example.backend_parser.mapper.base.IMapper;
-import com.example.backend_parser.mapper.base.Mapper;
 import com.example.backend_parser.mapper.exchanges.BybitMapper;
-import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.service.IExchangeService;
-import com.example.backend_parser.service.Service;
 import com.example.backend_parser.service.ExchangeService;
-import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/bybit")
