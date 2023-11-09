@@ -28,7 +28,7 @@ public class Telegram extends TelegramLongPollingBot {
         return "5390306395:AAEe8Y1XzdgF8PvooDvet9Ul98Jy2kSUQIE";
     }
 
-    public static List<String> chatID = Arrays.asList("549368505");
+    public static List<String> chatID = Arrays.asList("549368505", "1664722747", "639191552");
 
     public void sendMessage(String message) {
         for(int i = 0; i < chatID.size(); i ++) {
