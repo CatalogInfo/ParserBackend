@@ -32,7 +32,6 @@ public class TelegramService {
         }
 
         if(defineIsCommand(messageText)) {
-
             if (messageText.startsWith("/ban")) {
                 BanCommand banCommand = getCommandBlocks(messageText);
 
