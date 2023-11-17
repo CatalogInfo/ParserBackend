@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BackendParserApplication {
 	public static void main(String[] args) {
-		TelegramService.registerBot();
+//		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
 	}
 

@@ -31,6 +31,7 @@ public class ExchangeService extends Service {
 
     @Override
     String getOrderBookUrl() {
+
         return this.orderBookUrl;
     }
     @Override
