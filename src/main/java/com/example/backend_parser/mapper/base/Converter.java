@@ -9,7 +9,7 @@ public class Converter extends Obtainer {
     protected BidsAsks convertOrderBook(String response) {
         JSONObject obj = getOrderBookData(response);
 
-        if (!obj.has(getKeysMapper().getBidsKey()) || String.valueOf(obj.get(getKeysMapper().getBidsKey())).equals("null")) {
+        if (!obj.has(getKeysMapper().getBidsKey()) || String.valueOf(obj.get(getKeysMapper().getBidsKey())).equals("null") || obj.equals(new JSONObject())) {
             return new BidsAsks();
         }
 

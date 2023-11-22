@@ -46,6 +46,10 @@ public class KrakenMapper extends Mapper {
     @Override
     protected JSONObject getOrderBookData(String response) {
         JSONObject obj = getJSONObject(response);
+        if(!obj.has("result")) {
+            return new JSONObject();
+        }
+
         JSONObject data = getJSONObject(obj, "result");
         return getJSONObject(data, data.keys().next());
     }

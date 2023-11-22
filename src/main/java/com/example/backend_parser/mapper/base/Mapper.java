@@ -14,7 +14,7 @@ import static com.example.backend_parser.utils.JsonUtils.getValue;
 
 
 public class Mapper extends Converter implements IMapper {
-    protected List<String> resolvedQuoteAssets = Arrays.asList("USDT", "USD");
+    protected List<String> resolvedQuoteAssets = Arrays.asList("USDT", "USD", "USDC");
     
     public Token convertResponseToToken(String response, String symbol, int minAmount) {
         BidsAsks orderBook = convertOrderBook(response);
