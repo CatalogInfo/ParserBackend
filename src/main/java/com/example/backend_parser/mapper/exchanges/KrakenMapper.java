@@ -3,7 +3,6 @@ package com.example.backend_parser.mapper.exchanges;
 import com.example.backend_parser.mapper.base.KeysMapper;
 import com.example.backend_parser.mapper.base.Mapper;
 import com.example.backend_parser.models.BaseQuote;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

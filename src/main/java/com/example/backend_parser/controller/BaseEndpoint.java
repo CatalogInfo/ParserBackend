@@ -3,7 +3,6 @@ package com.example.backend_parser.controller;
 
 import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.service.IExchangeService;
-import com.example.backend_parser.service.Service;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 

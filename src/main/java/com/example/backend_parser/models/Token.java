@@ -12,11 +12,19 @@ public class Token {
     String fullName;
     double bid;
     double ask;
+    String address;
     ArrayList<Chain> chains;
 
     public Token(String symbol, double bid, double ask) {
         this.symbol = symbol;
         this.bid = bid;
         this.ask = ask;
+    }
+
+    public Token(String symbol, double bid, double ask, String address) {
+        this.symbol = symbol;
+        this.bid = bid;
+        this.ask = ask;
+        this.address = address;
     }
 }
