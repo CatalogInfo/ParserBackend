@@ -20,4 +20,9 @@ public class BitrueExchange extends BaseExchange {
     protected int getDelayTime() {
         return 100;
     }
+
+    @Override
+    protected String getAuthToken() {
+        return null;
+    }
 }

@@ -1,10 +1,8 @@
 package com.example.backend_parser.exchanges;
 
 
-import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.service.IExchangeService;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,12 +17,14 @@ public abstract class BaseExchange {
         if (minAmount == null)
             minAmount = MIN_AMOUNT;
 
-        return getService().parseOrderBooks(tokens, getDelayTime(), minAmount);
+        return getService().parseOrderBooks(tokens, getDelayTime(), minAmount, getAuthToken());
     }
 
     protected abstract IExchangeService getService();
 
     protected abstract int getDelayTime();
+
+    protected abstract String getAuthToken();
 
     public int getMinAmount() {
         return MIN_AMOUNT;

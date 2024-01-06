@@ -18,4 +18,8 @@ public class GateExchange extends BaseExchange {
     protected int getDelayTime() {
         return 50;
     }
+    @Override
+    protected String getAuthToken() {
+        return null;
+    }
 }

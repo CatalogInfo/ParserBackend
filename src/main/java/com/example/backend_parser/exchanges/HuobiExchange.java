@@ -21,4 +21,8 @@ public class HuobiExchange extends BaseExchange {
     protected int getDelayTime() {
         return 100;
     }
+    @Override
+    protected String getAuthToken() {
+        return null;
+    }
 }

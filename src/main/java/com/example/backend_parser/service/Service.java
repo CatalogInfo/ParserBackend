@@ -17,8 +17,8 @@ public abstract class Service implements IExchangeService {
         return mapper.convertBaseQuote(RequestMaker.getRequest(getTradingPairsUrl()));
     }
     @Override
-    public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount) {
-        getTokens().addAll(runParseForOrderBooks(tokensToSymbols(tokens), time, minAmount));
+    public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
+        getTokens().addAll(runParseForOrderBooks(tokensToSymbols(tokens), time, minAmount, authToken));
         ArrayList<Token> finalList = new ArrayList<>(getTokens());
         clearInnerData();
         return finalList;
@@ -31,23 +31,26 @@ public abstract class Service implements IExchangeService {
         return symbolList;
     }
 
-    private String getOrderBookForSymbol(String symbol) {
+    private String getOrderBookForSymbol(String symbol, String authToken) {
+        if(authToken != null) {
+            return RequestMaker.getRequestWithAuth(getOrderBookUrl() + symbol + getAdditionalUrlParams(), authToken);
+        }
         return RequestMaker.getRequest(getOrderBookUrl() + symbol + getAdditionalUrlParams());
     }
 
-    private Token parseOrderBookForSymbol(String symbol, IMapper mapper, int minAmount) {
-        String response = getOrderBookForSymbol(symbol);
+    private Token parseOrderBookForSymbol(String symbol, IMapper mapper, int minAmount, String authToken) {
+        String response = getOrderBookForSymbol(symbol, authToken);
 
         return mapper.convertResponseToToken(response, symbol, minAmount);
     }
 
-    private List<Token> runParseForOrderBooks(List<String> symbols, int time, int minAmount) {
+    private List<Token> runParseForOrderBooks(List<String> symbols, int time, int minAmount, String authToken) {
         List<Thread> threads = getThreads();
         List<Token> tokens = new ArrayList<>();
 
         for(String symbol : symbols) {
             Thread t = new Thread(() -> {
-                Token token = parseOrderBookForSymbol(symbol, getMapper(), minAmount);
+                Token token = parseOrderBookForSymbol(symbol, getMapper(), minAmount, authToken);
                 synchronized (tokens) {
                     tokens.add(token);
                 }

@@ -3,8 +3,6 @@ package com.example.backend_parser.exchanges;
 import com.example.backend_parser.mapper.exchanges.HuobiMapper;
 import com.example.backend_parser.service.ExchangeService;
 import com.example.backend_parser.service.IExchangeService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 public class InchExchange extends BaseExchange {
     IExchangeService service = new ExchangeService(
@@ -19,5 +17,9 @@ public class InchExchange extends BaseExchange {
     @Override
     protected int getDelayTime() {
         return 100;
+    }
+    @Override
+    protected String getAuthToken() {
+        return "B9PcyyN0hdb1u681DJm15oHpPaMllexg";
     }
 }

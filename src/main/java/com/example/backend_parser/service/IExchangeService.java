@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IExchangeService {
     List<Token> parseTradingPairs();
-    List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount);
+    List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken);
 }

@@ -20,4 +20,8 @@ public class MexcExchange extends BaseExchange {
     protected int getDelayTime() {
         return 50;
     }
+    @Override
+    protected String getAuthToken() {
+        return null;
+    }
 }

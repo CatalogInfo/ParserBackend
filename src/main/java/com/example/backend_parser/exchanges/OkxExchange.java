@@ -20,4 +20,8 @@ public class OkxExchange extends BaseExchange {
     protected int getDelayTime() {
         return 100;
     }
+    @Override
+    protected String getAuthToken() {
+        return null;
+    }
 }
