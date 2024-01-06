@@ -1,18 +1,16 @@
-package com.example.backend_parser.controller;
+package com.example.backend_parser.exchanges;
 
-import com.example.backend_parser.mapper.exchanges.HuobiMapper;
+import com.example.backend_parser.mapper.exchanges.KrakenMapper;
 import com.example.backend_parser.service.ExchangeService;
 import com.example.backend_parser.service.IExchangeService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/inch")
-public class InchEndpoint extends BaseEndpoint {
+public class KrakenExchange extends BaseExchange {
     IExchangeService service = new ExchangeService(
-            "https://api.1inch.dev/swap/v5.2/1/quote",
-            "https://api.1inch.dev/token/v1.2/1",
-            new HuobiMapper()
+            "https://api.kraken.com/0/public/Depth?pair=",
+            "https://api.kraken.com/0/public/AssetPairs",
+            new KrakenMapper()
     );
     @Override
     protected IExchangeService getService() {

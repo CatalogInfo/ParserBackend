@@ -23,10 +23,10 @@ public class Mapper extends Converter implements IMapper {
         return new Token(symbol, bidAsk.getBid(), bidAsk.getAsk());
     }
 
-    public List<BaseQuote> convertBaseQuote(String response) {
+    public List<Token> convertBaseQuote(String response) {
         JSONArray symbols = getSymbols(response);
 
-        List<BaseQuote> baseQuoteList = new ArrayList<>();
+        List<Token> baseQuoteList = new ArrayList<>();
 
         for(int i = 0; i < symbols.length(); i ++) {
             JSONObject symbolObject = getJSONObject(symbols.get(i));
@@ -36,7 +36,7 @@ public class Mapper extends Converter implements IMapper {
             String quoteAsset = getValue(symbolObject, getKeysMapper().getQuoteKey());
 
             if(quoteAssetAndCustomCheck(symbolObject)) {
-                baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+                baseQuoteList.add(new Token(symbol, baseAsset, quoteAsset));
             }
         }
 

@@ -1,4 +1,4 @@
-package com.example.backend_parser.controller;
+package com.example.backend_parser.exchanges;
 
 import com.example.backend_parser.Telegram.TelegramService;
 import com.example.backend_parser.entities.BanToken;

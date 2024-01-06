@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IMapper {
     Token convertResponseToToken(String response, String symbol, int minAmount);
-    List<BaseQuote> convertBaseQuote(String response);
+    List<Token> convertBaseQuote(String response);
 }

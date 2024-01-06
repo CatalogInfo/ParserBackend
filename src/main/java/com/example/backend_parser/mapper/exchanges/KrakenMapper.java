@@ -3,6 +3,7 @@ package com.example.backend_parser.mapper.exchanges;
 import com.example.backend_parser.mapper.base.KeysMapper;
 import com.example.backend_parser.mapper.base.Mapper;
 import com.example.backend_parser.models.BaseQuote;
+import com.example.backend_parser.models.Token;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -19,10 +20,10 @@ public class KrakenMapper extends Mapper {
     }
 
     @Override
-    public List<BaseQuote> convertBaseQuote(String response) {
+    public List<Token> convertBaseQuote(String response) {
         JSONObject symbols = getResult(response);
 
-        List<BaseQuote> baseQuoteList = new ArrayList<>();
+        List<Token> baseQuoteList = new ArrayList<>();
 
         Iterator<String> keys = symbols.keys();
 
@@ -35,7 +36,7 @@ public class KrakenMapper extends Mapper {
             String quoteAsset = getValue(symbolObject, getKeysMapper().getQuoteKey());
 
             if(quoteAssetAndCustomCheck(symbolObject)) {
-                baseQuoteList.add(new BaseQuote(symbol, baseAsset, quoteAsset));
+                baseQuoteList.add(new Token(symbol, baseAsset, quoteAsset));
             }
         }
 

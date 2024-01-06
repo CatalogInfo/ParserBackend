@@ -1,25 +1,23 @@
-package com.example.backend_parser.controller;
+package com.example.backend_parser.exchanges;
 
-import com.example.backend_parser.mapper.base.Mapper;
+import com.example.backend_parser.mapper.exchanges.OkxMapper;
 import com.example.backend_parser.service.IExchangeService;
 import com.example.backend_parser.service.ExchangeService;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/mexc")
-public class MexcEndpoint extends BaseEndpoint {
+public class OkxExchange extends BaseExchange {
     IExchangeService service = new ExchangeService(
-            "https://api.mexc.com/api/v3/depth?symbol=",
-            "https://api.mexc.com/api/v3/exchangeInfo",
-            new Mapper()
+            "https://www.okx.com/api/v5/market/books?instId=",
+            "https://www.okx.com/api/v5/public/instruments?instType=SPOT",
+            new OkxMapper(),
+            "&sz=50"
     );
     @Override
     protected IExchangeService getService() {
         return service;
     }
-
     @Override
     protected int getDelayTime() {
-        return 50;
+        return 100;
     }
 }

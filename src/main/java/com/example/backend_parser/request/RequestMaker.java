@@ -31,6 +31,29 @@ public class RequestMaker {
         return RequestUtils.readFromConnection(inputStream);
     }
 
+    public static String getRequestWithAuth(String url, String authorizationToken) {
+        InputStream inputStream = null;
+        try {
+            HttpClient httpclient = HttpClients.createDefault();
+
+            HttpGet httpGet = new HttpGet(url);
+
+            // Adding Authorization header
+            httpGet.addHeader("Authorization", "Bearer " + authorizationToken);
+
+            HttpResponse httpResponse = httpclient.execute(httpGet);
+
+            isRequestWorked(httpResponse.getStatusLine().getStatusCode(), url);
+
+            HttpEntity entity = httpResponse.getEntity();
+            inputStream = entity.getContent();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return RequestUtils.readFromConnection(inputStream);
+    }
+
+
     public static String postRequest(String url, String body) {
         InputStream inputStream = null;
         try {

@@ -5,32 +5,30 @@ import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.utils.ThreadUtils;
-import org.springframework.http.HttpEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public abstract class Service implements IExchangeService{
+public abstract class Service implements IExchangeService {
     @Override
-    public HttpEntity<List<BaseQuote>> parseTradingPairs() {
+    public List<Token> parseTradingPairs() {
         IMapper mapper = getMapper();
-        return new HttpEntity<>(mapper.convertBaseQuote(RequestMaker.getRequest(getTradingPairsUrl())));
+        return mapper.convertBaseQuote(RequestMaker.getRequest(getTradingPairsUrl()));
     }
     @Override
-    public HttpEntity<?> parseOrderBooks(List<String> symbols, int time, int minAmount) {
-        if(getThreads().isEmpty()) {
-            new Thread(() -> getTokens().addAll(runParseForOrderBooks(symbols, time, minAmount))).start();
-        }
+    public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount) {
+        getTokens().addAll(runParseForOrderBooks(tokensToSymbols(tokens), time, minAmount));
+        ArrayList<Token> finalList = new ArrayList<>(getTokens());
+        clearInnerData();
+        return finalList;
+    }
 
-        if(!getTokens().isEmpty()) {
-            List<Token> finalist = new ArrayList<>(getTokens());
-
-            clearInnerData();
-
-            return new HttpEntity<>(finalist);
-        }
-
-        return new HttpEntity<>("running");
+    private List<String> tokensToSymbols(List<Token> token) {
+        List<String> symbolList = token.stream()
+                .map(Token::getSymbol)
+                .collect(Collectors.toList());
+        return symbolList;
     }
 
     private String getOrderBookForSymbol(String symbol) {
