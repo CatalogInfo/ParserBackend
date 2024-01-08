@@ -1,14 +1,14 @@
 package com.example.backend_parser.exchanges;
 
-import com.example.backend_parser.mapper.exchanges.HuobiMapper;
-import com.example.backend_parser.service.ExchangeService;
+import com.example.backend_parser.mapper.exchanges.InchMapper;
 import com.example.backend_parser.service.IExchangeService;
+import com.example.backend_parser.service.InchService;
 
 public class InchExchange extends BaseExchange {
-    IExchangeService service = new ExchangeService(
-            "https://api.1inch.dev/swap/v5.2/1/quote",
+    IExchangeService service = new InchService(
+            "",
             "https://api.1inch.dev/token/v1.2/1",
-            new HuobiMapper()
+            new InchMapper()
     );
     @Override
     protected IExchangeService getService() {

@@ -1,16 +1,20 @@
 package com.example.backend_parser.request;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
+
 
 public class RequestMaker {
     public static String getRequest(String url) {
@@ -31,19 +35,49 @@ public class RequestMaker {
         return RequestUtils.readFromConnection(inputStream);
     }
 
-    public static String getRequestWithAuth(String url, String authorizationToken) {
+    public static String getRequestWithAuth(String url, String authToken) {
         InputStream inputStream = null;
         try {
             HttpClient httpclient = HttpClients.createDefault();
 
             HttpGet httpGet = new HttpGet(url);
+            // Adding Authorization header
+            httpGet.addHeader("Authorization", "Bearer " + authToken);
+
+            HttpResponse httpResponse = httpclient.execute(httpGet);
+
+            isRequestWorked(httpResponse.getStatusLine().getStatusCode(), url);
+
+            HttpEntity entity = httpResponse.getEntity();
+            inputStream = entity.getContent();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return RequestUtils.readFromConnection(inputStream);
+    }
+
+
+    public static String inchQuoteRequest(String url, String authorizationToken, String src, String dst, int amount) {
+        InputStream inputStream = null;
+        try {
+            HttpClient httpclient = HttpClients.createDefault();
+            // Use URIBuilder to add parameters to the URL
+            URIBuilder uriBuilder = new URIBuilder(url);
+            // Example: add a parameter "param1" with value "value1"
+            uriBuilder.setParameter("src", src);
+            uriBuilder.setParameter("dst", dst);
+            uriBuilder.setParameter("amount", String.valueOf(amount));
+
+            URI uriWithParams = uriBuilder.build();
+
+            HttpGet httpGet = new HttpGet(uriWithParams);
 
             // Adding Authorization header
             httpGet.addHeader("Authorization", "Bearer " + authorizationToken);
 
             HttpResponse httpResponse = httpclient.execute(httpGet);
 
-            isRequestWorked(httpResponse.getStatusLine().getStatusCode(), url);
+            isRequestWorked(httpResponse.getStatusLine().getStatusCode(), uriWithParams.toString());
 
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
@@ -83,7 +117,7 @@ public class RequestMaker {
 
         if (responseCode != HttpURLConnection.HTTP_OK) {
             System.out.println(url);
-            throw new Exception("NOT WORKED");
+//            throw new Exception("NOT WORKED");
         }
     }
 }

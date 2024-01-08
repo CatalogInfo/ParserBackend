@@ -1,7 +1,6 @@
 package com.example.backend_parser.service;
 
 import com.example.backend_parser.mapper.base.IMapper;
-import com.example.backend_parser.models.BaseQuote;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.utils.ThreadUtils;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 
 public abstract class Service implements IExchangeService {
     @Override
-    public List<Token> parseTradingPairs() {
+    public List<Token> parseTradingPairs(String authToken) {
         IMapper mapper = getMapper();
         return mapper.convertBaseQuote(RequestMaker.getRequest(getTradingPairsUrl()));
     }
@@ -32,9 +31,6 @@ public abstract class Service implements IExchangeService {
     }
 
     private String getOrderBookForSymbol(String symbol, String authToken) {
-        if(authToken != null) {
-            return RequestMaker.getRequestWithAuth(getOrderBookUrl() + symbol + getAdditionalUrlParams(), authToken);
-        }
         return RequestMaker.getRequest(getOrderBookUrl() + symbol + getAdditionalUrlParams());
     }
 

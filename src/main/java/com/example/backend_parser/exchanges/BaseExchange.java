@@ -10,7 +10,7 @@ public abstract class BaseExchange {
     static final int MIN_AMOUNT = 2000;
 
     public List<Token> getTradingPairs() {
-        return getService().parseTradingPairs();
+        return getService().parseTradingPairs(getAuthToken());
     }
 
     public List<Token> getOrderBooks(List<Token> tokens, Integer minAmount) {

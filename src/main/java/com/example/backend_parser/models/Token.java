@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Token {
     String symbol;
     String fullName;
+    int decimals;
     double bid;
     double ask;
     String base;
@@ -35,6 +36,14 @@ public class Token {
         this.bid = bid;
         this.ask = ask;
         this.address = address;
+    }
+
+    public Token(String symbol, int decimals, String address, String base, String quote) {
+        this.symbol = symbol;
+        this.decimals = decimals;
+        this.address = address;
+        this.base = base;
+        this.quote = quote;
     }
 
     public void setBid(double bid) {
