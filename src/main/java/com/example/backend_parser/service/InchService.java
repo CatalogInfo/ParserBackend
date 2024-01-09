@@ -3,10 +3,15 @@ package com.example.backend_parser.service;
 import com.example.backend_parser.mapper.base.IMapper;
 import com.example.backend_parser.models.ProxyWithApiToken;
 import com.example.backend_parser.models.Token;
+import com.example.backend_parser.request.ProxyService;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.utils.JsonUtils;
+import com.example.backend_parser.utils.ThreadUtils;
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +36,13 @@ public class InchService extends Service {
         this.tradingPairsUrl = tradingPairsUrl;
         this.mapper = mapper;
         this.additionalUrlParams = additionalUrlParams;
+    }
+
+    @Getter
+    @Setter
+    public static class PriceAmount {
+        String amount;
+        double price;
     }
 
     @Override
@@ -60,8 +72,11 @@ public class InchService extends Service {
     }
 
     private void initProxies() {
-        proxies.add(new ProxyWithApiToken( "185.75.132.77", 8000, "8uJsED", "1qVb7f", "Q8bcWnHcvawk6cUKXIimjADeoT7154Vu"));
-        proxies.add(new ProxyWithApiToken( "45.147.31.243", 8000, "HPvEDX", "Nqu3XC", "FsJEnnGnpvQ46ogwMPCFW0x5YGuuVqJY"));
+        proxies.add(new ProxyWithApiToken( "185.95.228.63", 8000, "8uJsED", "1qVb7f", "Q8bcWnHcvawk6cUKXIimjADeoT7154Vu"));
+        proxies.add(new ProxyWithApiToken( "88.218.50.177", 8000, "8uJsED", "1qVb7f", "KjXA85dk88Tbri171sgBwXkflqpQhEgq"));
+        proxies.add(new ProxyWithApiToken( "185.75.132.77", 8000, "8uJsED", "1qVb7f", "NkXh67g4ruxgVLHWSxLS1eltTZ4oATPf"));
+        proxies.add(new ProxyWithApiToken( "45.147.31.243", 8000, "8uJsED", "1qVb7f", "SLLR4CqUKNnv2yJn1fxkNLL4c5TzX7oS"));
+
     }
 
     @Override
@@ -74,68 +89,80 @@ public class InchService extends Service {
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
         initProxies();
         int tokenNumber = 0;
-        System.out.println("Entered ");
-        for(int i = 0; i < tokens.size() / proxies.size(); i ++) {
-            System.out.println("Entered " + tokens.get(tokenNumber));
+        for(int i = 0; i < 2; i ++) {
             for (ProxyWithApiToken proxyWithApiToken : proxies) {
 
                 int finalTokenNumber = tokenNumber;
-                new Thread(() -> {
-                    double ask = getAsk(tokens.get(finalTokenNumber).getAddress(), (int)(minAmount * Math.pow(10, 6)), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
-
-                    System.out.println("AAAAAAAAAAAAAAAAAA");
+                Thread t = new Thread(() -> {
+                    PriceAmount bid = getBid(tokens.get(finalTokenNumber).getAddress(), (int)(minAmount * Math.pow(10, 6)), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    PriceAmount ask = getAsk(tokens.get(finalTokenNumber).getAddress(), bid.getAmount(), (int)(minAmount * Math.pow(10, tokens.get(finalTokenNumber).getDecimals())), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
 
-                    double bid = getBid(tokens.get(finalTokenNumber).getAddress(), (int)(minAmount * Math.pow(10, 6)), proxyWithApiToken, 6);
-                    System.out.println("Bid:" + bid + " " + tokens.get(finalTokenNumber).getSymbol() + " " + tokens.get(finalTokenNumber).getAddress());
-                    System.out.println("ASK:" + ask);
-                    tokens.get(finalTokenNumber).setAsk(ask);
-                    tokens.get(finalTokenNumber).setBid(bid);
-                }).start();
+                    System.out.println("BID: " + bid.price + " " + tokens.get(finalTokenNumber).getAddress());
+                    System.out.println("ASK: " + ask.price + " " + tokens.get(finalTokenNumber).getAddress());
+
+                    tokens.get(finalTokenNumber).setAsk(ask.getPrice());
+                    tokens.get(finalTokenNumber).setBid(bid.getPrice());
+                });
                 tokenNumber ++;
+                t.start();
+                threads.add(t);
             }
+            ThreadUtils.waitTillThreadsExecuted(threads);
+            System.out.println("wait started");
+
             try {
-                Thread.sleep(600000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            System.out.println("wait ended");
+
         }
 
         return tokens;
     }
 
-    public double getAsk(String addressFrom, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
-        System.out.println("get ask workes");
+    public PriceAmount getAsk(String addressFrom, String minAmountString, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
+        System.out.println("get ask workes " + minAmountString + " " + addressFrom);
 
         // request to proxy server
-        String response = RequestMaker.inchQuoteRequest("https://api.1inch.dev/swap/v5.2/1/quote", proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, (int)(minAmount *  Math.pow(10, decimals)));
+        String response = ProxyService.requestWithProxy(proxyWithApiToken, "https://api.1inch.dev/swap/v5.2/1/quote", proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
         JSONObject object = JsonUtils.getJSONObject(response);
-        double amountTo = calculateFinalAmount(object, decimals);
-        System.out.println((int)(minAmount *  Math.pow(10, decimals)));
-        double amountFrom = minAmount *  Math.pow(10, decimals);
-        return calculateFinalPrice(amountFrom, amountTo);
+        PriceAmount priceAmount = calculateFinalAmount(object, 6);
+
+        BigInteger divider = new BigInteger("10").pow(decimals);
+
+        BigInteger amount = new BigInteger(minAmountString).divide(divider);
+
+        priceAmount.setPrice(calculateFinalPrice(Double.parseDouble(String.valueOf(amount)), priceAmount.getPrice()));
+        return priceAmount;
     }
-    public double getBid(String addressTo, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
+    public PriceAmount getBid(String addressTo, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
         System.out.println("get bid workes");
-        // request to proxy server
-        String response = RequestMaker.inchQuoteRequest("https://api.1inch.dev/swap/v5.2/1/quote", proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, (int)(minAmount *  Math.pow(10, decimals)));
+        String response = ProxyService.requestWithProxy(proxyWithApiToken,"https://api.1inch.dev/swap/v5.2/1/quote", proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, String.valueOf(minAmount));
         JSONObject object = JsonUtils.getJSONObject(response);
-        double amountFrom = calculateFinalAmount(object, decimals);
-        double amountTo = minAmount *  Math.pow(10, decimals);
-        return calculateFinalPrice(amountFrom, amountTo);
+        PriceAmount priceAmount = calculateFinalAmount(object, decimals);
+        priceAmount.setPrice(calculateFinalPrice(priceAmount.getPrice(), minAmount) / Math.pow(10, 6));
+        return priceAmount;
     }
 
-    private double calculateFinalAmount(JSONObject obj, int decimals) {
+    private PriceAmount calculateFinalAmount(JSONObject obj, int decimals) {
         if(!obj.has("toAmount")) {
-            return 0;
+            return new PriceAmount();
         }
         String toAmountString = String.valueOf(obj.get("toAmount"));
+        PriceAmount priceAmount = new PriceAmount();
+
         double toAmount = Double.parseDouble(toAmountString);
-        return toAmount / Math.pow(10, decimals);
+
+        priceAmount.setAmount(toAmountString);
+        priceAmount.setPrice(toAmount / Math.pow(10, decimals));
+        return priceAmount;
     }
 
     private double calculateFinalPrice(double amountFrom, double amountTo) {

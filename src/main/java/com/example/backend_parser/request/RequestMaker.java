@@ -57,7 +57,7 @@ public class RequestMaker {
     }
 
 
-    public static String inchQuoteRequest(String url, String authorizationToken, String src, String dst, int amount) {
+    public static String inchQuoteRequest(String url, String authorizationToken, String src, String dst, String amount) {
         InputStream inputStream = null;
         try {
             HttpClient httpclient = HttpClients.createDefault();
@@ -66,7 +66,7 @@ public class RequestMaker {
             // Example: add a parameter "param1" with value "value1"
             uriBuilder.setParameter("src", src);
             uriBuilder.setParameter("dst", dst);
-            uriBuilder.setParameter("amount", String.valueOf(amount));
+            uriBuilder.setParameter("amount", amount);
 
             URI uriWithParams = uriBuilder.build();
 
