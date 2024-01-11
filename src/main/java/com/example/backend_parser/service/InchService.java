@@ -92,7 +92,7 @@ public class InchService extends Service {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    PriceAmount ask = getAsk(tokens.get(finalTokenNumber).getAddress(), bid.getAmount(), (int)(minAmount * Math.pow(10, tokens.get(finalTokenNumber).getDecimals())), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
+                    PriceAmount ask = getAsk(tokens.get(finalTokenNumber).getAddress(), bid.getAmount(), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
 
                     System.out.println("BID: " + bid.price + " " + tokens.get(finalTokenNumber).getAddress());
                     System.out.println("ASK: " + ask.price + " " + tokens.get(finalTokenNumber).getAddress());
@@ -119,10 +119,7 @@ public class InchService extends Service {
         return tokens;
     }
 
-    public PriceAmount getAsk(String addressFrom, String minAmountString, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
-        System.out.println("get ask workes " + minAmountString + " " + addressFrom);
-
-        // request to proxy server
+    public PriceAmount getAsk(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
         String response = ProxyService.requestWithProxy(proxyWithApiToken, "https://api.1inch.dev/swap/v5.2/1/quote", proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
         JSONObject object = JsonUtils.getJSONObject(response);
         PriceAmount priceAmount = calculateFinalAmount(object, 6);
@@ -135,7 +132,6 @@ public class InchService extends Service {
         return priceAmount;
     }
     public PriceAmount getBid(String addressTo, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
-        System.out.println("get bid workes");
         String response = ProxyService.requestWithProxy(proxyWithApiToken,"https://api.1inch.dev/swap/v5.2/1/quote", proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, String.valueOf(minAmount));
         JSONObject object = JsonUtils.getJSONObject(response);
         PriceAmount priceAmount = calculateFinalAmount(object, decimals);

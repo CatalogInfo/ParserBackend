@@ -5,7 +5,6 @@ import java.net.URLDecoder;
 
 public class TelegramService {
     public static void sendMessage(String message) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         try {
             String decodedMessage = URLDecoder.decode(message, "UTF-8");
             com.example.backend_parser.Telegram.TelegramService.getTelegram().sendMessage(decodedMessage);

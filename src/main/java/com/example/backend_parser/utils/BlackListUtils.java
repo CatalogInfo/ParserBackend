@@ -39,9 +39,6 @@ public class BlackListUtils {
         BlackListItem item1 = getTokenBySymbolFromBlackList(symbol1, exchange1.getBlackList());
         BlackListItem item2 = getTokenBySymbolFromBlackList(symbol2, exchange2.getBlackList());
 
-        System.out.println(exchange1.getBlackList());
-        System.out.println(exchange2.getBlackList());
-
         if (System.currentTimeMillis() - item1.getTime() > 3600000 && System.currentTimeMillis() - item2.getTime() > 3600000) {
             updateTime(symbol1, exchange1.getBlackList());
             updateTime(symbol2, exchange2.getBlackList());

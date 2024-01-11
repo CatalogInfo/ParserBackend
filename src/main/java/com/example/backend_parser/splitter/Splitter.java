@@ -28,13 +28,10 @@ public class Splitter {
         List<List<Token>> arrayOfPairs = new ArrayList<>();
         for (Exchange exchange : exchanges) {
             exchange.getBaseQuotes();
-            System.out.println(exchange.getTokens().size() + exchange.getName());
 
             arrayOfPairs.add(exchange.getTokens());
         }
         List<List<Token>> outputPairs = findRepeatedBaseAndQuoteElements(arrayOfPairs);
-
-        System.out.println(outputPairs.get(0).get(0).getBase());
 
         for (int i = 0; i < exchanges.size(); i++) {
             exchanges.get(i).setTokens(outputPairs.get(i));
@@ -43,8 +40,6 @@ public class Splitter {
         List<Thread> threads = new ArrayList<>();
 
         for (Exchange exchange : exchanges) {
-
-            System.out.println(exchange.getTokens().size() + exchange.getName());
 
             Thread t = new Thread(() -> {
                 exchange.getOrderBook(exchange.getTokens());
