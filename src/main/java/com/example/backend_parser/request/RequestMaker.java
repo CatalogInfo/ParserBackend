@@ -117,7 +117,7 @@ public class RequestMaker {
 
         if (responseCode != HttpURLConnection.HTTP_OK) {
             System.out.println(url);
-//            throw new Exception("NOT WORKED");
+            throw new Exception("NOT WORKED");
         }
     }
 }
