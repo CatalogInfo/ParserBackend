@@ -23,7 +23,7 @@ public class InchService extends Service {
     private final IMapper mapper;
     private String additionalUrlParams = "";
     final String USDT_ADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
-    List<ProxyWithApiToken> proxies = new ArrayList<>();
+    List<ProxyWithApiToken> proxies = ReadProxiesService.readProxies("proxiesWithAPI.txt");
 
     public InchService(String orderBookUrl, String tradingPairsUrl, IMapper mapper) {
         this.orderBookUrl = orderBookUrl;
@@ -71,13 +71,6 @@ public class InchService extends Service {
         return tokens;
     }
 
-    private void initProxies() {
-        proxies.add(new ProxyWithApiToken( "185.95.228.63", 8000, "8uJsED", "1qVb7f", "Q8bcWnHcvawk6cUKXIimjADeoT7154Vu"));
-        proxies.add(new ProxyWithApiToken( "88.218.50.177", 8000, "8uJsED", "1qVb7f", "KjXA85dk88Tbri171sgBwXkflqpQhEgq"));
-        proxies.add(new ProxyWithApiToken( "185.75.132.77", 8000, "8uJsED", "1qVb7f", "NkXh67g4ruxgVLHWSxLS1eltTZ4oATPf"));
-        proxies.add(new ProxyWithApiToken( "45.147.31.243", 8000, "8uJsED", "1qVb7f", "SLLR4CqUKNnv2yJn1fxkNLL4c5TzX7oS"));
-
-    }
 
     @Override
     public List<Token> parseTradingPairs(String authToken) {
@@ -87,7 +80,6 @@ public class InchService extends Service {
 
     @Override
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
-        initProxies();
         int tokenNumber = 0;
         for(int i = 0; i < 2; i ++) {
             for (ProxyWithApiToken proxyWithApiToken : proxies) {

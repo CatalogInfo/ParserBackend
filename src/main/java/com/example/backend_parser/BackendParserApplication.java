@@ -2,6 +2,7 @@ package com.example.backend_parser;
 
 import com.example.backend_parser.Telegram.TelegramService;
 import com.example.backend_parser.request.ProxyService;
+import com.example.backend_parser.service.ReadProxiesService;
 import com.example.backend_parser.splitter.Splitter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
