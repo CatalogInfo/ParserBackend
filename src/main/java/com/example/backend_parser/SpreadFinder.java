@@ -32,8 +32,6 @@ public class SpreadFinder {
         for (ExchangePair pair : exchangePairs) {
             for (Token token : pair.exchange1.getTokens()) {
                 for (Token token1 : pair.exchange2.getTokens()) {
-                    System.out.println(token1.getBase());
-                    System.out.println(token.getBase());
                     if (token.getBase().equalsIgnoreCase(token1.getBase())) {
                         defineSpread(token, token1, pair.exchange1, pair.exchange2);
                     }

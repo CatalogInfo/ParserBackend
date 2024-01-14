@@ -17,7 +17,7 @@ public class Token {
     String base;
     String quote;
     String address;
-    ArrayList<Chain> chains;
+    ArrayList<Chain> chains = new ArrayList<>();
 
     public Token(String symbol, double bid, double ask) {
         this.symbol = symbol;
@@ -52,5 +52,9 @@ public class Token {
 
     public void setAsk(double ask) {
         this.ask = ask;
+    }
+
+    public void addChain(Chain chain) {
+        chains.add(chain);
     }
 }

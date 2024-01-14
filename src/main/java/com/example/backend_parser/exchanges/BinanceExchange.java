@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.apache.http.impl.client.HttpClients;
 
 import static com.example.backend_parser.request.RequestUtils.getSignatureHmac256;
 import static com.example.backend_parser.request.RequestUtils.readFromConnection;
