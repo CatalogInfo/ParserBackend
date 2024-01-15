@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Base64;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 public class RequestUtils {
@@ -38,6 +39,21 @@ public class RequestUtils {
             throw new RuntimeException("Failed to calculate hmac-sha256", e);
         }
         return Hex.encodeHexString(hmacSha256);
+    }
+
+    public static String getSignatureHmac256(String key, String timestamp, String path) {
+        String HMAC_SHA256 = "HmacSHA256";
+        byte[] hmacSha256;
+        String prehash = timestamp + "GET" + path;
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), HMAC_SHA256);
+            Mac mac = Mac.getInstance(HMAC_SHA256);
+            mac.init(secretKeySpec);
+            hmacSha256 = mac.doFinal(prehash.getBytes());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to calculate hmac-sha256", e);
+        }
+        return Base64.getEncoder().encodeToString(hmacSha256);
     }
 
     public static String getSignatureHmac256(String key, String timestamp, String api_key, String RECV_WINDOW) {

@@ -8,6 +8,7 @@ import com.example.backend_parser.exchanges.GateExchange;
 import com.example.backend_parser.mapper.exchanges.BinanceMapper;
 import com.example.backend_parser.mapper.exchanges.BitrueMapper;
 import com.example.backend_parser.mapper.exchanges.BybitMapper;
+import com.example.backend_parser.mapper.exchanges.GateMapper;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.ProxyService;
 import com.example.backend_parser.service.ReadProxiesService;
@@ -22,7 +23,7 @@ import java.util.List;
 @SpringBootApplication
 public class BackendParserApplication {
 	public static void main(String[] args) throws IOException {
-		TelegramService.registerBot();
+//		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
 
 		Splitter.init();
@@ -37,10 +38,8 @@ public class BackendParserApplication {
 		GateExchange binanceExchange = new GateExchange();
 		BitrueExchange bitrueExchange = new BitrueExchange();
 
-		BybitMapper binanceMapper = new BybitMapper();
+		GateMapper binanceMapper = new GateMapper();
 		String response = binanceExchange.requestChains();
-		System.out.println(response);
-//		binanceMapper.mapChains(response, tokens);
+		binanceMapper.mapChains(response, tokens);
 	}
-
 }

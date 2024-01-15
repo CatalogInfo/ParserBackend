@@ -57,4 +57,19 @@ public class Token {
     public void addChain(Chain chain) {
         chains.add(chain);
     }
+
+    @Override
+    public String toString() {
+        return "Token{" +
+                "symbol='" + symbol + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", decimals=" + decimals +
+                ", bid=" + bid +
+                ", ask=" + ask +
+                ", base='" + base + '\'' +
+                ", quote='" + quote + '\'' +
+                ", address='" + address + '\'' +
+                ", chains=" + chains.toString() +
+                '}';
+    }
 }

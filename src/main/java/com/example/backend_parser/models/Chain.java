@@ -1,8 +1,12 @@
 package com.example.backend_parser.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
+@Setter
+@Getter
 public class Chain {
     String name;
     boolean isDepositEnabled;
@@ -15,6 +19,12 @@ public class Chain {
         this.isDepositEnabled = isDepositEnabled;
         this.isWithdrawalEnabled = isWithdrawalEnabled;
         this.fee = fee;
+    }
+
+    public Chain(String name, boolean isDepositEnabled, boolean isWithdrawalEnabled) {
+        this.name = name;
+        this.isDepositEnabled = isDepositEnabled;
+        this.isWithdrawalEnabled = isWithdrawalEnabled;
     }
 
     @Override
