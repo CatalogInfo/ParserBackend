@@ -9,6 +9,7 @@ import com.example.backend_parser.mapper.exchanges.BinanceMapper;
 import com.example.backend_parser.mapper.exchanges.BitrueMapper;
 import com.example.backend_parser.mapper.exchanges.BybitMapper;
 import com.example.backend_parser.mapper.exchanges.GateMapper;
+import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.ProxyService;
 import com.example.backend_parser.service.ReadProxiesService;
@@ -17,8 +18,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 public class BackendParserApplication {
@@ -34,12 +34,49 @@ public class BackendParserApplication {
 		}
 
 		List<Token> tokens = Splitter.exchanges.get(1).getTokens();
+		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
 
-		GateExchange binanceExchange = new GateExchange();
-		BitrueExchange bitrueExchange = new BitrueExchange();
+		GateExchange gateExchange = new GateExchange();
+		BinanceExchange binanceExchange = new BinanceExchange();
 
-		GateMapper binanceMapper = new GateMapper();
-		String response = binanceExchange.requestChains();
-		binanceMapper.mapChains(response, tokens);
+		GateMapper gateMapper = new GateMapper();
+		BinanceMapper binanceMapper = new BinanceMapper();
+		String response1 = binanceExchange.requestChains();
+		String response = gateExchange.requestChains();
+		binanceMapper.mapChains(response1, tokens1);
+		gateMapper.mapChains(response, tokens);
+		HashMap<String, String> allChainsGate = new HashMap();
+		HashMap<String, String> allChainsBinance = new HashMap<>();
+
+		for(Token token : tokens) {
+			for(Chain chain : token.getChains()) {
+				allChainsGate.put(token.getBase(), chain.getName());
+			}
+		}
+
+		for(Token token : tokens1) {
+			for(Chain chain : token.getChains()) {
+				allChainsBinance.put(token.getBase(), chain.getName());
+			}
+		}
+
+
+		HashMap<String, String> result = new HashMap<>();
+		for(String gateChain : allChainsGate.keySet()) {
+			if(!allChainsBinance.containsValue(allChainsGate.get(gateChain))) {
+				result.put(allChainsGate.get(gateChain) + " " + gateChain, "gate");
+			}
+		}
+
+		for(String binanceChain : allChainsBinance.keySet()) {
+			if(!allChainsGate.containsValue(allChainsBinance.get(binanceChain))) {
+				result.put(allChainsBinance.get(binanceChain)  + " " + binanceChain, "binance");
+			}
+		}
+
+		for(String key : result.keySet()) {
+			System.out.println(result.get(key)+ " " + key);
+		}
+
 	}
 }
