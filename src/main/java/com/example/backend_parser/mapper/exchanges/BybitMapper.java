@@ -53,7 +53,7 @@ public class BybitMapper extends Mapper {
 
                         double fee = chainDetail.getDouble("withdrawFee");
                         double feePercent = chainDetail.getDouble("withdrawPercentageFee");
-                        Chain chain1 = new Chain(chain, depositEnable, withdrawEnable, fee, feePercent);
+                        Chain chain1 = new Chain(unifyChain(chain), depositEnable, withdrawEnable, fee, feePercent);
                         System.out.println(chain1);
                         token.addChain(chain1);
                     }
@@ -68,5 +68,16 @@ public class BybitMapper extends Mapper {
         }
         return false;
     }
+
+    public String unifyChain(String chain) {
+        switch (chain) {
+            case "ERC20":
+                return "ETH";
+            case  "BSC (BEP20)":
+                return "BSC";
+        }
+        return chain;
+    }
+
 
 }

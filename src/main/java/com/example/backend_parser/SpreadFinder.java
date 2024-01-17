@@ -1,7 +1,6 @@
 package com.example.backend_parser;
 
 import com.example.backend_parser.calculations.SpreadCalculator;
-import com.example.backend_parser.exchanges.BaseExchange;
 import com.example.backend_parser.models.*;
 import com.example.backend_parser.service.TelegramService;
 import com.example.backend_parser.splitter.Splitter;
@@ -10,7 +9,6 @@ import com.example.backend_parser.utils.BlackListUtils;
 import com.example.backend_parser.utils.MessageUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SpreadFinder {
@@ -58,9 +56,9 @@ public class SpreadFinder {
                 return;
             }
 
-            String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread, "ETH");
+            String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread, chain);
             if (token1.getBid() > token2.getAsk()) {
-                formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, "ETH");
+                formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, chain);
             }
 
             TelegramService.sendMessage(formattedMessage);
@@ -81,7 +79,7 @@ public class SpreadFinder {
 
                         if(chain1.isDepositEnabled() && chain2.isWithdrawalEnabled()) {
                             ChainAndFee chainAndFee = getFinalFee(token2, exchange2, chain2);
-                            double amountOfTokens = token2.getAsk() * exchange2.getBaseExchange().getMinAmount();
+                            double amountOfTokens = exchange2.getBaseExchange().getMinAmount() / token2.getAsk();
                             double newAsk = exchange2.getBaseExchange().getMinAmount()/(amountOfTokens - chainAndFee.getFee());
                             if(token1.getBid() > newAsk && SpreadCalculator.percentBetweenPrices(token1.getBid(), newAsk) > MIN_SPREAD) {
                                 chainsAndFees.add(chainAndFee);
@@ -89,12 +87,14 @@ public class SpreadFinder {
                         }
                     }
                     else {
-                        System.out.println("Option2 " + chain2.getName() + " " + chain2.isDepositEnabled() + " " + chain1.isWithdrawalEnabled());
+                        System.out.println("Option2 " + chain2.getName() + " " + chain2.isDepositEnabled() + " " + chain1.isWithdrawalEnabled() + " " + chain1);
 
-                        if(chain2.isDepositEnabled() && chain1.isWithdrawalEnabled()) {
+                        if(chain1.isWithdrawalEnabled() && chain2.isDepositEnabled()) {
+                            System.out.println("Done");
                             ChainAndFee chainAndFee = getFinalFee(token1, exchange1, chain1);
-                            double amountOfTokens = token1.getAsk() * exchange1.getBaseExchange().getMinAmount();
+                            double amountOfTokens = exchange1.getBaseExchange().getMinAmount() / token1.getAsk();
                             double newAsk = exchange1.getBaseExchange().getMinAmount()/(amountOfTokens - chainAndFee.getFee());
+                            System.out.println(newAsk + " " + token1.getBase());
                             if(token2.getBid() > newAsk && SpreadCalculator.percentBetweenPrices(token2.getBid(), newAsk) > MIN_SPREAD) {
                                 chainsAndFees.add(chainAndFee);
                             }
