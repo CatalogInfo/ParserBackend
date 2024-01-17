@@ -15,6 +15,11 @@ public abstract class Service implements IExchangeService {
         IMapper mapper = getMapper();
         return mapper.convertBaseQuote(RequestMaker.getRequest(getTradingPairsUrl()));
     }
+
+    @Override
+    public void parseChains(String response, List<Token> tokens) {
+        getMapper().convertChains(response, tokens);
+    }
     @Override
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
         getTokens().addAll(runParseForOrderBooks(tokensToSymbols(tokens), time, minAmount, authToken));

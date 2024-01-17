@@ -24,7 +24,7 @@ public class SpreadCalculator {
         return bid != 0.0 && ask != 0.0;
     }
 
-    private static double percentBetweenPrices(
+    public static double percentBetweenPrices(
             double firstTokenPrice,
             double secondTokenPrice
     ) {

@@ -4,6 +4,8 @@ import com.example.backend_parser.mapper.exchanges.InchMapper;
 import com.example.backend_parser.service.IExchangeService;
 import com.example.backend_parser.service.InchService;
 
+import java.io.IOException;
+
 public class InchExchange extends BaseExchange {
     IExchangeService service = new InchService(
             "",
@@ -21,5 +23,10 @@ public class InchExchange extends BaseExchange {
     @Override
     protected String getAuthToken() {
         return "B9PcyyN0hdb1u681DJm15oHpPaMllexg";
+    }
+
+    @Override
+    public String requestChains() throws IOException {
+        return null;
     }
 }

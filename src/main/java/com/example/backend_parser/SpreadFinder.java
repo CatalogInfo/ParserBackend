@@ -1,9 +1,8 @@
 package com.example.backend_parser;
 
 import com.example.backend_parser.calculations.SpreadCalculator;
-import com.example.backend_parser.models.Exchange;
-import com.example.backend_parser.models.ExchangePair;
-import com.example.backend_parser.models.Token;
+import com.example.backend_parser.exchanges.BaseExchange;
+import com.example.backend_parser.models.*;
 import com.example.backend_parser.service.TelegramService;
 import com.example.backend_parser.splitter.Splitter;
 import com.example.backend_parser.utils.BanListUtils;
@@ -52,14 +51,88 @@ public class SpreadFinder {
             BlackListUtils.addToBlackList(token1.getSymbol(), exchange1.getBlackList());
             BlackListUtils.addToBlackList(token2.getSymbol(), exchange2.getBlackList());
 
-            String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread);
+            String chain = findAChainWithMinFee(token1, token2, exchange1, exchange2);
+
+            System.out.println(chain);
+            if(chain == null) {
+                return;
+            }
+
+            String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread, "ETH");
             if (token1.getBid() > token2.getAsk()) {
-                formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread);
+                formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, "ETH");
             }
 
             TelegramService.sendMessage(formattedMessage);
             Thread.sleep(1000);
         }
+    }
+
+    private static String findAChainWithMinFee(Token token1, Token token2, Exchange exchange1, Exchange exchange2) {
+        List<ChainAndFee> chainsAndFees = new ArrayList<>();
+        List<Chain> chains1 = token1.getChains();
+        List<Chain> chains2 = token2.getChains();
+
+        for(Chain chain1 : chains1) {
+            for(Chain chain2 : chains2) {
+                if(chain1.getName().equalsIgnoreCase(chain2.getName())) {
+                    if(token1.getBid() > token2.getAsk()) {
+                        System.out.println("Option1 " + chain2.getName() + " " + chain1.isDepositEnabled() + " " + chain2.isWithdrawalEnabled());
+
+                        if(chain1.isDepositEnabled() && chain2.isWithdrawalEnabled()) {
+                            ChainAndFee chainAndFee = getFinalFee(token2, exchange2, chain2);
+                            double amountOfTokens = token2.getAsk() * exchange2.getBaseExchange().getMinAmount();
+                            double newAsk = exchange2.getBaseExchange().getMinAmount()/(amountOfTokens - chainAndFee.getFee());
+                            if(token1.getBid() > newAsk && SpreadCalculator.percentBetweenPrices(token1.getBid(), newAsk) > MIN_SPREAD) {
+                                chainsAndFees.add(chainAndFee);
+                            }
+                        }
+                    }
+                    else {
+                        System.out.println("Option2 " + chain2.getName() + " " + chain2.isDepositEnabled() + " " + chain1.isWithdrawalEnabled());
+
+                        if(chain2.isDepositEnabled() && chain1.isWithdrawalEnabled()) {
+                            ChainAndFee chainAndFee = getFinalFee(token1, exchange1, chain1);
+                            double amountOfTokens = token1.getAsk() * exchange1.getBaseExchange().getMinAmount();
+                            double newAsk = exchange1.getBaseExchange().getMinAmount()/(amountOfTokens - chainAndFee.getFee());
+                            if(token2.getBid() > newAsk && SpreadCalculator.percentBetweenPrices(token2.getBid(), newAsk) > MIN_SPREAD) {
+                                chainsAndFees.add(chainAndFee);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        if(chainsAndFees.isEmpty()) {
+            return null;
+        }
+        return findMinFeeObject(chainsAndFees);
+    }
+
+    private static ChainAndFee getFinalFee(Token token, Exchange exchange, Chain chain) {
+        double tokenAmount = exchange.getBaseExchange().getMinAmount() / token.getAsk();
+
+        double percentFee = chain.getFeePercent() * tokenAmount;
+        double finalFee = percentFee + chain.getFee();
+
+        return new ChainAndFee(chain.getName(), finalFee);
+    }
+
+    private static String findMinFeeObject(List<ChainAndFee> chainAndFees) {
+        if (chainAndFees == null || chainAndFees.isEmpty()) {
+            return null;
+        }
+
+        ChainAndFee minFeeObject = chainAndFees.get(0);
+
+        for (ChainAndFee chainAndFee : chainAndFees) {
+            if (chainAndFee.getFee() < minFeeObject.getFee()) {
+                minFeeObject = chainAndFee;
+            }
+        }
+
+        return minFeeObject.getName();
     }
 
     private static List<ExchangePair> parseExchangesPairs(List<String> blackExchangesList) {

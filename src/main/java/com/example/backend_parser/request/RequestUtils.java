@@ -1,4 +1,6 @@
 package com.example.backend_parser.request;
+import com.example.backend_parser.exchanges.OkxExchange;
+import com.example.backend_parser.mapper.exchanges.OkxMapper;
 import org.apache.commons.codec.binary.Hex;
 
 import java.io.BufferedReader;

@@ -50,6 +50,14 @@ public class Splitter {
             threads.add(t);
         }
 
+        for (Exchange exchange : exchanges) {
+
+            Thread t = new Thread(exchange::getChains);
+
+            t.start();
+            threads.add(t);
+        }
+
         ThreadUtils.waitTillThreadsExecuted(threads);
     }
 

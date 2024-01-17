@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,14 @@ public class Exchange {
             tokensToUpperCase.add(token1);
         }
         tokens.addAll(tokensOutput);
+    }
+
+    public void getChains() {
+        try {
+            baseExchange.getChains(baseExchange.requestChains(), tokens);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void getOrderBook(List<Token> tokensInp) {

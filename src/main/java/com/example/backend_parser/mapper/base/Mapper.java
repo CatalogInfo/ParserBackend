@@ -23,6 +23,10 @@ public class Mapper extends Converter implements IMapper {
         return new Token(symbol, bidAsk.getBid(), bidAsk.getAsk());
     }
 
+    public void convertChains(String response, List<Token> tokens) {
+
+    }
+
     public List<Token> convertBaseQuote(String response) {
         JSONArray symbols = getSymbols(response);
 

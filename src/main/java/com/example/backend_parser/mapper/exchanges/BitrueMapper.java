@@ -10,7 +10,8 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class BitrueMapper extends Mapper {
-    public void mapChains(String response, List<Token> tokens) {
+    @Override
+    public void convertChains(String response, List<Token> tokens) {
         JSONObject obj = JsonUtils.getJSONObject(response);
         JSONArray coins = new JSONArray(obj.getJSONArray("coins"));
 

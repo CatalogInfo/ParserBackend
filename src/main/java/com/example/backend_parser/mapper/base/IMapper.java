@@ -8,4 +8,6 @@ import java.util.List;
 public interface IMapper {
     Token convertResponseToToken(String response, String symbol, int minAmount);
     List<Token> convertBaseQuote(String response);
+
+    void convertChains(String response, List<Token> tokens);
 }

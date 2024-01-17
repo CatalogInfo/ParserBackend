@@ -10,7 +10,8 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class BinanceMapper extends Mapper {
-    public void mapChains(String response, List<Token> tokens) {
+    @Override
+    public void convertChains(String response, List<Token> tokens) {
         JSONArray array = JsonUtils.getJSONArray(response);
         for(Token token : tokens) {
             for(int i = 0; i < array.length(); i ++) {
@@ -23,7 +24,6 @@ public class BinanceMapper extends Mapper {
                     for(int j = 0; j < networkList.length(); j ++) {
                         JSONObject networkObject = networkList.getJSONObject(j);
                         String chain = networkObject.getString("network");
-                        System.out.println(networkObject);
 
                         boolean depositEnable = networkObject.getBoolean("depositEnable");
                         boolean withdrawEnable = networkObject.getBoolean("withdrawEnable");

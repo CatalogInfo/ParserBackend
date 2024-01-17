@@ -25,7 +25,8 @@ public class GateMapper extends Mapper {
         return new KeysMapper("id", "base", "quote");
     }
 
-    public void mapChains(String response, List<Token> tokens) {
+    @Override
+    public void convertChains(String response, List<Token> tokens) {
         setDepositWithdraw(tokens);
         JSONObject obj = JsonUtils.getJSONObject(response);
         Iterator keys = obj.keys();
@@ -68,10 +69,8 @@ public class GateMapper extends Mapper {
             for (int i = 0; i < arrayInitial.length(); i++) {
                 JSONObject obj = arrayInitial.getJSONObject(i);
                 String currency = obj.getString("currency");
-                boolean withdraw_disabled = obj.getBoolean("withdraw_disabled");
-                boolean deposit_disabled = obj.getBoolean("deposit_disabled");
-                deposit_disabled = !deposit_disabled;
-                withdraw_disabled = !withdraw_disabled;
+                boolean withdrawDisabled = !obj.getBoolean("withdraw_disabled");
+                boolean depositDisabled = !obj.getBoolean("deposit_disabled");
                 String chain = obj.getString("chain");
 
                 if (currency.contains("_")) {
@@ -79,7 +78,7 @@ public class GateMapper extends Mapper {
                 }
 
                 if (currency.equalsIgnoreCase(token.getBase())) {
-                    Chain chain1 = new Chain(chain, deposit_disabled, withdraw_disabled);
+                    Chain chain1 = new Chain(chain, depositDisabled, withdrawDisabled);
                     token.addChain(chain1);
                 }
             }

@@ -6,6 +6,8 @@ import com.example.backend_parser.service.IExchangeService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 public class KrakenExchange extends BaseExchange {
     IExchangeService service = new ExchangeService(
             "https://api.kraken.com/0/public/Depth?pair=",
@@ -22,6 +24,10 @@ public class KrakenExchange extends BaseExchange {
     }
     @Override
     protected String getAuthToken() {
+        return null;
+    }
+    @Override
+    public String requestChains() throws IOException {
         return null;
     }
 }

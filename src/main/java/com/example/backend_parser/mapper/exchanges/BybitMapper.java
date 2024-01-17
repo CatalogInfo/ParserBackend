@@ -30,7 +30,8 @@ public class BybitMapper extends Mapper {
     public KeysMapper getKeysMapper() {
         return new KeysMapper("symbol", "baseCoin", "quoteCoin", "b", "a");
     }
-    public void mapChains(String response, List<Token> tokens) {
+    @Override
+    public void convertChains(String response, List<Token> tokens) {
         JSONObject obj = JsonUtils.getJSONObject(response);
         JSONObject result = obj.getJSONObject("result");
         JSONArray rows = result.getJSONArray("rows");
