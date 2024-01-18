@@ -26,8 +26,8 @@ public class BitrueMapper extends Mapper {
                         JSONObject chainDetail = chainsDetails.getJSONObject(j);
                         String chain = chainDetail.getString("chain");
 
-                        boolean depositEnable = chainDetail.getBoolean("depositEnable");
-                        boolean withdrawEnable = chainDetail.getBoolean("withdrawEnable");
+                        boolean depositEnable = chainDetail.getBoolean("enableDeposit");
+                        boolean withdrawEnable = chainDetail.getBoolean("enableWithdraw");
                         double fee = chainDetail.getDouble("withdrawFee");
                         Chain chain1 = new Chain(chain, depositEnable, withdrawEnable, fee);
                         token.addChain(chain1);

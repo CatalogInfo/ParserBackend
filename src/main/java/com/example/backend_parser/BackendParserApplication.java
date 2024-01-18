@@ -5,8 +5,6 @@ import com.example.backend_parser.exchanges.*;
 import com.example.backend_parser.mapper.exchanges.*;
 import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Token;
-import com.example.backend_parser.request.ProxyService;
-import com.example.backend_parser.service.ReadProxiesService;
 import com.example.backend_parser.splitter.Splitter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,48 +27,46 @@ public class BackendParserApplication {
 
 		List<Token> tokens = Splitter.exchanges.get(1).getTokens();
 		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
-//		System.out.println(tokens1);
 
-//		GateExchange gateExchange = new GateExchange();
-//		BinanceExchange binanceExchange = new BinanceExchange();
-//
-//		GateMapper gateMapper = new GateMapper();
-//		BinanceMapper binanceMapper = new BinanceMapper();
-//		String response1 = binanceExchange.requestChains();
-//		String response = gateExchange.requestChains();
-//		binanceMapper.convertChains(response1, tokens1);
-//		gateMapper.convertChains(response, tokens);
-//		HashMap<String, String> allChainsGate = new HashMap();
-//		HashMap<String, String> allChainsBinance = new HashMap<>();
-//
-//		for(Token token : tokens) {
-//			for(Chain chain : token.getChains()) {
-//				allChainsGate.put(token.getBase(), chain.getName());
-//			}
-//		}
-//
-//		for(Token token : tokens1) {
-//			for(Chain chain : token.getChains()) {
-//				allChainsBinance.put(token.getBase(), chain.getName());
-//			}
-//		}
-//
-//
-//		HashMap<String, String> result = new HashMap<>();
-//		for(String gateChain : allChainsGate.keySet()) {
-//			if(!allChainsBinance.containsValue(allChainsGate.get(gateChain))) {
-//				result.put(allChainsGate.get(gateChain) + " " + gateChain, "gate");
-//			}
-//		}
-//
-//		for(String binanceChain : allChainsBinance.keySet()) {
-//			if(!allChainsGate.containsValue(allChainsBinance.get(binanceChain))) {
-//				result.put(allChainsBinance.get(binanceChain)  + " " + binanceChain, "binance");
-//			}
-//		}
-//
-//		for(String key : result.keySet()) {
-//			System.out.println(result.get(key)+ " " + key);
-//		}
+		GateExchange gateExchange = new GateExchange();
+		BinanceExchange binanceExchange = new BinanceExchange();
+
+		GateMapper gateMapper = new GateMapper();
+		BinanceMapper binanceMapper = new BinanceMapper();
+		String response1 = binanceExchange.requestChains();
+		String response = gateExchange.requestChains();
+		binanceMapper.convertChains(response1, tokens1);
+		gateMapper.convertChains(response, tokens);
+
+		printUniqueChains(tokens, tokens1, "gate");
+		printUniqueChains(tokens1, tokens, "binance");
+
 	}
+	private static void printUniqueChains(List<Token> tokens1, List<Token> tokens2, String name) {
+		Set<String> printedChains = new HashSet<>();
+
+		for (Token token1 : tokens1) {
+			for (Chain chain1 : token1.getChains()) {
+				boolean isChainUnique = isChainUnique(chain1.getName(), tokens2);
+				String combination = String.format("%s %s %s", name, chain1.getName(), token1.getBase() + " " + chain1.getFee());
+
+				if (isChainUnique && !printedChains.contains(chain1.getName())) {
+					System.out.println(combination);
+					printedChains.add(chain1.getName());
+				}
+			}
+		}
+	}
+
+	private static boolean isChainUnique(String chainName, List<Token> tokens) {
+		for (Token token : tokens) {
+			for (Chain chain : token.getChains()) {
+				if (chain.getName().equals(chainName)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 }

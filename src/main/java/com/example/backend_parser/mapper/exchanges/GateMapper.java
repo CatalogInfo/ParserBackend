@@ -49,7 +49,7 @@ public class GateMapper extends Mapper {
                             double fee = coin.getDouble(key);
                             for(Chain chain : token.getChains()) {
                                 if(chain.getName().equalsIgnoreCase(chainName)) {
-                                    chain.setName(chainName);
+                                    chain.setName(unifyChain(chainName));
                                     chain.setFee(fee);
                                     chain.setFeePercent(feePercent);
                                 }
@@ -73,6 +73,7 @@ public class GateMapper extends Mapper {
                 boolean depositDisabled = !obj.getBoolean("deposit_disabled");
                 String chain = obj.getString("chain");
 
+                System.out.println(currency);
                 if (currency.contains("_")) {
                     currency = currency.substring(0, currency.indexOf("_"));
                 }
@@ -83,5 +84,20 @@ public class GateMapper extends Mapper {
                 }
             }
         }
+    }
+
+    public String unifyChain(String chain) {
+
+        switch (chain) {
+            case "AVAX_C":
+                return "AVAXC";
+            case  "WAXP":
+                return "WAX";
+            case "ZKSERA":
+                return "ZKSYNCERA";
+            case "OPETH":
+                return "OPTIMISM";
+        }
+        return chain;
     }
 }

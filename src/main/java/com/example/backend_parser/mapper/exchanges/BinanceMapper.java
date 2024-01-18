@@ -23,7 +23,7 @@ public class BinanceMapper extends Mapper {
 
                     for(int j = 0; j < networkList.length(); j ++) {
                         JSONObject networkObject = networkList.getJSONObject(j);
-                        String chain = networkObject.getString("network");
+                        String chain = unifyChain(networkObject.getString("network"));
 
                         boolean depositEnable = networkObject.getBoolean("depositEnable");
                         boolean withdrawEnable = networkObject.getBoolean("withdrawEnable");
@@ -34,5 +34,16 @@ public class BinanceMapper extends Mapper {
                 }
             }
         }
+    }
+
+    public String unifyChain(String chain) {
+
+        switch (chain) {
+            case "AVAX_C":
+                return "AVAXC";
+            case  "WAXP":
+                return "WAX";
+        }
+        return chain;
     }
 }

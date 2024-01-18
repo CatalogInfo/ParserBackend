@@ -40,7 +40,7 @@ public class OkxMapper extends Mapper {
             String ccy = ccyInfo.getString("ccy");
             boolean canDeposit = ccyInfo.getBoolean("canDep");
             boolean canWithdraw = ccyInfo.getBoolean("canWd");
-            String chain = parseChain(ccyInfo.getString("chain"));
+            String chain = unifyChain(parseChain(ccyInfo.getString("chain")));
             double fee = ccyInfo.getDouble("minFee");
             for(Token token : tokens) {
                 if(token.getBase().equalsIgnoreCase(ccy)) {
@@ -54,5 +54,15 @@ public class OkxMapper extends Mapper {
 
     private String parseChain(String chain) {
         return chain.substring(chain.indexOf("-") + 1);
+    }
+
+    public String unifyChain(String chain) {
+        switch (chain) {
+            case "ERC20":
+                return "ETH";
+            case  "BSC (BEP20)":
+                return "BSC";
+        }
+        return chain;
     }
 }
