@@ -48,8 +48,8 @@ public class BybitMapper extends Mapper {
                         JSONObject chainDetail = chainsDetails.getJSONObject(j);
                         String chain = chainDetail.getString("chainType");
 
-                        boolean depositEnable = defineIsIntBoolean(chainDetail.getInt("chainDeposit"));
-                        boolean withdrawEnable = defineIsIntBoolean(chainDetail.getInt("chainWithdraw"));
+                        boolean depositEnable = defineIsIntBoolean(chainDetail.getString("chainDeposit"));
+                        boolean withdrawEnable = defineIsIntBoolean(chainDetail.getString("chainWithdraw"));
 
                         double fee = chainDetail.getDouble("withdrawFee");
                         double feePercent = chainDetail.getDouble("withdrawPercentageFee");
@@ -61,8 +61,8 @@ public class BybitMapper extends Mapper {
         }
     }
 
-    public boolean defineIsIntBoolean(int number) {
-        if(number == 1) {
+    public boolean defineIsIntBoolean(String number) {
+        if(number.equals("1")) {
             return true;
         }
         return false;
