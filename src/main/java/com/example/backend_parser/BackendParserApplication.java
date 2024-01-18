@@ -25,21 +25,21 @@ public class BackendParserApplication {
 			throw new RuntimeException(e);
 		}
 
-		List<Token> tokens = Splitter.exchanges.get(1).getTokens();
-		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
-
-		GateExchange gateExchange = new GateExchange();
-		BinanceExchange binanceExchange = new BinanceExchange();
-
-		GateMapper gateMapper = new GateMapper();
-		BinanceMapper binanceMapper = new BinanceMapper();
-		String response1 = binanceExchange.requestChains();
-		String response = gateExchange.requestChains();
-		binanceMapper.convertChains(response1, tokens1);
-		gateMapper.convertChains(response, tokens);
-
-		printUniqueChains(tokens, tokens1, "gate");
-		printUniqueChains(tokens1, tokens, "binance");
+//		List<Token> tokens = Splitter.exchanges.get(1).getTokens();
+//		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
+//
+//		GateExchange gateExchange = new GateExchange();
+//		BinanceExchange binanceExchange = new BinanceExchange();
+//
+//		GateMapper gateMapper = new GateMapper();
+//		BinanceMapper binanceMapper = new BinanceMapper();
+//		String response1 = binanceExchange.requestChains();
+//		String response = gateExchange.requestChains();
+//		binanceMapper.convertChains(response1, tokens1);
+//		gateMapper.convertChains(response, tokens);
+//
+//		printUniqueChains(tokens, tokens1, "gate");
+//		printUniqueChains(tokens1, tokens, "binance");
 
 	}
 	private static void printUniqueChains(List<Token> tokens1, List<Token> tokens2, String name) {

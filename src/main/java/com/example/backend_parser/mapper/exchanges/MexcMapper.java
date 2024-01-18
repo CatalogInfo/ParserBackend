@@ -31,6 +31,5 @@ public class MexcMapper extends Mapper {
                 }
             }
         }
-        System.out.println(tokens);
     }
 }

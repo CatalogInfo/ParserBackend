@@ -73,7 +73,6 @@ public class GateMapper extends Mapper {
                 boolean depositDisabled = !obj.getBoolean("deposit_disabled");
                 String chain = obj.getString("chain");
 
-                System.out.println(currency);
                 if (currency.contains("_")) {
                     currency = currency.substring(0, currency.indexOf("_"));
                 }

@@ -34,6 +34,9 @@ public class OkxMapper extends Mapper {
     @Override
     public void convertChains(String response, List<Token> tokens) {
         JSONObject obj = JsonUtils.getJSONObject(response);
+        if(!obj.has("data")) {
+            return;
+        }
         JSONArray array = obj.getJSONArray("data");
         for(int i = 0; i < array.length(); i ++) {
             JSONObject ccyInfo = array.getJSONObject(i);
@@ -49,7 +52,6 @@ public class OkxMapper extends Mapper {
                 }
             }
         }
-        System.out.println(tokens);
     }
 
     private String parseChain(String chain) {

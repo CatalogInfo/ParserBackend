@@ -54,7 +54,6 @@ public class BybitMapper extends Mapper {
                         double fee = chainDetail.getDouble("withdrawFee");
                         double feePercent = chainDetail.getDouble("withdrawPercentageFee");
                         Chain chain1 = new Chain(unifyChain(chain), depositEnable, withdrawEnable, fee, feePercent);
-                        System.out.println(chain1);
                         token.addChain(chain1);
                     }
                 }
