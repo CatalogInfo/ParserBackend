@@ -46,6 +46,7 @@ public class GateMapper extends Mapper {
                         if (key.startsWith("withdraw_fix_on_chain_")) {
 
                             String chainName = key.substring(22);
+                            System.out.println(chainName);
                             double fee = coin.getDouble(key);
                             for(Chain chain : token.getChains()) {
                                 if(chain.getName().equalsIgnoreCase(chainName)) {
@@ -87,6 +88,9 @@ public class GateMapper extends Mapper {
 
     public String unifyChain(String chain) {
 
+        if(chain.startsWith("NEO_OLD")) {
+            System.out.println("AAAAAAA");
+        }
         switch (chain) {
             case "AVAX_C":
                 return "AVAXC";
@@ -98,7 +102,7 @@ public class GateMapper extends Mapper {
                 return "OPTIMISM";
             case "MANTAETH":
                 return "MANTA";
-            case "NEO_OLD", "GAS_OLD":
+            case "NEO_OLD":
                 return "NEO";
             case "RBTC":
                 return "RSK";

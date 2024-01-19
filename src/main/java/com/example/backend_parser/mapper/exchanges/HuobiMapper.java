@@ -167,6 +167,8 @@ public class HuobiMapper extends Mapper {
                 return "SMT";
             case "dbc1":
                 return "DBC";
+            case "fsn":
+                return "FSN";
 
         }
         return chain;

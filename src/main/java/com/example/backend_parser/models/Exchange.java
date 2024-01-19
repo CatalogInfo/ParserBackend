@@ -17,6 +17,7 @@ public class Exchange {
     String link;
     String linkSplitter;
     String splitter;
+    String endOfLink = "";
     boolean toLowerCase;
 
     List<BlackListItem> blackList = new ArrayList<>();
@@ -37,6 +38,16 @@ public class Exchange {
         this.splitter = splitter;
         this.toLowerCase = toLowerCase;
         this.baseExchange = baseExchange;
+    }
+
+    public Exchange( String name, String link, String linkSplitter, String splitter, boolean toLowerCase, BaseExchange baseExchange, String endOfLink) {
+        this.name = name;
+        this.link = link;
+        this.linkSplitter = linkSplitter;
+        this.splitter = splitter;
+        this.toLowerCase = toLowerCase;
+        this.baseExchange = baseExchange;
+        this.endOfLink = endOfLink;
     }
 
     public void getBaseQuotes() {
