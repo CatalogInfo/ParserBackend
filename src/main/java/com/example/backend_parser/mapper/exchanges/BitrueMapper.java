@@ -24,7 +24,7 @@ public class BitrueMapper extends Mapper {
                     JSONArray chainsDetails = chainObj.getJSONArray("chainDetail");
                     for (int j = 0; j < chainsDetails.length(); j++) {
                         JSONObject chainDetail = chainsDetails.getJSONObject(j);
-                        String chain = chainDetail.getString("chain");
+                        String chain = unifyChain(chainDetail.getString("chain"));
 
                         boolean depositEnable = chainDetail.getBoolean("enableDeposit");
                         boolean withdrawEnable = chainDetail.getBoolean("enableWithdraw");
@@ -35,5 +35,28 @@ public class BitrueMapper extends Mapper {
                 }
             }
         }
+    }
+
+    private String unifyChain(String chain) {
+        switch(chain) {
+            case "CFX Core":
+                return "CFX";
+            case "CFX eSpace":
+                return "CFXEVM";
+            case "RBTC":
+                return "RSK";
+            case "MA":
+                return "MANTA";
+            case "BRC20":
+                return "ORDIBTC";
+            case "zkSync":
+                return "ZKSYNCERA";
+            case "COREDAO":
+                return "CORE";
+            case "Bahamut":
+                return "FTN";
+        }
+
+        return chain;
     }
 }

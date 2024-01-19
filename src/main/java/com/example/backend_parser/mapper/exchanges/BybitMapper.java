@@ -83,6 +83,66 @@ public class BybitMapper extends Mapper {
                 return "ETH";
             case  "BSC (BEP20)":
                 return "BSC";
+            case "Arbitrum One", "Arbitrum One (Bridged)":
+                return "ARBITRUM";
+            case "Polygon(bridged)", "Polygon", "Polygon ":
+                return "POLYGON";
+            case "Terra Classic":
+                return "LUNC";
+            case "Avalanche":
+                return "AVAX";
+            case "AVAX C-Chain":
+                return "AVAXC";
+            case "BNB (BEP2)":
+                return "BNB";
+            case "zkSync Era":
+                return "ZKSYNCERA";
+            case "TRC20":
+                return "TRX";
+            case "NEM":
+                return "XEM";
+            case "Base Mainnet":
+                return "BASE";
+            case "Stellar Lumens":
+                return "XLM";
+            case "Dogecoin":
+                return "DOGE";
+            case "Ethereum Classic":
+                return "ETC";
+            case "Bitcoin Cash":
+                return "BCH";
+            case "Solana":
+                return "SOL";
+            case "APTOS":
+                return "APT";
+            case "Celestia":
+                return "TIA";
+            case "Viction":
+                return "VIC";
+            case "BRC20 - unisat":
+                return "ORDIBTC";
+            case "Filecoin":
+                return "FIL";
+            case "Terra":
+                return "LUNA";
+            case "Mantle Network":
+                return "MNT";
+            case "Chiliz Legacy Chain":
+                return "CHZ";
+            case "Kaspa":
+                return "KAS";
+            case "Arbitrum Nova":
+                return "ARBNOVA";
+            case "Neon EVM":
+                return "NEON";
+            case "Luniverse":
+                return "LUK";
+            case "OMEGA":
+                return "OMG";
+            case "Caduceus":
+                return "CMP";
+            case "STEP":
+                return "FITFI";
         }
         return chain;
     }

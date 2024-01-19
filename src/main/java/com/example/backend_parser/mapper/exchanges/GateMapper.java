@@ -96,6 +96,22 @@ public class GateMapper extends Mapper {
                 return "ZKSYNCERA";
             case "OPETH":
                 return "OPTIMISM";
+            case "MANTAETH":
+                return "MANTA";
+            case "NEO_OLD", "GAS_OLD":
+                return "NEO";
+            case "RBTC":
+                return "RSK";
+            case "ARBEVM":
+                return "ARBITRUM";
+            case "GAS":
+                return "NEO3";
+            case "LINEAETH":
+                return "LINEA";
+            case "KONCHAIN":
+                return "KON";
+            case "OMN":
+                return "OMG";
         }
         return chain;
     }

@@ -1,6 +1,7 @@
 package com.example.backend_parser.mapper.exchanges;
 
 import com.example.backend_parser.mapper.base.Mapper;
+import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.utils.JsonUtils;
 import org.json.JSONObject;
@@ -30,5 +31,11 @@ public class InchMapper extends Mapper {
 
         }
         return baseQuoteList;
+    }
+    @Override
+    public void convertChains(String response, List<Token> tokens) {
+        for(Token token : tokens) {
+            token.addChain(new Chain("ETH", true, true, 0, 0));
+        }
     }
 }

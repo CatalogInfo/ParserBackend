@@ -12,12 +12,12 @@ public class Splitter {
     public static List<Exchange> exchanges = new ArrayList<>();
 
     public static void init() {
-        exchanges.add(new Exchange("binance", "", "https://www.binance.com/en/trade/", "", new BinanceExchange())); // doesn't matter
-        exchanges.add(new Exchange("gate", "_", "https://www.gate.io/trade/", "_", new GateExchange())); // BASE_QUOTE, ++
+//        exchanges.add(new Exchange("binance", "", "https://www.binance.com/en/trade/", "", new BinanceExchange())); // doesn't matter
 //        exchanges.add(new Exchange("bitrue", "", "https://www.bitrue.com/trade/", "_", new BitrueExchange())); // BASEQOUTE api, ++
 //        exchanges.add(new Exchange("okx", "-", "https://www.okx.com/trade-spot/", "-", new OkxExchange())); // BASE-QUOTE api, ++
 //        exchanges.add(new Exchange("huobi", "", "https://www.htx.com/en-us/trade/", "_", true, new HuobiExchange())); // basequote api, base_quote link dolboebi
-//        exchanges.add(new Exchange("bybit", "", "https://www.bybit.com/en-US/trade/spot/", "/", new BybitExchange())); // BASEQUOTE , BASE/QUOTE link eblan
+        exchanges.add(new Exchange("bybit", "", "https://www.bybit.com/en-US/trade/spot/", "/", new BybitExchange())); // BASEQUOTE , BASE/QUOTE link eblan
+        exchanges.add(new Exchange("gate", "_", "https://www.gate.io/trade/", "_", new GateExchange())); // BASE_QUOTE, ++
 
 
 //        exchanges.add(new Exchange("1inch", "", "https://www.bybit.com/en-US/trade/spot/", "/", new InchExchange()));
