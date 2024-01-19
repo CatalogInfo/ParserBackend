@@ -51,7 +51,7 @@ public class HuobiMapper extends Mapper {
                     JSONArray chainsDetails = chainObj.getJSONArray("chains");
                     for (int j = 0; j < chainsDetails.length(); j++) {
                         JSONObject chainDetail = chainsDetails.getJSONObject(j);
-                        String chain = chainDetail.getString("chain");
+                        String chain = unifyChain(chainDetail.getString("chain"));
                         boolean depositEnable = false;
                         boolean withdrawEnable = false;
                         String dep = chainDetail.getString("depositStatus");
@@ -77,5 +77,98 @@ public class HuobiMapper extends Mapper {
                 }
             }
         }
+    }
+
+    private String unifyChain(String chain) {
+        if(chain.startsWith("erc20")) {
+            return "ETH";
+        } else if (chain.startsWith("bep20")) {
+            return "BSC";
+        } else if (chain.startsWith("arbi")) {
+            return "ARBITRUM";
+        } else if (chain.startsWith("base")) {
+            return "BASE";
+        } else if (chain.startsWith("opt")) {
+            return "OPTIMISM";
+        } else if (chain.startsWith("hrc20")) {
+            return "HRC20";
+        } else if (chain.startsWith("trc20")) {
+            return "TRX";
+        } else if (chain.startsWith("btt2")) {
+            return "BTT";
+        }
+
+        switch(chain) {
+            case "ordi":
+                return "ORDIBTC";
+            case "poly1":
+                return "POLYX";
+            case "elf1":
+                return "ELF";
+            case "xec1":
+                return "XEC";
+            case "wax1":
+                return "WAX";
+            case "luna1":
+                return "LUNA";
+            case "sxp1":
+                return "SXP";
+            case "lsk1":
+                return "LSK";
+            case "eur":
+                return "FIAT_MONEY";
+            case "ctxc1":
+                return "CTXC";
+            case "kava10":
+                return "KAVA";
+            case "band2":
+                return "BAND";
+            case "one1":
+                return "ONE";
+            case "atom1":
+                return "ATOM";
+            case "enj1":
+                return "ENJ";
+            case "theta1":
+                return "THETA";
+            case "xmr1":
+                return "XMR";
+            case "zil1":
+                return "ZIL";
+            case "cchainavax":
+                return "AVAXC";
+            case "nuls1":
+                return "NULS";
+            case "icx1":
+                return "ICX";
+            case "ont2":
+                return "ONT";
+            case "iota1":
+                return "IOTA";
+            case "trx1":
+                return "TRX";
+            case "neo1":
+                return "NEO";
+            case "bnb1":
+                return "BNB";
+            case "eos1":
+                return "EOS";
+            case "arb":
+                return "ARBITRUM";
+            case "mnt1":
+                return "MNT";
+            case "tenet1":
+                return "TENET";
+            case "wemix1":
+                return "WEMIX";
+            case "wicc1":
+                return "WICC";
+            case "smt2":
+                return "SMT";
+            case "dbc1":
+                return "DBC";
+
+        }
+        return chain;
     }
 }

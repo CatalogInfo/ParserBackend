@@ -91,7 +91,7 @@ public class BybitMapper extends Mapper {
                 return "LUNC";
             case "Avalanche":
                 return "AVAX";
-            case "AVAX C-Chain":
+            case "AVAX C-Chain", "AVAX-C":
                 return "AVAXC";
             case "BNB (BEP2)":
                 return "BNB";

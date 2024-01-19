@@ -28,18 +28,18 @@ public class BackendParserApplication {
 		List<Token> tokens = Splitter.exchanges.get(1).getTokens();
 		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
 
-		GateExchange gateExchange = new GateExchange();
-		BybitExchange binanceExchange = new BybitExchange();
+		HuobiExchange gateExchange = new HuobiExchange();
+		GateExchange binanceExchange = new GateExchange();
 
-		GateMapper gateMapper = new GateMapper();
-		BybitMapper binanceMapper = new BybitMapper();
+		HuobiMapper gateMapper = new HuobiMapper();
+		GateMapper binanceMapper = new GateMapper();
 		String response1 = binanceExchange.requestChains();
 		String response = gateExchange.requestChains();
 		binanceMapper.convertChains(response1, tokens1);
 		gateMapper.convertChains(response, tokens);
 
-		printUniqueChains(tokens, tokens1, "gate");
-		printUniqueChains(tokens1, tokens, "bybit");
+		printUniqueChains(tokens, tokens1, "huobi");
+		printUniqueChains(tokens1, tokens, "gate");
 
 	}
 	private static void printUniqueChains(List<Token> tokens1, List<Token> tokens2, String name) {

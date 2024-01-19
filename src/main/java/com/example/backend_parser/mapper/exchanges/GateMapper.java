@@ -112,6 +112,26 @@ public class GateMapper extends Mapper {
                 return "KON";
             case "OMN":
                 return "OMG";
+            case "AURORAEVM":
+                return "AURORA";
+            case "BOBAEVM":
+                return "BOBA";
+            case "BASEEVM":
+                return "BASE";
+            case "CLVEVM":
+                return "CLV";
+            case "ASTREVM":
+                return "ASTR";
+            case "KAVAEVM":
+                return "KAVA";
+            case "SDNEVM":
+                return "snd";
+            case "NULSEVM":
+                return "NULS";
+            case "GTEVM":
+                return "GT";
+            case "DOGEEVM":
+                return "DOGE";
         }
         return chain;
     }
