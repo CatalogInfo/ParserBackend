@@ -20,7 +20,9 @@ public class BackendParserApplication {
 
 		Splitter.init();
 		try {
-			SpreadFinder.findSpreads();
+			while(true) {
+				SpreadFinder.findSpreads();
+			}
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
