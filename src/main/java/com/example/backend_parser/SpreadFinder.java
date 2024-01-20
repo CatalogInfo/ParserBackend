@@ -49,12 +49,10 @@ public class SpreadFinder {
             BlackListUtils.addToBlackList(token1.getSymbol(), exchange1.getBlackList());
             BlackListUtils.addToBlackList(token2.getSymbol(), exchange2.getBlackList());
 
-//            String chain = findAChainWithMinFee(token1, token2, exchange1, exchange2);
-//
-//            System.out.println(chain);
-//            if(chain == null) {
-//                return;
-//            }
+            String chain = findAChainWithMinFee(token1, token2, exchange1, exchange2);
+            if(chain == null) {
+                return;
+            }
 
             String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread, "chain");
             if (token1.getBid() > token2.getAsk()) {
@@ -90,11 +88,9 @@ public class SpreadFinder {
                         System.out.println("Option2 " + chain2.getName() + " " + chain2.isDepositEnabled() + " " + chain1.isWithdrawalEnabled() + " " + chain1);
 
                         if(chain1.isWithdrawalEnabled() && chain2.isDepositEnabled()) {
-                            System.out.println("Done");
                             ChainAndFee chainAndFee = getFinalFee(token1, exchange1, chain1);
                             double amountOfTokens = exchange1.getBaseExchange().getMinAmount() / token1.getAsk();
                             double newAsk = exchange1.getBaseExchange().getMinAmount()/(amountOfTokens - chainAndFee.getFee());
-                            System.out.println(newAsk + " " + token1.getBase());
                             if(token2.getBid() > newAsk && SpreadCalculator.percentBetweenPrices(token2.getBid(), newAsk) > MIN_SPREAD) {
                                 chainsAndFees.add(chainAndFee);
                             }
