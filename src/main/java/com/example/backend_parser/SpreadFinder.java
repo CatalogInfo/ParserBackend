@@ -54,9 +54,9 @@ public class SpreadFinder {
                 return;
             }
 
-            String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread, "chain");
+            String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread, chain);
             if (token1.getBid() > token2.getAsk()) {
-                formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, "chain");
+                formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, chain);
             }
             System.out.println(formattedMessage);
             TelegramService.sendMessage(formattedMessage);
