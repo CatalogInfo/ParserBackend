@@ -135,7 +135,7 @@ public class SpreadFinder {
         List<ExchangePair> exchangesList = new ArrayList<>();
 
         for (Exchange exchange1 : Splitter.exchanges) {
-//            blackExchangesList.add(exchange1.getName());
+            blackExchangesList.add(exchange1.getName());
             for (Exchange exchange2 : Splitter.exchanges) {
                 if (blackExchangesList.contains(exchange2.getName())) {
                     continue;
