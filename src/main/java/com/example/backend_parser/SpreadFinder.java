@@ -23,8 +23,8 @@ public class SpreadFinder {
     }
 
     private static void parseTokensAndSendSpread() throws InterruptedException {
-        List<String> exchangesNames = List.of();
-        List<ExchangePair> exchangePairs = parseExchangesPairs(exchangesNames);
+        List<String> exchangesNames = new ArrayList<>();
+        List<ExchangePair> exchangePairs = new ArrayList<>(parseExchangesPairs(exchangesNames));
 
         for (ExchangePair pair : exchangePairs) {
             for (Token token : pair.exchange1.getTokens()) {
