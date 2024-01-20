@@ -1,6 +1,7 @@
 package com.example.backend_parser.models;
 
 import com.example.backend_parser.exchanges.BaseExchange;
+import com.example.backend_parser.utils.RestartUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,7 @@ public class Exchange {
         try {
             baseExchange.getChains(baseExchange.requestChains(), tokens);
         } catch (IOException e) {
+            RestartUtils.restartApp();
             throw new RuntimeException(e);
         }
     }

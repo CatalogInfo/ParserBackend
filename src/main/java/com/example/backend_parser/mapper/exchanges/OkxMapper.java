@@ -64,6 +64,138 @@ public class OkxMapper extends Mapper {
                 return "ETH";
             case  "BSC (BEP20)":
                 return "BSC";
+            case "Bitcoin":
+                return "BTC";
+            case "Arbitrum One":
+                return "ARBITRUM";
+            case "zkSync Era":
+                return "ZKSYNCERA";
+            case "Ripple":
+                return "XRP";
+            case "Solana":
+                return "SOL";
+            case "Dogecoin":
+                return "DOGE";
+            case "Acala":
+                return "ACA";
+            case "Endurance Smart Chain":
+                return "ENDURANCE";
+            case "Cardano":
+                return "ADA";
+            case "Algorand":
+                return "ALGO";
+            case "Aptos":
+                return "APT";
+            case "Arweave":
+                return "AR";
+            case "Astar":
+                return "ASTR";
+            case "Cosmos":
+                return "ATOM";
+            case "Avalanche X-Chain":
+                return "AVAX";
+            case "Avalanche C-Chain":
+                return "AVAXC";
+            case "BitcoinCash":
+                return "BCH";
+            case "TRC20":
+                return "TRX";
+            case "Conflux":
+                return "CFX";
+            case "CFX_EVM":
+                return "CFXEVM";
+            case "Cortex":
+                return "CTXC";
+            case "Decred":
+                return "DCR";
+            case "Digibyte":
+                return "DGB";
+            case "Elrond":
+                return "EGLD";
+            case "AELF":
+                return "ELF";
+            case "Enjin Relay Chain":
+                return "ENJ";
+            case "Ethereum Classic":
+                return "ETC";
+            case "EthereumPoW":
+                return "ETHW";
+            case "Filecoin":
+                return "FIL";
+            case "Fantom":
+                return "FTM";
+            case "Moonbeam":
+                return "GLMR";
+            case "Hedera":
+                return "HBAR";
+            case "ICON":
+                return "ICX";
+            case "MIOTA":
+                return "IOTA";
+            case "Kadena":
+                return "KDA";
+            case "Klaytn":
+                return "KLAY";
+            case "Kusama":
+                return "KSM";
+            case "Lisk":
+                return "LSK";
+            case "Litecoin":
+                return "LTC";
+            case "Terra Classic":
+                return "LUNC";
+            case "Terra":
+                return "LUNA";
+            case "Moonriver":
+                return "MOVR";
+            case "Harmony":
+                return "ONE";
+            case "Ontology":
+                return "ONT";
+            case "Quantum":
+                return "QTUM";
+            case "Ravencoin":
+                return "RVN";
+            case "Siacoin":
+                return "SC";
+            case "l-Stacks":
+                return "STX";
+            case "Celestia":
+                return "TIA";
+            case "New Economy Movement":
+                return "XEM";
+            case "Stellar Lumens":
+                return "XLM";
+            case "Tezos":
+                return "XTZ";
+            case "Zilliqa":
+                return "ZIL";
+            case "Polygon":
+                return "MATIC";
+            case "BRC20":
+                return "ORDIBTC";
+            case "Casper":
+                return "CSPR";
+            case "Polkadot":
+                return "DOT";
+            case "N3":
+                return "NEO3";
+            case "Flare":
+                return "FLR";
+            case "HyperCash":
+                return "HC";
+            case "PlatON":
+                return "LAT";
+            case "Ronin":
+                return "RON";
+            case "Khala":
+                return "PHA";
+            case "ONT":
+                return "ONG";
+            case "Omega Chain":
+                return "OMG";
+            case "OASYS":
+                return "OAS";
         }
         return chain;
     }

@@ -31,6 +31,7 @@ public class RequestMaker {
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
+            RestartUtils.restartApp();
             e.printStackTrace();
         }
         return RequestUtils.readFromConnection(inputStream);

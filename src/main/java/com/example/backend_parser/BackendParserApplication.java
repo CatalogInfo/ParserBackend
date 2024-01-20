@@ -6,6 +6,7 @@ import com.example.backend_parser.mapper.exchanges.*;
 import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.splitter.Splitter;
+import com.example.backend_parser.utils.RestartUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -26,28 +27,29 @@ public class BackendParserApplication {
 		System.setProperty("java.awt.headless", "false");
 
 		try {
-			//while(true) {
+			while(true) {
 				SpreadFinder.findSpreads();
-			//}
+			}
 		} catch (InterruptedException e) {
-		//	throw new RuntimeException(e);
+			RestartUtils.restartApp();
+			throw new RuntimeException(e);
 		}
 
-		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
-		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
-
-		HuobiExchange exchange1 = new HuobiExchange();
-		GateExchange exchange2 = new GateExchange();
-
-		HuobiMapper mapper1 = new HuobiMapper();
-		GateMapper mapper2 = new GateMapper();
-		String response1 = exchange1.requestChains();
-		String response2 = exchange2.requestChains();
-		mapper1.convertChains(response1, tokens1);
-		mapper2.convertChains(response2, tokens2);
-
-		printUniqueChains(tokens1, tokens2, "binance");
-		printUniqueChains(tokens2, tokens1, "okx");
+//		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
+//		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
+//
+//		BitrueExchange exchange1 = new BitrueExchange();
+//		OkxExchange exchange2 = new OkxExchange();
+//
+//		BitrueMapper mapper1 = new BitrueMapper();
+//		OkxMapper mapper2 = new OkxMapper();
+//		String response1 = exchange1.requestChains();
+//		String response2 = exchange2.requestChains();
+//		mapper1.convertChains(response1, tokens1);
+//		mapper2.convertChains(response2, tokens2);
+//
+//		printUniqueChains(tokens1, tokens2, "bitrue");
+//		printUniqueChains(tokens2, tokens1, "okx");
 
 	}
 	private static void printUniqueChains(List<Token> tokens1, List<Token> tokens2, String name) {
