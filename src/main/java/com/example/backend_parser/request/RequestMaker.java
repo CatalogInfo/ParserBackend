@@ -1,5 +1,6 @@
 package com.example.backend_parser.request;
 
+import com.example.backend_parser.utils.RestartUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -116,7 +117,7 @@ public class RequestMaker {
         }
 
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            System.out.println(url);
+            RestartUtils.restartApp();
             throw new Exception("NOT WORKED");
         }
     }

@@ -9,16 +9,22 @@ import com.example.backend_parser.splitter.Splitter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 @SpringBootApplication
 public class BackendParserApplication {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, AWTException {
 //		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
 
 		Splitter.init();
+		System.setProperty("java.awt.headless", "false");
+
 		try {
 			while(true) {
 				SpreadFinder.findSpreads();
