@@ -81,21 +81,23 @@ public class InchService extends Service {
     @Override
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
         int tokenNumber = 0;
-        for(int i = 0; i < 2; i ++) {
+        for(int i = 0; i < 10; i ++) {
             for (ProxyWithApiToken proxyWithApiToken : proxies) {
 
                 int finalTokenNumber = tokenNumber;
                 Thread t = new Thread(() -> {
-                    PriceAmount bid = getBid(tokens.get(finalTokenNumber).getAddress(), (int)(minAmount * Math.pow(10, 6)), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
+                    PriceAmount ask = getAsk(tokens.get(finalTokenNumber).getAddress(), (int)(minAmount * Math.pow(10, 6)), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
+
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    PriceAmount ask = getAsk(tokens.get(finalTokenNumber).getAddress(), bid.getAmount(), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
+                    PriceAmount bid = getBid(tokens.get(finalTokenNumber).getAddress(), ask.getAmount(), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
 
-                    System.out.println("BID: " + bid.price + " " + tokens.get(finalTokenNumber).getAddress());
-                    System.out.println("ASK: " + ask.price + " " + tokens.get(finalTokenNumber).getAddress());
+
+                    System.out.println("BID: " + bid.price + " " + tokens.get(finalTokenNumber).getAddress() + " " + tokens.get(finalTokenNumber).getSymbol());
+                    System.out.println("ASK: " + ask.price + " " + tokens.get(finalTokenNumber).getAddress() + " " +  tokens.get(finalTokenNumber).getSymbol());
 
                     tokens.get(finalTokenNumber).setAsk(ask.getPrice());
                     tokens.get(finalTokenNumber).setBid(bid.getPrice());
@@ -119,31 +121,39 @@ public class InchService extends Service {
         return tokens;
     }
 
-    public PriceAmount getAsk(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
-        String response = ProxyService.requestWithProxy(proxyWithApiToken, "https://api.1inch.dev/swap/v5.2/1/quote", proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
+    public PriceAmount getBid(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
+        String response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
         JSONObject object = JsonUtils.getJSONObject(response);
         PriceAmount priceAmount = calculateFinalAmount(object, 6);
 
         BigInteger divider = new BigInteger("10").pow(decimals);
 
         BigInteger amount = new BigInteger(minAmountString).divide(divider);
-
+        double price = calculateFinalPrice(Double.parseDouble(String.valueOf(amount)), priceAmount.getPrice());
+        JSONObject presets = object.getJSONObject("presets");
+        JSONObject fast = presets.getJSONObject("fast");
+        BigInteger fee = new BigInteger(fast.getString("tokenFee")).divide(divider);
         priceAmount.setPrice(calculateFinalPrice(Double.parseDouble(String.valueOf(amount)), priceAmount.getPrice()));
         return priceAmount;
     }
-    public PriceAmount getBid(String addressTo, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
-        String response = ProxyService.requestWithProxy(proxyWithApiToken,"https://api.1inch.dev/swap/v5.2/1/quote", proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, String.valueOf(minAmount));
+    public PriceAmount getAsk(String addressTo, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
+        String response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, String.valueOf(minAmount));
         JSONObject object = JsonUtils.getJSONObject(response);
         PriceAmount priceAmount = calculateFinalAmount(object, decimals);
+        JSONObject presets = object.getJSONObject("presets");
+        JSONObject fast = presets.getJSONObject("fast");
+        BigInteger divider = new BigInteger("10").pow(decimals);
+
+        BigInteger fee = new BigInteger(fast.getString("tokenFee")).divide(divider);
         priceAmount.setPrice(calculateFinalPrice(priceAmount.getPrice(), minAmount) / Math.pow(10, 6));
         return priceAmount;
     }
 
     private PriceAmount calculateFinalAmount(JSONObject obj, int decimals) {
-        if(!obj.has("toAmount")) {
+        if(!obj.has("toTokenAmount")) {
             return new PriceAmount();
         }
-        String toAmountString = String.valueOf(obj.get("toAmount"));
+        String toAmountString = String.valueOf(obj.get("toTokenAmount"));
         PriceAmount priceAmount = new PriceAmount();
 
         double toAmount = Double.parseDouble(toAmountString);

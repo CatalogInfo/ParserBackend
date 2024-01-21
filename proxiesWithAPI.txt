@@ -2,3 +2,9 @@
 88.218.50.177:8000:8uJsED:1qVb7f:KjXA85dk88Tbri171sgBwXkflqpQhEgq
 185.75.132.77:8000:8uJsED:1qVb7f:NkXh67g4ruxgVLHWSxLS1eltTZ4oATPf
 45.147.31.243:8000:8uJsED:1qVb7f:SLLR4CqUKNnv2yJn1fxkNLL4c5TzX7oS
+104.238.8.101:5959:qoeqmlvv:oydvaukmtb30:mOHs2EDCmUIWs1ka18n8hpIr0CVevLLg
+64.137.49.111:6652:qoeqmlvv:oydvaukmtb30:JDkQvUq16X6LTvTGdlkjm3imi66t25A5
+104.233.19.150:5822:qoeqmlvv:oydvaukmtb30:yk5skTkTvxwwyNRO2y6hpmdwXM5x1uyn
+104.143.252.95:5709:qoeqmlvv:oydvaukmtb30:QYQjnjjxc0miT19f6aT6vxNiazAUiWef
+64.137.59.132:6725:qoeqmlvv:oydvaukmtb30:Y7SUWtYJAEQbqQv6rjJdMYSNb9XhIuuI
+104.239.43.211:5939:qoeqmlvv:oydvaukmtb30:lBq3TC6tl5KFm22gAb0TGZSNZ44o4W0O

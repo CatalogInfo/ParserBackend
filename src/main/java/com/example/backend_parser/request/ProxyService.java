@@ -10,7 +10,7 @@ import java.net.*;
 import java.util.List;
 
 public class ProxyService {
-    public static String requestWithProxy(ProxyWithApiToken proxyWithApiToken, String url, String authorizationToken, String src, String dst, String amount) {
+    public static String requestWithProxy(ProxyWithApiToken proxyWithApiToken, String authorizationToken, String src, String dst, String amount) {
         System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "false");
         System.setProperty("jdk.http.auth.proxying.disabledSchemes", "false");
 
@@ -39,6 +39,6 @@ public class ProxyService {
         ProxySelector.setDefault(proxySelector);
 
 
-        return RequestMaker.inchQuoteRequest(url, authorizationToken, src, dst, amount);
+        return RequestMaker.inchQuoteRequest(authorizationToken, src, dst, amount);
     }
 }

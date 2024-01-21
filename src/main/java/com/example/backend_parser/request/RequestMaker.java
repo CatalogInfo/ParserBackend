@@ -59,27 +59,22 @@ public class RequestMaker {
     }
 
 
-    public static String inchQuoteRequest(String url, String authorizationToken, String src, String dst, String amount) {
+    public static String inchQuoteRequest(String authorizationToken, String src, String dst, String amount) {
+        String link = "https://api.1inch.dev/fusion/quoter/v1.0/1/quote/receive?fromTokenAddress=" + src + "&toTokenAddress=" + dst + "&amount=" + amount + "&walletAddress=0xb094Cf1aA47891e96d2CA5a3Fd66B3755B349aF2&enableEstimate=true&isLedgerLive=true";
+
         InputStream inputStream = null;
         try {
             HttpClient httpclient = HttpClients.createDefault();
             // Use URIBuilder to add parameters to the URL
-            URIBuilder uriBuilder = new URIBuilder(url);
-            // Example: add a parameter "param1" with value "value1"
-            uriBuilder.setParameter("src", src);
-            uriBuilder.setParameter("dst", dst);
-            uriBuilder.setParameter("amount", amount);
 
-            URI uriWithParams = uriBuilder.build();
-
-            HttpGet httpGet = new HttpGet(uriWithParams);
+            HttpGet httpGet = new HttpGet(link);
 
             // Adding Authorization header
             httpGet.addHeader("Authorization", "Bearer " + authorizationToken);
 
             HttpResponse httpResponse = httpclient.execute(httpGet);
 
-            isRequestWorked(httpResponse.getStatusLine().getStatusCode(), uriWithParams.toString());
+            isRequestWorked(httpResponse.getStatusLine().getStatusCode(), link);
 
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
@@ -118,7 +113,8 @@ public class RequestMaker {
         }
 
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            RestartUtils.restartApp();
+//            RestartUtils.restartApp();
+            System.out.println(url);
             throw new Exception("NOT WORKED");
         }
     }

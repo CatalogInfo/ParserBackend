@@ -31,7 +31,7 @@ public class BackendParserApplication {
 				SpreadFinder.findSpreads();
 			}
 		} catch (InterruptedException e) {
-			RestartUtils.restartApp();
+//			RestartUtils.restartApp();
 			throw new RuntimeException(e);
 		}
 
