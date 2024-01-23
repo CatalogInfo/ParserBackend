@@ -7,14 +7,18 @@ import com.example.backend_parser.request.ProxyService;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.utils.JsonUtils;
 import com.example.backend_parser.utils.ThreadUtils;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
 public class InchService extends Service {
     private final List<Thread> threads = new ArrayList<>();
     private final List<Token> tokens = new ArrayList<>();
@@ -43,6 +47,14 @@ public class InchService extends Service {
     public static class PriceAmount {
         String amount;
         double price;
+
+        public PriceAmount(int price, String amount) {
+            this.price = price;
+            this.amount = amount;
+        }
+        public PriceAmount() {
+
+        }
     }
 
     @Override
@@ -81,15 +93,17 @@ public class InchService extends Service {
     @Override
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
         int tokenNumber = 0;
-        for(int i = 0; i < 10; i ++) {
+        for(int i = 0; i < 2; i ++) {
             for (ProxyWithApiToken proxyWithApiToken : proxies) {
-
                 int finalTokenNumber = tokenNumber;
+                if(finalTokenNumber == tokens.size() - 1) {
+                    return tokens;
+                }
                 Thread t = new Thread(() -> {
                     PriceAmount ask = getAsk(tokens.get(finalTokenNumber).getAddress(), (int)(minAmount * Math.pow(10, 6)), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
 
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -110,7 +124,7 @@ public class InchService extends Service {
             System.out.println("wait started");
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -124,27 +138,45 @@ public class InchService extends Service {
     public PriceAmount getBid(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
         String response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
         JSONObject object = JsonUtils.getJSONObject(response);
+
+        if(object.has("statusCode") && object.getInt("statusCode") == 400) {
+            return new PriceAmount(0, "0");
+        }
         PriceAmount priceAmount = calculateFinalAmount(object, 6);
 
-        BigInteger divider = new BigInteger("10").pow(decimals);
+        BigDecimal divider = new BigDecimal("10").pow(decimals);
 
-        BigInteger amount = new BigInteger(minAmountString).divide(divider);
+        BigDecimal amount = new BigDecimal(minAmountString).divide(divider);
         double price = calculateFinalPrice(Double.parseDouble(String.valueOf(amount)), priceAmount.getPrice());
         JSONObject presets = object.getJSONObject("presets");
         JSONObject fast = presets.getJSONObject("fast");
-        BigInteger fee = new BigInteger(fast.getString("tokenFee")).divide(divider);
+        BigDecimal fee = new BigDecimal(fast.getString("tokenFee")).divide(divider);
         priceAmount.setPrice(calculateFinalPrice(Double.parseDouble(String.valueOf(amount)), priceAmount.getPrice()));
+        if(addressFrom.equalsIgnoreCase("0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2")) {
+            System.out.println("SASAT " + new BigDecimal(minAmountString) + " " + priceAmount.getPrice());
+        }
         return priceAmount;
     }
     public PriceAmount getAsk(String addressTo, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
-        String response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, String.valueOf(minAmount));
+        String response = "";
+        try {
+            response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, String.valueOf(minAmount));
+        } catch (Exception e) {
+            System.out.println(proxyWithApiToken.getApiToken());
+        }
+
+        System.out.println(response);
         JSONObject object = JsonUtils.getJSONObject(response);
+
+        if(object.has("statusCode") && object.getInt("statusCode") == 400) {
+            return new PriceAmount(0, "0");
+        }
         PriceAmount priceAmount = calculateFinalAmount(object, decimals);
         JSONObject presets = object.getJSONObject("presets");
         JSONObject fast = presets.getJSONObject("fast");
-        BigInteger divider = new BigInteger("10").pow(decimals);
+        BigDecimal divider = new BigDecimal("10").pow(decimals);
 
-        BigInteger fee = new BigInteger(fast.getString("tokenFee")).divide(divider);
+        BigDecimal fee = new BigDecimal(fast.getString("tokenFee")).divide(divider);
         priceAmount.setPrice(calculateFinalPrice(priceAmount.getPrice(), minAmount) / Math.pow(10, 6));
         return priceAmount;
     }
