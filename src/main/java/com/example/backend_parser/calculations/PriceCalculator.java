@@ -11,16 +11,16 @@ public class PriceCalculator {
         ArrayList<Order> bids = bidsAsks.getBids();
         ArrayList<Order> asks = bidsAsks.getAsks();
 
-        if (bids.isEmpty()) {
-            return new BidAsk();
+        double bid = 0;
+        double ask = 0;
+
+        if (!bids.isEmpty()) {
+            bid = findPrice(bids, liquidity);
         }
 
-        if (asks.isEmpty()) {
-            return new BidAsk();
+        if (!asks.isEmpty()) {
+            ask = findPrice(asks, liquidity); new BidAsk();
         }
-
-        double bid = findPrice(bids, liquidity);
-        double ask = findPrice(asks, liquidity);
 
         return new BidAsk(bid, ask);
     }

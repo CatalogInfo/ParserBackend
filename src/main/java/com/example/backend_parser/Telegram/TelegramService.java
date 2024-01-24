@@ -45,7 +45,7 @@ public class TelegramService {
             } else if (messageText.equals("/info")) {
                 getTelegram().sendMessageById("чтобы  забанить токен на бирже: напиши /ban exchange TOKENUSDT" + "\n"
                 + "чтобы  разбанить токен на бирже: напиши /unban exchange TOKENUSDT" + "\n"
-                + "*Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT капсом и вместе", chatId);
+                + "*Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT, капсом и вместе", chatId);
             }
         }
 

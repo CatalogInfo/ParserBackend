@@ -19,7 +19,7 @@ public class Splitter {
 //        exchanges.add(new Exchange("huobi", "https://www.htx.com/en-us/trade/", "_", "_", true, new HuobiExchange(), "?type=spot")); // basequote api, base_quote link dolboebi
 //        exchanges.add(new Exchange("bybit", "https://www.bybit.com/en-US/trade/spot/", "", "/", new BybitExchange())); // BASEQUOTE , BASE/QUOTE link eblan
 
-        exchanges.add(new Exchange("1inch", "https://www.bybit.com/en-US/trade/spot/", "", "/", new InchExchange()));
+        exchanges.add(new Exchange("1inch", "https://app.1inch.io/#/1/advanced/swap/", "", "/", new InchExchange()));
 //        exchanges.add(new Exchange("mexc", "", "", "", new MexcExchange()));
 //        exchanges.add(new Exchange("kraken", "", "https://pro.kraken.com/app/trade/", "", new KrakenExchange())); // BASEQUOTE , BASE/QUOTE link eblani
 
@@ -36,6 +36,10 @@ public class Splitter {
             arrayOfPairs.add(exchange.getTokens());
         }
         List<List<Token>> outputPairs = findRepeatedBaseAndQuoteElements(arrayOfPairs);
+
+        System.out.println(arrayOfPairs.size() + " " + outputPairs.get(0).size() + " HUI");
+
+        System.out.println(arrayOfPairs.size() + " " + outputPairs.get(1).size() + " HUI");
 
         for (int i = 0; i < exchanges.size(); i++) {
             exchanges.get(i).setTokens(outputPairs.get(i));

@@ -31,7 +31,7 @@ public class RequestMaker {
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
-//            RestartUtils.restartApp();
+            RestartUtils.restartApp();
             e.printStackTrace();
         }
         return RequestUtils.readFromConnection(inputStream);
@@ -79,6 +79,7 @@ public class RequestMaker {
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
+            RestartUtils.restartApp();
             e.printStackTrace();
         }
         return RequestUtils.readFromConnection(inputStream);
@@ -109,7 +110,7 @@ public class RequestMaker {
     private static void isRequestWorked(int responseCode, String url) throws Exception {
 
         if(responseCode == 429){
-            throw new Exception("LIMIT REACHED");
+            System.out.println("LIMIT REACHED " + url);
         }
 
 //        if (responseCode != HttpURLConnection.HTTP_OK) {

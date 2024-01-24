@@ -14,7 +14,7 @@ import java.util.List;
 public class SpreadFinder {
 
     private static final int MIN_SPREAD = 2;
-    private static final int MAX_SPREAD = 20;
+    private static final int MAX_SPREAD = 200;
 
     public static void findSpreads() throws InterruptedException {
         Splitter.split();
@@ -30,6 +30,7 @@ public class SpreadFinder {
             for (Token token : pair.exchange1.getTokens()) {
                 for (Token token1 : pair.exchange2.getTokens()) {
                     if (token.getBase().equalsIgnoreCase(token1.getBase())) {
+                        System.out.println(token.getBase() + " " + token.getBid() + " " + token.getAsk() + " " + token1.getBase() + " " + token1.getBid() + " " + token1.getAsk());
                         defineSpread(token, token1, pair.exchange1, pair.exchange2);
                     }
                 }
@@ -71,7 +72,7 @@ public class SpreadFinder {
 
         for(Chain chain1 : chains1) {
             for(Chain chain2 : chains2) {
-                if(chain1.getName().equalsIgnoreCase(chain2.getName())) {
+                if(chain1.getName().equalsIgnoreCase(chain2.getName()) || chain1.getName().equals("") || chain2.getName().equals("")) {
                     if(token1.getBid() > token2.getAsk()) {
                         System.out.println("Option1 " + chain2.getName() + " " + chain1.isDepositEnabled() + " " + chain2.isWithdrawalEnabled());
 

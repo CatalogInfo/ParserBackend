@@ -7,6 +7,10 @@ import com.example.backend_parser.utils.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public abstract class Service implements IExchangeService {
@@ -46,25 +50,27 @@ public abstract class Service implements IExchangeService {
     }
 
     private List<Token> runParseForOrderBooks(List<String> symbols, int time, int minAmount, String authToken) {
-        List<Thread> threads = getThreads();
-        List<Token> tokens = new ArrayList<>();
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
+        List<Future<Token>> futures = new ArrayList<>();
 
-        for(String symbol : symbols) {
-            Thread t = new Thread(() -> {
-                Token token = parseOrderBookForSymbol(symbol, getMapper(), minAmount, authToken);
-                synchronized (tokens) {
-                    tokens.add(token);
-                }
-
-            });
-
-            t.start();
-            threads.add(t);
-
+        for (String symbol : symbols) {
+            Future<Token> future = executorService.submit(() -> parseOrderBookForSymbol(symbol, getMapper(), minAmount, authToken));
+            futures.add(future);
             ThreadUtils.sleepOnTime(time);
         }
 
-        ThreadUtils.waitTillThreadsExecuted(threads);
+        List<Token> tokens = new ArrayList<>();
+        for (Future<Token> future : futures) {
+            try {
+                Token token = future.get();
+                tokens.add(token);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace(); // Handle exceptions appropriately
+            }
+        }
+
+        // Shutdown the executor service
+        executorService.shutdown();
 
         return tokens;
     }

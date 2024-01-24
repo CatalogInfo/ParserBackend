@@ -52,6 +52,7 @@ public class Exchange {
     }
 
     public void getBaseQuotes() {
+        tokens.clear();
         List<Token> tokensOutput = baseExchange.getTradingPairs();
         List<Token> tokensToUpperCase = new ArrayList<>();
         for (Token token : tokensOutput) {

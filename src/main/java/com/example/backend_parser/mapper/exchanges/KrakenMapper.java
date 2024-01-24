@@ -3,6 +3,7 @@ package com.example.backend_parser.mapper.exchanges;
 import com.example.backend_parser.mapper.base.KeysMapper;
 import com.example.backend_parser.mapper.base.Mapper;
 import com.example.backend_parser.models.BaseQuote;
+import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Token;
 import org.json.JSONObject;
 
@@ -57,5 +58,12 @@ public class KrakenMapper extends Mapper {
     @Override
     public KeysMapper getKeysMapper() {
         return new KeysMapper("altname", "base", "quote", "bids", "asks");
+    }
+
+    @Override
+    public void convertChains(String response, List<Token> tokens) {
+        for(Token token : tokens) {
+            token.addChain(new Chain("", true, true, 0, 0));
+        }
     }
 }

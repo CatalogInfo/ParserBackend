@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
 public class InchService extends Service {
@@ -86,60 +89,82 @@ public class InchService extends Service {
 
     @Override
     public List<Token> parseTradingPairs(String authToken) {
-        IMapper mapper = getMapper();
-        return mapper.convertBaseQuote(RequestMaker.getRequestWithAuth(getTradingPairsUrl(), authToken));
+        return getMapper().convertBaseQuote(RequestMaker.getRequestWithAuth(getTradingPairsUrl(), authToken));
     }
 
     @Override
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
         int tokenNumber = 0;
-        for(int i = 0; i < 2; i ++) {
+
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
+
+        for (int i = 0; i < 2; i++) {
             for (ProxyWithApiToken proxyWithApiToken : proxies) {
                 int finalTokenNumber = tokenNumber;
-                if(finalTokenNumber == tokens.size() - 1) {
-                    return tokens;
-                }
-                Thread t = new Thread(() -> {
-                    PriceAmount ask = getAsk(tokens.get(finalTokenNumber).getAddress(), (int)(minAmount * Math.pow(10, 6)), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
 
+                if (finalTokenNumber == tokens.size() - 1) {
+                    List<Token> finalTokens = tokens;
+                    System.out.println(finalTokens.size() + " JJJJJJJJJJJJJJJJJJJJJJ");
+                    clearInnerData();
+
+                    executorService.shutdown();
                     try {
-                        Thread.sleep(2000);
+                        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    PriceAmount bid = getBid(tokens.get(finalTokenNumber).getAddress(), ask.getAmount(), proxyWithApiToken, tokens.get(finalTokenNumber).getDecimals());
 
+                    System.out.println("ENDED execution inner");
 
-                    System.out.println("BID: " + bid.price + " " + tokens.get(finalTokenNumber).getAddress() + " " + tokens.get(finalTokenNumber).getSymbol());
-                    System.out.println("ASK: " + ask.price + " " + tokens.get(finalTokenNumber).getAddress() + " " +  tokens.get(finalTokenNumber).getSymbol());
+                    return finalTokens;
+                }
 
-                    tokens.get(finalTokenNumber).setAsk(ask.getPrice());
-                    tokens.get(finalTokenNumber).setBid(bid.getPrice());
-                });
-                tokenNumber ++;
-                t.start();
-                threads.add(t);
+                executorService.submit(() -> processToken(tokens.get(finalTokenNumber), proxyWithApiToken, minAmount));
+
+                tokenNumber++;
             }
-            ThreadUtils.waitTillThreadsExecuted(threads);
-            System.out.println("wait started");
+
+            System.out.println("Waiting started");
 
             try {
-                Thread.sleep(60000);
+                Thread.sleep(6000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println("wait ended");
-
+            System.out.println("Waiting ended");
         }
 
         return tokens;
     }
 
+    private void processToken(Token token, ProxyWithApiToken proxyWithApiToken, double minAmount) {
+        PriceAmount ask = getAsk(token.getAddress(), (int) (minAmount * Math.pow(10, 6)), proxyWithApiToken, token.getDecimals());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        PriceAmount bid = getBid(token.getAddress(), ask.getAmount(), proxyWithApiToken, token.getDecimals());
+
+        token.setAsk(ask.getPrice());
+        token.setBid(bid.getPrice());
+
+        if(token.getBase().equals("STMX")) {
+            System.out.println("BID: " + token.getBid() + " " + token.getAddress() + " " + token.getSymbol());
+            System.out.println("ASK: " + token.getAsk() + " " + token.getAddress() + " " + token.getSymbol());
+
+        }
+
+
+
+    }
     public PriceAmount getBid(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
         String response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
         JSONObject object = JsonUtils.getJSONObject(response);
 
-        if(object.has("statusCode") && object.getInt("statusCode") == 400) {
+        if(object.has("statusCode")) {
             return new PriceAmount(0, "0");
         }
         PriceAmount priceAmount = calculateFinalAmount(object, 6);
@@ -152,9 +177,7 @@ public class InchService extends Service {
         JSONObject fast = presets.getJSONObject("fast");
         BigDecimal fee = new BigDecimal(fast.getString("tokenFee")).divide(divider);
         priceAmount.setPrice(calculateFinalPrice(Double.parseDouble(String.valueOf(amount)), priceAmount.getPrice()));
-        if(addressFrom.equalsIgnoreCase("0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2")) {
-            System.out.println("SASAT " + new BigDecimal(minAmountString) + " " + priceAmount.getPrice());
-        }
+
         return priceAmount;
     }
     public PriceAmount getAsk(String addressTo, int minAmount, ProxyWithApiToken proxyWithApiToken, int decimals) {
@@ -165,10 +188,9 @@ public class InchService extends Service {
             System.out.println(proxyWithApiToken.getApiToken());
         }
 
-        System.out.println(response);
         JSONObject object = JsonUtils.getJSONObject(response);
 
-        if(object.has("statusCode") && object.getInt("statusCode") == 400) {
+        if(object.has("statusCode")) {
             return new PriceAmount(0, "0");
         }
         PriceAmount priceAmount = calculateFinalAmount(object, decimals);
@@ -197,6 +219,11 @@ public class InchService extends Service {
 
     private double calculateFinalPrice(double amountFrom, double amountTo) {
         return amountTo / amountFrom;
+    }
+
+    private void clearInnerData() {
+        getThreads().clear();
+        getTokens().clear();
     }
 }
 
