@@ -51,7 +51,9 @@ public class HuobiMapper extends Mapper {
                     JSONArray chainsDetails = chainObj.getJSONArray("chains");
                     for (int j = 0; j < chainsDetails.length(); j++) {
                         JSONObject chainDetail = chainsDetails.getJSONObject(j);
-                        String chain = unifyChain(chainDetail.getString("chain"));
+                        System.out.println(chainDetail + " DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD " + coin);
+
+                        String chain = unifyChain(chainDetail.getString("displayName"));
                         boolean depositEnable = false;
                         boolean withdrawEnable = false;
                         String dep = chainDetail.getString("depositStatus");
@@ -99,76 +101,34 @@ public class HuobiMapper extends Mapper {
         }
 
         switch(chain) {
-            case "ordi":
-                return "ORDIBTC";
-            case "poly1":
-                return "POLYX";
-            case "elf1":
-                return "ELF";
-            case "xec1":
-                return "XEC";
-            case "wax1":
-                return "WAX";
-            case "luna1":
-                return "LUNA";
-            case "sxp1":
-                return "SXP";
-            case "lsk1":
-                return "LSK";
-            case "eur":
-                return "FIAT_MONEY";
-            case "ctxc1":
-                return "CTXC";
-            case "kava10":
-                return "KAVA";
-            case "band2":
-                return "BAND";
-            case "one1":
-                return "ONE";
-            case "atom1":
-                return "ATOM";
-            case "enj1":
-                return "ENJ";
-            case "theta1":
-                return "THETA";
-            case "xmr1":
-                return "XMR";
-            case "zil1":
-                return "ZIL";
-            case "cchainavax":
+            case "BEP20":
+                return "BSC";
+            case "AVAXCCHAIN":
                 return "AVAXC";
-            case "nuls1":
-                return "NULS";
-            case "icx1":
-                return "ICX";
-            case "ont2":
-                return "ONT";
-            case "iota1":
-                return "IOTA";
-            case "trx1":
+            case "CCHAIN":
+                return "AVAX";
+            case "OPTIMISM-BRIDGED":
+                return "XEC";
+            case "SOLANA":
+                return "SOL";
+            case "NEON3":
+                return "NEO3";
+            case "ERC20":
+                return "ETH";
+            case "BRC20":
+                return "ORDIBTC";
+            case "TRC20":
                 return "TRX";
-            case "neo1":
-                return "NEO";
-            case "bnb1":
-                return "BNB";
-            case "eos1":
-                return "EOS";
-            case "arb":
+            case "BCC":
+                return "BCH";
+            case "WAX1":
+                return "WAX";
+            case "ATOM1":
+                return "ATOM";
+            case "ARBITRUMONE":
                 return "ARBITRUM";
-            case "mnt1":
-                return "MNT";
-            case "tenet1":
-                return "TENET";
-            case "wemix1":
-                return "WEMIX";
-            case "wicc1":
-                return "WICC";
-            case "smt2":
-                return "SMT";
-            case "dbc1":
-                return "DBC";
-            case "fsn":
-                return "FSN";
+            case "SOLAR":
+                return "SXP";
 
         }
         return chain;

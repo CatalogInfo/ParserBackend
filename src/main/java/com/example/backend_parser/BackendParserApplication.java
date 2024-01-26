@@ -10,9 +10,7 @@ import com.example.backend_parser.utils.RestartUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -26,31 +24,31 @@ public class BackendParserApplication {
 		Splitter.init();
 		System.setProperty("java.awt.headless", "false");
 
-			while(true) {
+//			while(true) {
 				try {
 					SpreadFinder.findSpreads();
 				} catch (InterruptedException e) {
 					RestartUtils.restartApp();
 					throw new RuntimeException(e);
 				}
-			}
+//			}
 
 
-//		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
-//		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
-//
-//		BitrueExchange exchange1 = new BitrueExchange();
-//		OkxExchange exchange2 = new OkxExchange();
-//
-//		BitrueMapper mapper1 = new BitrueMapper();
-//		OkxMapper mapper2 = new OkxMapper();
-//		String response1 = exchange1.requestChains();
-//		String response2 = exchange2.requestChains();
-//		mapper1.convertChains(response1, tokens1);
-//		mapper2.convertChains(response2, tokens2);
-//
-//		printUniqueChains(tokens1, tokens2, "bitrue");
-//		printUniqueChains(tokens2, tokens1, "okx");
+		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
+		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
+
+		GateExchange exchange1 = new GateExchange();
+		HuobiExchange exchange2 = new HuobiExchange();
+
+		GateMapper mapper1 = new GateMapper();
+		HuobiMapper mapper2 = new HuobiMapper();
+		String response1 = exchange1.requestChains();
+		String response2 = exchange2.requestChains();
+		mapper1.convertChains(response1, tokens1);
+		mapper2.convertChains(response2, tokens2);
+
+		printUniqueChains(tokens1, tokens2, "gate");
+		printUniqueChains(tokens2, tokens1, "huobi");
 
 	}
 	private static void printUniqueChains(List<Token> tokens1, List<Token> tokens2, String name) {
