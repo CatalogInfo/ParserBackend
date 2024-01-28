@@ -1,9 +1,17 @@
 package com.example.backend_parser.models;
 
+import com.example.backend_parser.entities.BanToken;
 import com.example.backend_parser.exchanges.BaseExchange;
+import com.example.backend_parser.repos.BanTokenRepo;
+import com.example.backend_parser.request.RequestMaker;
+import com.example.backend_parser.service.BanTokenService;
 import com.example.backend_parser.utils.RestartUtils;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,7 +30,7 @@ public class Exchange {
     boolean toLowerCase;
 
     List<BlackListItem> blackList = new ArrayList<>();
-    List<String> banList = new ArrayList<>();
+    List<BanToken> banList = new ArrayList<>();
 
     public Exchange(String name, String link, String linkSplitter, String splitter, BaseExchange baseExchange) {
         this.name = name;
@@ -30,6 +38,20 @@ public class Exchange {
         this.linkSplitter = linkSplitter;
         this.splitter = splitter;
         this.baseExchange = baseExchange;
+        banList.addAll(parseBanTokens());
+    }
+
+    public List<BanToken> parseBanTokens() {
+        List<BanToken> tokens = new ArrayList<>();
+        String response = RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + name);
+        JSONArray jsonArray = new JSONArray(response);
+        for(int i = 0; i < jsonArray.length(); i ++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+            BanToken banToken = new BanToken(obj.getLong("id"), obj.getString("exchange"), obj.getString("token"));
+            tokens.add(banToken);
+        }
+
+        return tokens;
     }
 
     public Exchange( String name, String link, String linkSplitter, String splitter, boolean toLowerCase, BaseExchange baseExchange) {

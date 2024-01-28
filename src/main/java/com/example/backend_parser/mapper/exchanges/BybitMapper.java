@@ -35,6 +35,7 @@ public class BybitMapper extends Mapper {
         JSONObject obj = JsonUtils.getJSONObject(response);
         JSONObject result = obj.getJSONObject("result");
         JSONArray rows = result.getJSONArray("rows");
+        System.out.println(rows);
 
         for(int i = 0; i < rows.length(); i ++) {
             for(Token token : tokens) {

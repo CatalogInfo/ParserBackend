@@ -39,6 +39,7 @@ public class GateMapper extends Mapper {
                 Iterator keysInside = coin.keys();
                 if(token.getBase().equalsIgnoreCase(symbol)) {
 
+//                    System.out.println(coin + " " + symbol);
                     while (keysInside.hasNext()) {
                         String key = String.valueOf(keysInside.next());
                         String withdrawPercent = coin.getString("withdraw_percent");

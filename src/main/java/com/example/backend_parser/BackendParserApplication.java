@@ -5,6 +5,7 @@ import com.example.backend_parser.exchanges.*;
 import com.example.backend_parser.mapper.exchanges.*;
 import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Token;
+import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.splitter.Splitter;
 import com.example.backend_parser.utils.RestartUtils;
 import org.springframework.boot.SpringApplication;
@@ -34,21 +35,21 @@ public class BackendParserApplication {
 //			}
 
 
-		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
-		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
-
-		GateExchange exchange1 = new GateExchange();
-		HuobiExchange exchange2 = new HuobiExchange();
-
-		GateMapper mapper1 = new GateMapper();
-		HuobiMapper mapper2 = new HuobiMapper();
-		String response1 = exchange1.requestChains();
-		String response2 = exchange2.requestChains();
-		mapper1.convertChains(response1, tokens1);
-		mapper2.convertChains(response2, tokens2);
-
-		printUniqueChains(tokens1, tokens2, "gate");
-		printUniqueChains(tokens2, tokens1, "huobi");
+//		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
+//		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
+//
+//		GateExchange exchange1 = new GateExchange();
+//		HuobiExchange exchange2 = new HuobiExchange();
+//
+//		GateMapper mapper1 = new GateMapper();
+//		HuobiMapper mapper2 = new HuobiMapper();
+//		String response1 = exchange1.requestChains();
+//		String response2 = exchange2.requestChains();
+//		mapper1.convertChains(response1, tokens1);
+//		mapper2.convertChains(response2, tokens2);
+//
+//		printUniqueChains(tokens1, tokens2, "gate");
+//		printUniqueChains(tokens2, tokens1, "huobi");
 
 	}
 	private static void printUniqueChains(List<Token> tokens1, List<Token> tokens2, String name) {
