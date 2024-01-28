@@ -7,7 +7,12 @@ import org.json.JSONObject;
 
 public class Converter extends Obtainer {
     protected BidsAsks convertOrderBook(String response) {
-        JSONObject obj = getOrderBookData(response);
+        JSONObject obj = new JSONObject();
+        try {
+            obj = getOrderBookData(response);
+        }catch (Exception e) {
+            return new BidsAsks();
+        }
 
         if (!obj.has(getKeysMapper().getBidsKey()) || String.valueOf(obj.get(getKeysMapper().getBidsKey())).equals("null") || obj.equals(new JSONObject())) {
             return new BidsAsks();
