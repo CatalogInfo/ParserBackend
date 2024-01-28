@@ -1,10 +1,16 @@
 package com.example.backend_parser.utils;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JsonUtils {
     public static JSONObject getJSONObject(String data) {
+        try {
+            new JSONObject(data);
+        } catch (JSONException e) {
+            return new JSONObject();
+        }
         return new JSONObject(data);
     }
 
