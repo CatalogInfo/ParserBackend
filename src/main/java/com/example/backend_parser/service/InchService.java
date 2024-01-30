@@ -109,7 +109,7 @@ public class InchService extends Service {
 
                     executorService.shutdown();
                     try {
-                        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+                        executorService.awaitTermination(3, TimeUnit.NANOSECONDS);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

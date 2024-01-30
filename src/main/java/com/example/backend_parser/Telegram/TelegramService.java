@@ -1,6 +1,7 @@
 package com.example.backend_parser.Telegram;
 
 import com.example.backend_parser.Telegram.entities.BanCommand;
+import com.example.backend_parser.Telegram.entities.ObtainCommand;
 import com.example.backend_parser.request.RequestMaker;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -42,13 +43,18 @@ public class TelegramService {
 
                 RequestMaker.getRequest("http://localhost:8080/unban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
                 getTelegram().sendMessageById("чтобы забанить - /ban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
-            } else if (messageText.equals("/info")) {
+            } else if (messageText.startsWith("/list")) {
+
+                ObtainCommand banCommand = getCommandBlocksForGet(messageText);
+                RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
+            }
+            else if (messageText.equals("/info")) {
                 getTelegram().sendMessageById("чтобы  забанить токен на бирже: напиши /ban exchange TOKENUSDT" + "\n"
                 + "чтобы  разбанить токен на бирже: напиши /unban exchange TOKENUSDT" + "\n"
-                + "*Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT, капсом и вместе", chatId);
+                + "*Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT, капсом и вместе" + "\n"
+                + "Чтобы получить список забаненных токенов для какой-то биржи: /list bybit", chatId);
             }
         }
-
     }
 
     private static boolean defineIsCommand(String messageText) {
@@ -65,6 +71,17 @@ public class TelegramService {
         String token = words[2];
 
         return new BanCommand(exchange, token, flag);
+    }
+
+    private static ObtainCommand getCommandBlocksForGet(String messageText) {
+        String messageBody = messageText.substring(1);
+        System.out.println(messageBody);
+        String[] words = messageBody.split("\\s+");
+
+        String flag = words[0];
+        String exchange = words[1];
+
+        return new ObtainCommand(flag, exchange);
     }
 
 }
