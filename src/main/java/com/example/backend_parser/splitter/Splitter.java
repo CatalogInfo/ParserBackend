@@ -29,6 +29,7 @@ public class Splitter {
     }
 
     public static void split() {
+        loopNumber ++;
         LogFactory.makeALog("Loop number -" + loopNumber+ "- has started ");
 
         List<List<Token>> arrayOfPairs = new ArrayList<>();
