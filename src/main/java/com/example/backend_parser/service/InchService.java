@@ -1,5 +1,6 @@
 package com.example.backend_parser.service;
 
+import com.example.backend_parser.logs.LogFactory;
 import com.example.backend_parser.mapper.base.IMapper;
 import com.example.backend_parser.models.ProxyWithApiToken;
 import com.example.backend_parser.models.Token;
@@ -104,18 +105,16 @@ public class InchService extends Service {
 
                 if (finalTokenNumber == tokens.size() - 1) {
                     List<Token> finalTokens = tokens;
-                    System.out.println(finalTokens.size() + " JJJJJJJJJJJJJJJJJJJJJJ");
                     clearInnerData();
 
                     executorService.shutdown();
+                    LogFactory.makeALog("Starting termination InchService");
                     try {
-                        executorService.awaitTermination(3, TimeUnit.NANOSECONDS);
+                        executorService.awaitTermination(3, TimeUnit.MINUTES);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-
-                    System.out.println("ENDED execution inner");
-
+                    LogFactory.makeALog("Ending termination InchService");
                     return finalTokens;
                 }
 
@@ -124,14 +123,14 @@ public class InchService extends Service {
                 tokenNumber++;
             }
 
-            System.out.println("Waiting started");
+            LogFactory.makeALog("Waiting started");
 
             try {
-                Thread.sleep(6000);
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println("Waiting ended");
+            LogFactory.makeALog("Waiting ended");
         }
 
         return tokens;
@@ -151,14 +150,6 @@ public class InchService extends Service {
         token.setAsk(ask.getPrice());
         token.setBid(bid.getPrice());
 
-        if(token.getBase().equals("STMX")) {
-            System.out.println("BID: " + token.getBid() + " " + token.getAddress() + " " + token.getSymbol());
-            System.out.println("ASK: " + token.getAsk() + " " + token.getAddress() + " " + token.getSymbol());
-
-        }
-
-
-
     }
     public PriceAmount getBid(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
         String response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
@@ -168,14 +159,8 @@ public class InchService extends Service {
             return new PriceAmount(0, "0");
         }
         PriceAmount priceAmount = calculateFinalAmount(object, 6);
-
         BigDecimal divider = new BigDecimal("10").pow(decimals);
-
         BigDecimal amount = new BigDecimal(minAmountString).divide(divider);
-        double price = calculateFinalPrice(Double.parseDouble(String.valueOf(amount)), priceAmount.getPrice());
-        JSONObject presets = object.getJSONObject("presets");
-        JSONObject fast = presets.getJSONObject("fast");
-        BigDecimal fee = new BigDecimal(fast.getString("tokenFee")).divide(divider);
         priceAmount.setPrice(calculateFinalPrice(Double.parseDouble(String.valueOf(amount)), priceAmount.getPrice()));
 
         return priceAmount;
@@ -185,7 +170,7 @@ public class InchService extends Service {
         try {
             response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, String.valueOf(minAmount));
         } catch (Exception e) {
-            System.out.println(proxyWithApiToken.getApiToken());
+            e.printStackTrace();
         }
 
         JSONObject object = JsonUtils.getJSONObject(response);
@@ -194,11 +179,6 @@ public class InchService extends Service {
             return new PriceAmount(0, "0");
         }
         PriceAmount priceAmount = calculateFinalAmount(object, decimals);
-        JSONObject presets = object.getJSONObject("presets");
-        JSONObject fast = presets.getJSONObject("fast");
-        BigDecimal divider = new BigDecimal("10").pow(decimals);
-
-        BigDecimal fee = new BigDecimal(fast.getString("tokenFee")).divide(divider);
         priceAmount.setPrice(calculateFinalPrice(priceAmount.getPrice(), minAmount) / Math.pow(10, 6));
         return priceAmount;
     }

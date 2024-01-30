@@ -45,7 +45,6 @@ public class TelegramService {
                 getTelegram().sendMessageById("чтобы забанить - /ban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
             } else if (messageText.startsWith("/list")) {
 
-                System.out.println(":BVTYCTYUYVYUVUVYU");
                 ObtainCommand banCommand = getCommandBlocksForGet(messageText);
                 String response = RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
                 getTelegram().sendMessageById(response, chatId);
@@ -65,7 +64,6 @@ public class TelegramService {
 
     private static BanCommand getCommandBlocks(String messageText) {
         String messageBody = messageText.substring(1);
-        System.out.println(messageBody);
         String[] words = messageBody.split("\\s+");
 
         String flag = words[0];
@@ -77,7 +75,6 @@ public class TelegramService {
 
     private static ObtainCommand getCommandBlocksForGet(String messageText) {
         String messageBody = messageText.substring(1);
-        System.out.println(messageBody);
         String[] words = messageBody.split("\\s+");
 
         String flag = words[0];

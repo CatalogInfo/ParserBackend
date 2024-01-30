@@ -1,6 +1,7 @@
 package com.example.backend_parser.splitter;
 
 import com.example.backend_parser.exchanges.*;
+import com.example.backend_parser.logs.LogFactory;
 import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.utils.ThreadUtils;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class Splitter {
     public static List<Exchange> exchanges = new ArrayList<>();
 
+    public static int loopNumber = 0;
     public static void init() {
 //        exchanges.add(new Exchange("binance", "https://www.binance.com/en/trade/", "", "", new BinanceExchange())); // doesn't matter
 //        exchanges.add(new Exchange("gate", "https://www.gate.io/trade/", "_", "_", new GateExchange())); // BASE_QUOTE, ++
@@ -19,7 +21,7 @@ public class Splitter {
 //        exchanges.add(new Exchange("huobi", "https://www.htx.com/en-us/trade/", "_", "_", true, new HuobiExchange(), "?type=spot")); // basequote api, base_quote link dolboebi
 //        exchanges.add(new Exchange("bybit", "https://www.bybit.com/en-US/trade/spot/", "", "/", new BybitExchange())); // BASEQUOTE , BASE/QUOTE link eblan
 
-        exchanges.add(new Exchange("1inch", "https://app.1inch.io/#/1/advanced/swap/", "", "/", new InchExchange()));
+        exchanges.add(new Exchange("1inch", "https://app.1inch.io/#/1/advanced/swap/", "/", "/", new InchExchange()));
 //        exchanges.add(new Exchange("mexc", "", "", "", new MexcExchange()));
 //        exchanges.add(new Exchange("kraken", "", "https://pro.kraken.com/app/trade/", "", new KrakenExchange())); // BASEQUOTE , BASE/QUOTE link eblani
 
@@ -27,7 +29,7 @@ public class Splitter {
     }
 
     public static void split() {
-        System.out.println("Has started");
+        LogFactory.makeALog("Loop number -" + loopNumber+ "- has started -> Splitter");
 
         List<List<Token>> arrayOfPairs = new ArrayList<>();
         for (Exchange exchange : exchanges) {
@@ -36,10 +38,7 @@ public class Splitter {
             arrayOfPairs.add(exchange.getTokens());
         }
         List<List<Token>> outputPairs = findRepeatedBaseAndQuoteElements(arrayOfPairs);
-
-        System.out.println(arrayOfPairs.size() + " " + outputPairs.get(0).size() + " HUI");
-
-        System.out.println(arrayOfPairs.size() + " " + outputPairs.get(1).size() + " HUI");
+        LogFactory.makeALog("Base and Quotes parsed -> Splitter");
 
         for (int i = 0; i < exchanges.size(); i++) {
             exchanges.get(i).setTokens(outputPairs.get(i));
@@ -56,10 +55,12 @@ public class Splitter {
             t.start();
             threads.add(t);
         }
-        System.out.println("wait started");
+        LogFactory.makeALog("Order books parsed parsed -> Splitter");
+
+        LogFactory.makeALog("  -- Starting waiting termination -> Splitter");
         ThreadUtils.waitTillThreadsExecuted(threads);
 
-        System.out.println("wait ended");
+        LogFactory.makeALog("  --  Ending waiting termination -> Splitter");
         for (Exchange exchange : exchanges) {
 
             Thread t = new Thread(exchange::getChains);
@@ -67,8 +68,11 @@ public class Splitter {
             t.start();
             threads.add(t);
         }
-
+        LogFactory.makeALog("Chains parsed parsed -> Splitter");
+        LogFactory.makeALog("  -- Starting waiting termination -> Splitter");
         ThreadUtils.waitTillThreadsExecuted(threads);
+        LogFactory.makeALog("  --  Ending waiting termination -> Splitter");
+
     }
 
     public static List<List<Token>> findRepeatedBaseAndQuoteElements(List<List<Token>> listOfLists) {

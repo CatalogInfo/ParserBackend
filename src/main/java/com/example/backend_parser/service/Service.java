@@ -1,5 +1,6 @@
 package com.example.backend_parser.service;
 
+import com.example.backend_parser.logs.LogFactory;
 import com.example.backend_parser.mapper.base.IMapper;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.RequestMaker;
@@ -7,10 +8,7 @@ import com.example.backend_parser.utils.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public abstract class Service implements IExchangeService {
@@ -65,12 +63,18 @@ public abstract class Service implements IExchangeService {
                 Token token = future.get();
                 tokens.add(token);
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace(); // Handle exceptions appropriately
+                e.printStackTrace();
             }
         }
 
-        // Shutdown the executor service
         executorService.shutdown();
+        LogFactory.makeALog("Starting termination Service");
+        try {
+            executorService.awaitTermination(3, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        LogFactory.makeALog("Ending termination Service");
 
         return tokens;
     }

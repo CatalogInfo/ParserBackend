@@ -51,7 +51,6 @@ public class HuobiMapper extends Mapper {
                     JSONArray chainsDetails = chainObj.getJSONArray("chains");
                     for (int j = 0; j < chainsDetails.length(); j++) {
                         JSONObject chainDetail = chainsDetails.getJSONObject(j);
-                        System.out.println(chainDetail + " DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD " + coin);
 
                         String chain = unifyChain(chainDetail.getString("displayName"));
                         boolean depositEnable = false;

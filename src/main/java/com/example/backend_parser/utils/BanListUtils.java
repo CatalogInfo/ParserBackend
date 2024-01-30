@@ -8,7 +8,6 @@ import java.util.List;
 
 public class BanListUtils {
     public static boolean tokenInBanList(Token token, Exchange exchange) {
-        System.out.println(token.getBase() + token.getQuote() + " "  + exchange.getBanList());
         return hasTokenBySymbolFromBanList(token.getBase() + token.getQuote(), exchange.getBanList());
     }
 

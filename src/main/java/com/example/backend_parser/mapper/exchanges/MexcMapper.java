@@ -34,7 +34,7 @@ public class MexcMapper extends Mapper {
                             token.addChain(chain1);
                         }
                     } catch (JSONException e) {
-//                        System.out.println(coins.get(j));
+                        e.printStackTrace();
                     }
                 }
             }
