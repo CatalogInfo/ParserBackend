@@ -68,13 +68,13 @@ public abstract class Service implements IExchangeService {
         }
 
         executorService.shutdown();
-        LogFactory.makeALog("Starting termination Service");
+        LogFactory.makeALog("Starting termination");
         try {
             executorService.awaitTermination(3, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        LogFactory.makeALog("Ending termination Service");
+        LogFactory.makeALog("Ending termination");
 
         return tokens;
     }

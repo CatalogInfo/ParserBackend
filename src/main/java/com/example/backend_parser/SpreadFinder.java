@@ -30,7 +30,6 @@ public class SpreadFinder {
             for (Token token : pair.exchange1.getTokens()) {
                 for (Token token1 : pair.exchange2.getTokens()) {
                     if (token.getBase().equalsIgnoreCase(token1.getBase())) {
-                        System.out.println(token.getBase() + " " + token.getBid() + " " + token.getAsk() + " " + token1.getBase() + " " + token1.getBid() + " " + token1.getAsk());
                         defineSpread(token, token1, pair.exchange1, pair.exchange2);
                     }
                 }
@@ -59,7 +58,7 @@ public class SpreadFinder {
             if (token1.getBid() > token2.getAsk()) {
                 formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, chain);
             }
-            System.out.println(formattedMessage);
+
             TelegramService.sendMessage(formattedMessage);
             Thread.sleep(1000);
         }

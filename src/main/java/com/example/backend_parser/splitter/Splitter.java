@@ -29,7 +29,7 @@ public class Splitter {
     }
 
     public static void split() {
-        LogFactory.makeALog("Loop number -" + loopNumber+ "- has started -> Splitter");
+        LogFactory.makeALog("Loop number -" + loopNumber+ "- has started ");
 
         List<List<Token>> arrayOfPairs = new ArrayList<>();
         for (Exchange exchange : exchanges) {
@@ -38,7 +38,7 @@ public class Splitter {
             arrayOfPairs.add(exchange.getTokens());
         }
         List<List<Token>> outputPairs = findRepeatedBaseAndQuoteElements(arrayOfPairs);
-        LogFactory.makeALog("Base and Quotes parsed -> Splitter");
+        LogFactory.makeALog("Base and Quotes parsed");
 
         for (int i = 0; i < exchanges.size(); i++) {
             exchanges.get(i).setTokens(outputPairs.get(i));
@@ -55,12 +55,12 @@ public class Splitter {
             t.start();
             threads.add(t);
         }
-        LogFactory.makeALog("Order books parsed parsed -> Splitter");
+        LogFactory.makeALog("Order books parsed parsed");
 
-        LogFactory.makeALog("  -- Starting waiting termination -> Splitter");
+        LogFactory.makeALog("  -- Starting waiting termination");
         ThreadUtils.waitTillThreadsExecuted(threads);
 
-        LogFactory.makeALog("  --  Ending waiting termination -> Splitter");
+        LogFactory.makeALog("  --  Ending waiting termination");
         for (Exchange exchange : exchanges) {
 
             Thread t = new Thread(exchange::getChains);
@@ -68,10 +68,10 @@ public class Splitter {
             t.start();
             threads.add(t);
         }
-        LogFactory.makeALog("Chains parsed parsed -> Splitter");
-        LogFactory.makeALog("  -- Starting waiting termination -> Splitter");
+        LogFactory.makeALog("Chains parsed parsed");
+        LogFactory.makeALog("  -- Starting waiting termination");
         ThreadUtils.waitTillThreadsExecuted(threads);
-        LogFactory.makeALog("  --  Ending waiting termination -> Splitter");
+        LogFactory.makeALog("  --  Ending waiting termination");
 
     }
 

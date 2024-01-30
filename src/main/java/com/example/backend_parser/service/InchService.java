@@ -108,13 +108,13 @@ public class InchService extends Service {
                     clearInnerData();
 
                     executorService.shutdown();
-                    LogFactory.makeALog("Starting termination InchService");
+                    LogFactory.makeALog("Starting termination");
                     try {
                         executorService.awaitTermination(3, TimeUnit.MINUTES);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    LogFactory.makeALog("Ending termination InchService");
+                    LogFactory.makeALog("Ending termination");
                     return finalTokens;
                 }
 
