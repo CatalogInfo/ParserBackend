@@ -56,7 +56,10 @@ public class Splitter {
             t.start();
             threads.add(t);
         }
+        System.out.println("wait started");
+        ThreadUtils.waitTillThreadsExecuted(threads);
 
+        System.out.println("wait ended");
         for (Exchange exchange : exchanges) {
 
             Thread t = new Thread(exchange::getChains);
