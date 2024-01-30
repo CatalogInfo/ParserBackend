@@ -1,5 +1,6 @@
 package com.example.backend_parser.Telegram;
 
+import com.example.backend_parser.Telegram.entities.KeyboardFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -12,6 +13,9 @@ public class Telegram extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        if(update.getMessage().getText().equals("/start")) {
+            sendInfoButton(update.getMessage().getChatId());
+        }
         String message_text = update.getMessage().getText();
         String chat_id = String.valueOf(update.getMessage().getChatId());
 
@@ -43,6 +47,19 @@ public class Telegram extends TelegramLongPollingBot {
         sendMessage.setText(message);
         try {
             execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendInfoButton(Long chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(String.valueOf(chatId));
+        message.setText("Жмякни /info, чтобы понять, как взаимодействовать с ботом:");
+        message.setReplyMarkup(KeyboardFactory.getInfoButton());
+
+        try {
+            execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
