@@ -45,8 +45,10 @@ public class TelegramService {
                 getTelegram().sendMessageById("чтобы забанить - /ban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
             } else if (messageText.startsWith("/list")) {
 
+                System.out.println(":BVTYCTYUYVYUVUVYU");
                 ObtainCommand banCommand = getCommandBlocksForGet(messageText);
-                RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
+                String response = RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
+                getTelegram().sendMessageById(response, chatId);
             }
             else if (messageText.equals("/info")) {
                 getTelegram().sendMessageById("чтобы  забанить токен на бирже: напиши /ban exchange TOKENUSDT" + "\n"
