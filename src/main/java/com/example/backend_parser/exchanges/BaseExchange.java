@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public abstract class BaseExchange {
-    static int MIN_AMOUNT = initMinAmount();
+    public static int MIN_AMOUNT = initMinAmount();
 
     public List<Token> getTradingPairs() {
         return getService().parseTradingPairs(getAuthToken());
@@ -35,10 +35,6 @@ public abstract class BaseExchange {
 
     public int getMinAmount() {
         return MIN_AMOUNT;
-    }
-
-    public void setMinAmount(int minAmount) {
-        this.MIN_AMOUNT = minAmount;
     }
 
     private static int initMinAmount() {

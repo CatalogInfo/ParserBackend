@@ -1,6 +1,7 @@
 package com.example.backend_parser.service;
 
 import com.example.backend_parser.entities.MinAmount;
+import com.example.backend_parser.exchanges.BaseExchange;
 import com.example.backend_parser.repos.MinAmountRepo;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ public class MinAmountService {
     MinAmountRepo minAmountRepo;
 
     public void setMinAmount(Integer minAmount) {
+        BaseExchange.MIN_AMOUNT = minAmount;
+
         if (minAmountRepo.findAll().isEmpty()) {
             MinAmount minAmountLocal = new MinAmount();
             minAmountLocal.setMinAmount(minAmount);

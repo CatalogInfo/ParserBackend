@@ -45,6 +45,8 @@ public class Splitter {
             exchanges.get(i).setTokens(outputPairs.get(i));
         }
 
+        System.out.println(exchanges.get(0));
+
         List<Thread> threads = new ArrayList<>();
 
         for (Exchange exchange : exchanges) {

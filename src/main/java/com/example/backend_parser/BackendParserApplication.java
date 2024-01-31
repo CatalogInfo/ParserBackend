@@ -25,14 +25,14 @@ public class BackendParserApplication {
 		Splitter.init();
 		System.setProperty("java.awt.headless", "false");
 
-//			while(true) {
+			while(true) {
 				try {
 					SpreadFinder.findSpreads();
 				} catch (InterruptedException e) {
 					RestartUtils.restartApp();
 					throw new RuntimeException(e);
 				}
-//			}
+			}
 
 
 //		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
