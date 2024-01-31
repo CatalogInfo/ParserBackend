@@ -56,7 +56,7 @@ public class Splitter {
             t.start();
             threads.add(t);
         }
-        LogFactory.makeALog("Order books parsed parsed");
+        LogFactory.makeALog("Order books parsed");
 
         LogFactory.makeALog("  -- Starting waiting termination");
         ThreadUtils.waitTillThreadsExecuted(threads);

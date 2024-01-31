@@ -3,6 +3,8 @@ package com.example.backend_parser.exchanges;
 import com.example.backend_parser.Telegram.TelegramService;
 import com.example.backend_parser.entities.BanToken;
 import com.example.backend_parser.service.BanTokenService;
+import com.example.backend_parser.service.MinAmountService;
+import com.example.backend_parser.splitter.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ import java.util.List;
 public class TelegramEndpoint {
     @Autowired
     BanTokenService banTokenService;
+
+    @Autowired
+    MinAmountService minAmountService;
 
     @PostMapping("/send_message")
     public HttpEntity<?> sendMessage(@RequestBody String message) throws IOException, InterruptedException {
@@ -35,6 +40,17 @@ public class TelegramEndpoint {
     @GetMapping("/banList")
     public HttpEntity<List<BanToken>> banList(@RequestParam(name="exchange") String exchange) {
         return new HttpEntity<>(banTokenService.getByExchange(exchange));
+    }
+
+    @GetMapping("/minAmount")
+    public HttpEntity<Integer> minAmount() {
+        return new HttpEntity<>(minAmountService.getMinAmount());
+    }
+
+    @PostMapping("/minAmount")
+    public HttpEntity<?> setMinAmount(@RequestBody String minAmount) {
+         minAmountService.setMinAmount(Integer.parseInt(minAmount));
+         return new HttpEntity<>("OK");
     }
 
     @GetMapping("/ban")

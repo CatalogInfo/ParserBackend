@@ -44,16 +44,22 @@ public class TelegramService {
                 RequestMaker.getRequest("http://localhost:8080/unban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
                 getTelegram().sendMessageById("чтобы забанить - /ban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
             } else if (messageText.startsWith("/list")) {
-
                 ObtainCommand banCommand = getCommandBlocksForGet(messageText);
                 String response = RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
                 getTelegram().sendMessageById(response, chatId);
-            }
-            else if (messageText.equals("/info")) {
+            } else if (messageText.startsWith("/minAmount")) {
+                String response = RequestMaker.getRequest("http://localhost:8080/minAmount");
+                getTelegram().sendMessageById(response, chatId);
+            } else if (messageText.startsWith("/set minAmount")) {
+                String response = RequestMaker.postRequest("http://localhost:8080/minAmount", getMinAmount(messageText));
+                getTelegram().sendMessageById(response, chatId);
+            } else if (messageText.equals("/info")) {
                 getTelegram().sendMessageById(" - чтобы  забанить токен на бирже: напиши /ban exchange TOKENUSDT" + "\n" + "\n"
                 + " - чтобы  разбанить токен на бирже: напиши /unban exchange TOKENUSDT" + "\n" + "\n"
                 + " - *Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT, капсом и вместе" + "\n" + "\n"
-                + " - Чтобы получить список забаненных токенов для какой-то биржи: /list bybit", chatId);
+                + " - Чтобы получить список забаненных токенов для какой-то биржи: /list bybit" + "\n" + "\n"
+                + " - Чтобы получить текущий объём, по которой бот считает цену: /minAmount" + "\n" + "\n"
+                + " - Чтобы установить новый минимальный объём: /set minAmount 2000", chatId);
             }
         }
     }
@@ -71,6 +77,14 @@ public class TelegramService {
         String token = words[2];
 
         return new BanCommand(exchange, token, flag);
+    }
+
+    private static String getMinAmount(String messageText) {
+        String messageBody = messageText.substring(1);
+        String[] words = messageBody.split("\\s+");
+
+        String minAmount = words[2];
+        return minAmount;
     }
 
     private static ObtainCommand getCommandBlocksForGet(String messageText) {
