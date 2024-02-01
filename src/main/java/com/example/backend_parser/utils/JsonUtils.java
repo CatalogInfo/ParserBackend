@@ -15,14 +15,25 @@ public class JsonUtils {
     }
 
     public static JSONObject getJSONObject(Object data) {
+        try {
+            new JSONObject(String.valueOf(data));
+        } catch (JSONException e) {
+            return new JSONObject();
+        }
         return new JSONObject(String.valueOf(data));
     }
 
     public static JSONObject getJSONObject(JSONObject object, String key) {
+        if (!object.has(key)) {
+            return new JSONObject();
+        }
         return new JSONObject(String.valueOf(object.get(key)));
     }
 
     public static JSONArray getJSONArray(JSONObject object, String key) {
+        if (!object.has(key)) {
+            return new JSONArray();
+        }
         return new JSONArray(String.valueOf(object.get(key)));
     }
 

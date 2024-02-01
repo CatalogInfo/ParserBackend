@@ -109,10 +109,6 @@ public class Exchange {
         tokens.addAll(tokens1);
     }
 
-    public void getOrderBookForSymbol(Token token) {
-
-    }
-
     public void setTokens(List<Token> tokensInput) {
         tokens.clear();
         tokens.addAll(tokensInput);

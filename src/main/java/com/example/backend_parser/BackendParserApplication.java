@@ -4,6 +4,7 @@ import com.example.backend_parser.Telegram.TelegramService;
 import com.example.backend_parser.exchanges.*;
 import com.example.backend_parser.mapper.exchanges.*;
 import com.example.backend_parser.models.Chain;
+import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.splitter.Splitter;
@@ -19,20 +20,25 @@ import java.util.List;
 @SpringBootApplication
 public class BackendParserApplication {
 	public static void main(String[] args) throws IOException, AWTException {
-		TelegramService.registerBot();
+//		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
 
-		Splitter.init();
+//		Splitter.init();
 		System.setProperty("java.awt.headless", "false");
 
-			while(true) {
-				try {
-					SpreadFinder.findSpreads();
-				} catch (InterruptedException e) {
-					RestartUtils.restartApp();
-					throw new RuntimeException(e);
-				}
-			}
+//			while(true) {
+//				try {
+//					SpreadFinder.findSpreads();
+//				} catch (InterruptedException e) {
+//					RestartUtils.restartApp();
+//					throw new RuntimeException(e);
+//				}
+//			}
+
+		Exchange exchange = new Exchange("bitget", "https://app.1inch.io/#/1/advanced/swap/", "/", "/", new BitgetExchange());
+		exchange.getBaseQuotes();
+		exchange.getOrderBook(exchange.getTokens());
+		System.out.println(exchange.getTokens());
 
 
 //		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
