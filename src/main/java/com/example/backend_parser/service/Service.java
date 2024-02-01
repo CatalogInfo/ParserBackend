@@ -41,6 +41,11 @@ public abstract class Service implements IExchangeService {
         return RequestMaker.getRequest(getOrderBookUrl() + symbol + getAdditionalUrlParams());
     }
 
+    @Override
+    public Token parseOrderBookForToken(Token token, int minAmount) {
+        return parseOrderBookForSymbol(token.getSymbol(), getMapper(), minAmount, "");
+    }
+
     private Token parseOrderBookForSymbol(String symbol, IMapper mapper, int minAmount, String authToken) {
         String response = getOrderBookForSymbol(symbol, authToken);
 

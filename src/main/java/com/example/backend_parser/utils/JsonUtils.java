@@ -27,6 +27,11 @@ public class JsonUtils {
     }
 
     public static JSONArray getJSONArray(String data) {
+        try {
+            new JSONArray(data);
+        } catch (JSONException e) {
+            return new JSONArray();
+        }
         return new JSONArray(data);
     }
 

@@ -59,9 +59,26 @@ public class SpreadFinder {
                 formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, chain);
             }
 
+            if(!isSpreadStillExists(token1, token2, exchange1, exchange2)) {
+                return;
+            }
+
             TelegramService.sendMessage(formattedMessage);
             Thread.sleep(1000);
         }
+    }
+
+    private static boolean isSpreadStillExists(Token token1, Token token2, Exchange exchange1, Exchange exchange2) {
+        Token tokenWithPrice1 = exchange1.getBaseExchange().getOrderBookForToken(token1);
+        Token tokenWithPrice2 = exchange2.getBaseExchange().getOrderBookForToken(token2);
+
+        double spread = SpreadCalculator.calculateSpread(tokenWithPrice1, tokenWithPrice2);
+
+        if (spread > MIN_SPREAD && spread < MAX_SPREAD) {
+            return true;
+        }
+
+        return false;
     }
 
     private static String findAChainWithMinFee(Token token1, Token token2, Exchange exchange1, Exchange exchange2) {

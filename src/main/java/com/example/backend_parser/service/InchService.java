@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -94,6 +95,12 @@ public class InchService extends Service {
     }
 
     @Override
+    public Token parseOrderBookForToken(Token token, int minAmount) {
+        processToken(token, proxies.get(new Random().nextInt(300)), minAmount);
+        return token;
+    }
+
+    @Override
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
         int tokenNumber = 0;
 
@@ -158,6 +165,7 @@ public class InchService extends Service {
         if(object.has("statusCode")) {
             return new PriceAmount(0, "0");
         }
+
         PriceAmount priceAmount = calculateFinalAmount(object, 6);
         BigDecimal divider = new BigDecimal("10").pow(decimals);
         BigDecimal amount = new BigDecimal(minAmountString).divide(divider);

@@ -7,4 +7,6 @@ public interface IExchangeService {
     List<Token> parseTradingPairs(String authToken);
     void parseChains(String response, List<Token> tokens);
     List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken);
+    Token parseOrderBookForToken(Token token, int minAmount);
+
 }

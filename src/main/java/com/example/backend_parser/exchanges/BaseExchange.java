@@ -27,6 +27,10 @@ public abstract class BaseExchange {
         return getService().parseOrderBooks(tokens, getDelayTime(), minAmount, getAuthToken());
     }
 
+    public Token getOrderBookForToken(Token token) {
+        return getService().parseOrderBookForToken(token, MIN_AMOUNT);
+    }
+
     protected abstract IExchangeService getService();
 
     protected abstract int getDelayTime();
