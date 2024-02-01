@@ -7,6 +7,9 @@ import com.example.backend_parser.models.Token;
 import com.example.backend_parser.utils.ThreadUtils;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Splitter {
@@ -29,13 +32,12 @@ public class Splitter {
     }
 
     public static void split() {
-        loopNumber ++;
-        LogFactory.makeALog("Loop number -" + loopNumber+ "- has started ");
+        loopNumber++;
+        LogFactory.makeALog("Loop number -" + loopNumber + "- has started ");
 
         List<List<Token>> arrayOfPairs = new ArrayList<>();
         for (Exchange exchange : exchanges) {
             exchange.getBaseQuotes();
-
             arrayOfPairs.add(exchange.getTokens());
         }
         List<List<Token>> outputPairs = findRepeatedBaseAndQuoteElements(arrayOfPairs);
@@ -45,37 +47,38 @@ public class Splitter {
             exchanges.get(i).setTokens(outputPairs.get(i));
         }
 
-        System.out.println(exchanges.get(0));
-
-        List<Thread> threads = new ArrayList<>();
+        ExecutorService executorService = Executors.newFixedThreadPool(exchanges.size());
 
         for (Exchange exchange : exchanges) {
-
-            Thread t = new Thread(() -> {
+            executorService.execute(() -> {
                 exchange.getOrderBook(exchange.getTokens());
             });
-
-            t.start();
-            threads.add(t);
         }
         LogFactory.makeALog("Order books parsed");
 
         LogFactory.makeALog("  -- Starting waiting termination");
-        ThreadUtils.waitTillThreadsExecuted(threads);
-
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(3, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         LogFactory.makeALog("  --  Ending waiting termination");
+
+        executorService = Executors.newFixedThreadPool(exchanges.size());
+
         for (Exchange exchange : exchanges) {
-
-            Thread t = new Thread(exchange::getChains);
-
-            t.start();
-            threads.add(t);
+            executorService.execute(exchange::getChains);
         }
         LogFactory.makeALog("Chains parsed parsed");
         LogFactory.makeALog("  -- Starting waiting termination");
-        ThreadUtils.waitTillThreadsExecuted(threads);
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(3, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         LogFactory.makeALog("  --  Ending waiting termination");
-
     }
 
     public static List<List<Token>> findRepeatedBaseAndQuoteElements(List<List<Token>> listOfLists) {
