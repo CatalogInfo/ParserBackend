@@ -28,7 +28,7 @@ public class BitgetExchange extends BaseExchange {
 
     @Override
     protected int getDelayTime() {
-        return 50;
+        return 100;
     }
 
     @Override

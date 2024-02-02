@@ -1,26 +1,25 @@
 package com.example.backend_parser.exchanges;
 
-import com.example.backend_parser.mapper.base.Mapper;
-import com.example.backend_parser.mapper.exchanges.MexcMapper;
-import com.example.backend_parser.service.IExchangeService;
+import com.example.backend_parser.mapper.exchanges.KucoinMapper;
 import com.example.backend_parser.service.ExchangeService;
+import com.example.backend_parser.service.IExchangeService;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.example.backend_parser.request.RequestUtils.getSignatureHmac256;
 import static com.example.backend_parser.request.RequestUtils.readFromConnection;
 
-public class MexcExchange extends BaseExchange {
+public class KucoinExchange extends BaseExchange {
     IExchangeService service = new ExchangeService(
-            "https://api.mexc.com/api/v3/depth?symbol=",
-            "https://api.mexc.com/api/v3/exchangeInfo",
-            new MexcMapper()
+            "https://api.kucoin.com/api/v1/market/orderbook/level2_100?symbol=",
+            "https://api.kucoin.com/api/v2/symbols",
+            new KucoinMapper()
     );
     @Override
     protected IExchangeService getService() {
@@ -31,13 +30,15 @@ public class MexcExchange extends BaseExchange {
     protected int getDelayTime() {
         return 100;
     }
+
     @Override
     protected String getAuthToken() {
         return null;
     }
+
     public String requestChains() throws IOException {
         HttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("https://www.mexc.com/open/api/v2/market/coin/list");
+        HttpGet httpGet = new HttpGet("https://api.kucoin.com/api/v3/currencies");
 
         HttpResponse response = httpclient.execute(httpGet);
         HttpEntity entity = response.getEntity();

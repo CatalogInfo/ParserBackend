@@ -1,12 +1,16 @@
 package com.example.backend_parser;
 
-import com.example.backend_parser.Telegram.TelegramService;
-import com.example.backend_parser.exchanges.*;
-import com.example.backend_parser.mapper.exchanges.*;
+import com.example.backend_parser.exchanges.BinanceExchange;
+import com.example.backend_parser.exchanges.BitgetExchange;
+import com.example.backend_parser.exchanges.KucoinExchange;
+import com.example.backend_parser.exchanges.XTcomExchange;
+import com.example.backend_parser.mapper.exchanges.BinanceMapper;
+import com.example.backend_parser.mapper.exchanges.BitgetMapper;
+import com.example.backend_parser.mapper.exchanges.KucoinMapper;
+import com.example.backend_parser.mapper.exchanges.XTcomMapper;
 import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
-import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.splitter.Splitter;
 import com.example.backend_parser.utils.RestartUtils;
 import org.springframework.boot.SpringApplication;
@@ -23,39 +27,34 @@ public class BackendParserApplication {
 //		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
 
-//		Splitter.init();
+		Splitter.init();
 		System.setProperty("java.awt.headless", "false");
 
 //			while(true) {
-//				try {
-//					SpreadFinder.findSpreads();
-//				} catch (InterruptedException e) {
-//					RestartUtils.restartApp();
-//					throw new RuntimeException(e);
-//				}
+				try {
+					SpreadFinder.findSpreads();
+				} catch (InterruptedException e) {
+					RestartUtils.restartApp();
+					throw new RuntimeException(e);
+				}
 //			}
 
-		Exchange exchange = new Exchange("bitget", "https://app.1inch.io/#/1/advanced/swap/", "/", "/", new BitgetExchange());
-		exchange.getBaseQuotes();
-		exchange.getOrderBook(exchange.getTokens());
-		System.out.println(exchange.getTokens());
 
+		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
+		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
 
-//		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
-//		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
-//
-//		GateExchange exchange1 = new GateExchange();
-//		HuobiExchange exchange2 = new HuobiExchange();
-//
-//		GateMapper mapper1 = new GateMapper();
-//		HuobiMapper mapper2 = new HuobiMapper();
-//		String response1 = exchange1.requestChains();
-//		String response2 = exchange2.requestChains();
-//		mapper1.convertChains(response1, tokens1);
-//		mapper2.convertChains(response2, tokens2);
-//
-//		printUniqueChains(tokens1, tokens2, "gate");
-//		printUniqueChains(tokens2, tokens1, "huobi");
+		BinanceExchange exchange1 = new BinanceExchange();
+		BitgetExchange exchange2 = new BitgetExchange();
+
+		BinanceMapper mapper1 = new BinanceMapper();
+		BitgetMapper mapper2 = new BitgetMapper();
+		String response1 = exchange1.requestChains();
+		String response2 = exchange2.requestChains();
+		mapper1.convertChains(response1, tokens1);
+		mapper2.convertChains(response2, tokens2);
+
+		printUniqueChains(tokens1, tokens2, "binance");
+		printUniqueChains(tokens2, tokens1, "bitget");
 
 	}
 	private static void printUniqueChains(List<Token> tokens1, List<Token> tokens2, String name) {

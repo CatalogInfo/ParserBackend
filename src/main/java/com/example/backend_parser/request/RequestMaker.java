@@ -5,6 +5,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
@@ -21,10 +23,12 @@ public class RequestMaker {
     public static String getRequest(String url) {
         InputStream inputStream = null;
         try {
-            HttpClient httpclient = HttpClients.createDefault();
-
+            HttpClient httpClient = HttpClients.custom()
+                    .setDefaultRequestConfig(RequestConfig.custom()
+                            .setCookieSpec(CookieSpecs.STANDARD).build())
+                    .build();
             HttpGet httpGet = new HttpGet(url);
-            HttpResponse httpResponse = httpclient.execute(httpGet);
+            HttpResponse httpResponse = httpClient.execute(httpGet);
 
             isRequestWorked(httpResponse.getStatusLine().getStatusCode(), url);
             
@@ -40,13 +44,15 @@ public class RequestMaker {
     public static String getRequestWithAuth(String url, String authToken) {
         InputStream inputStream = null;
         try {
-            HttpClient httpclient = HttpClients.createDefault();
-
+            HttpClient httpClient = HttpClients.custom()
+                    .setDefaultRequestConfig(RequestConfig.custom()
+                            .setCookieSpec(CookieSpecs.STANDARD).build())
+                    .build();
             HttpGet httpGet = new HttpGet(url);
             // Adding Authorization header
             httpGet.addHeader("Authorization", "Bearer " + authToken);
 
-            HttpResponse httpResponse = httpclient.execute(httpGet);
+            HttpResponse httpResponse = httpClient.execute(httpGet);
 
             isRequestWorked(httpResponse.getStatusLine().getStatusCode(), url);
 
@@ -64,15 +70,17 @@ public class RequestMaker {
 
         InputStream inputStream = null;
         try {
-            HttpClient httpclient = HttpClients.createDefault();
-            // Use URIBuilder to add parameters to the URL
+            HttpClient httpClient = HttpClients.custom()
+                    .setDefaultRequestConfig(RequestConfig.custom()
+                            .setCookieSpec(CookieSpecs.STANDARD).build())
+                    .build();            // Use URIBuilder to add parameters to the URL
 
             HttpGet httpGet = new HttpGet(link);
 
             // Adding Authorization header
             httpGet.addHeader("Authorization", "Bearer " + authorizationToken);
 
-            HttpResponse httpResponse = httpclient.execute(httpGet);
+            HttpResponse httpResponse = httpClient.execute(httpGet);
 
             isRequestWorked(httpResponse.getStatusLine().getStatusCode(), link);
 
@@ -89,14 +97,16 @@ public class RequestMaker {
     public static String postRequest(String url, String body) {
         InputStream inputStream = null;
         try {
-            HttpClient httpclient = HttpClients.createDefault();
-            HttpPost httppost = new HttpPost(url);
+            HttpClient httpClient = HttpClients.custom()
+                    .setDefaultRequestConfig(RequestConfig.custom()
+                            .setCookieSpec(CookieSpecs.STANDARD).build())
+                    .build();            HttpPost httppost = new HttpPost(url);
             httppost.setHeader("Content-Type", "application/json; charset=UTF-8");
 
             StringEntity body_json = new StringEntity(body);
             httppost.setEntity(body_json);
 
-            HttpResponse httpResponse = httpclient.execute(httppost);
+            HttpResponse httpResponse = httpClient.execute(httppost);
             HttpEntity entity = httpResponse.getEntity();
 
             inputStream = entity.getContent();

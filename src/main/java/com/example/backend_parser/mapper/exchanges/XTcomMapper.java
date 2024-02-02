@@ -13,45 +13,45 @@ import java.util.List;
 import static com.example.backend_parser.utils.JsonUtils.getJSONArray;
 import static com.example.backend_parser.utils.JsonUtils.getJSONObject;
 
-public class BitgetMapper extends Mapper {
-
+public class XTcomMapper extends Mapper {
     @Override
     public KeysMapper getKeysMapper() {
-        return new KeysMapper("symbol", "baseCoin", "quoteCoin");
-    }
-    @Override
-    protected JSONObject getOrderBookData(String response) {
-        JSONObject obj = getJSONObject(response);
-        return getJSONObject(obj, "data");
+        return new KeysMapper("symbol", "baseCurrency" ,"quoteCurrency");
     }
 
     @Override
     protected JSONArray getSymbols(String response) {
+        JSONObject obj = JsonUtils.getJSONObject(response);
+        JSONObject jsonResult = JsonUtils.getJSONObject(obj, "result");
+        return getJSONArray(jsonResult, "symbols");
+    }
+
+    @Override
+    protected JSONObject getOrderBookData(String response) {
         JSONObject obj = getJSONObject(response);
-        return getJSONArray(obj, "data");
+        return getJSONObject(obj, "result");
     }
 
     @Override
     public void convertChains(String response, List<Token> tokens) {
         JSONObject obj = JsonUtils.getJSONObject(response);
-        JSONArray coins = new JSONArray(obj.getJSONArray("data"));
+        JSONArray coins = new JSONArray(obj.getJSONArray("result"));
 
         for(int i = 0; i < coins.length(); i ++) {
             for(Token token : tokens) {
                 JSONObject chainObj = coins.getJSONObject(i);
-                String coin = chainObj.getString("coin");
+                String coin = chainObj.getString("currency");
                 if(token.getBase().equalsIgnoreCase(coin)) {
 
-                    JSONArray chainsDetails = chainObj.getJSONArray("chains");
+                    JSONArray chainsDetails = chainObj.getJSONArray("supportChains");
                     for (int j = 0; j < chainsDetails.length(); j++) {
                         JSONObject chainDetail = chainsDetails.getJSONObject(j);
                         String chain = unifyChain(chainDetail.getString("chain"));
 
-                        boolean depositEnable = chainDetail.getBoolean("rechargeable");
-                        boolean withdrawEnable = chainDetail.getBoolean("withdrawable");
-                        double fee = chainDetail.getDouble("withdrawFee");
-                        double feePercent = convertDoubleToPercent(chainDetail.getDouble("extraWithdrawFee"));
-                        Chain chain1 = new Chain(chain, depositEnable, withdrawEnable, fee, feePercent);
+                        boolean depositEnable = chainDetail.getBoolean("depositEnabled");
+                        boolean withdrawEnable = chainDetail.getBoolean("withdrawEnabled");
+                        double fee = chainDetail.getDouble("withdrawFeeAmount");
+                        Chain chain1 = new Chain(chain, depositEnable, withdrawEnable, fee);
                         token.addChain(chain1);
                     }
                 }
@@ -59,24 +59,20 @@ public class BitgetMapper extends Mapper {
         }
     }
 
-    private double convertDoubleToPercent(double fee) {
-        return fee * 100;
-    }
-
     private String unifyChain(String chain) {
         switch(chain) {
-            case "ERC20":
-                return "ETH";
-            case "BEP20":
+            case "BNB Smart Chain":
                 return "BSC";
-            case "C-Chain":
-                return "AVAXC";
-            case "Polygon", "POLYGON":
+            case "Polygon":
                 return "MATIC";
-            case "BRC20":
-                return "ORDIBTC";
-            case "zkSync":
-                return "ZKSYNCERA";
+            case "SOL-SOL":
+                return "SOL";
+            case "MA":
+                return "MANTA";
+            case "Ethereum":
+                return "ETH";
+            case "AVAX C-Chain":
+                return "AVAXC";
             case "COREDAO":
                 return "CORE";
             case "Bahamut":
@@ -85,5 +81,4 @@ public class BitgetMapper extends Mapper {
 
         return chain;
     }
-
 }
