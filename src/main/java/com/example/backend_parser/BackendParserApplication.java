@@ -30,31 +30,31 @@ public class BackendParserApplication {
 		Splitter.init();
 		System.setProperty("java.awt.headless", "false");
 
-//			while(true) {
+			while(true) {
 				try {
 					SpreadFinder.findSpreads();
 				} catch (InterruptedException e) {
 					RestartUtils.restartApp();
 					throw new RuntimeException(e);
 				}
-//			}
+			}
 
 
-		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
-		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
-
-		BinanceExchange exchange1 = new BinanceExchange();
-		BitgetExchange exchange2 = new BitgetExchange();
-
-		BinanceMapper mapper1 = new BinanceMapper();
-		BitgetMapper mapper2 = new BitgetMapper();
-		String response1 = exchange1.requestChains();
-		String response2 = exchange2.requestChains();
-		mapper1.convertChains(response1, tokens1);
-		mapper2.convertChains(response2, tokens2);
-
-		printUniqueChains(tokens1, tokens2, "binance");
-		printUniqueChains(tokens2, tokens1, "bitget");
+//		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
+//		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();
+//
+//		BinanceExchange exchange1 = new BinanceExchange();
+//		BitgetExchange exchange2 = new BitgetExchange();
+//
+//		BinanceMapper mapper1 = new BinanceMapper();
+//		BitgetMapper mapper2 = new BitgetMapper();
+//		String response1 = exchange1.requestChains();
+//		String response2 = exchange2.requestChains();
+//		mapper1.convertChains(response1, tokens1);
+//		mapper2.convertChains(response2, tokens2);
+//
+//		printUniqueChains(tokens1, tokens2, "binance");
+//		printUniqueChains(tokens2, tokens1, "bitget");
 
 	}
 	private static void printUniqueChains(List<Token> tokens1, List<Token> tokens2, String name) {
