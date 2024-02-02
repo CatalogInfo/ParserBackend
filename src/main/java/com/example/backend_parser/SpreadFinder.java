@@ -50,10 +50,10 @@ public class SpreadFinder {
             BlackListUtils.addToBlackList(token2.getSymbol(), exchange2.getBlackList());
 
             String chain = "ETH";
-//            chain = findAChainWithMinFee(token1, token2, exchange1, exchange2);
-//            if(chain == null) {
-//                return;
-//            }
+            chain = findAChainWithMinFee(token1, token2, exchange1, exchange2);
+            if(chain == null) {
+                return;
+            }
 
             String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread, chain);
             if (token1.getBid() > token2.getAsk()) {
