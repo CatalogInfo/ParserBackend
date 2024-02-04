@@ -156,6 +156,7 @@ public class InchService extends Service {
 
         token.setAsk(ask.getPrice());
         token.setBid(bid.getPrice());
+        System.out.println(token);
 
     }
     public PriceAmount getBid(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
