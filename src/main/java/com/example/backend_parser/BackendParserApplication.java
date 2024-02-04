@@ -1,5 +1,6 @@
 package com.example.backend_parser;
 
+import com.example.backend_parser.Telegram.TelegramService;
 import com.example.backend_parser.exchanges.BinanceExchange;
 import com.example.backend_parser.exchanges.BitgetExchange;
 import com.example.backend_parser.exchanges.KucoinExchange;
@@ -24,7 +25,7 @@ import java.util.List;
 @SpringBootApplication
 public class BackendParserApplication {
 	public static void main(String[] args) throws IOException, AWTException {
-//		TelegramService.registerBot();
+		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
 
 		Splitter.init();

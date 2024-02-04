@@ -2,11 +2,16 @@ package com.example.backend_parser.Telegram;
 
 import com.example.backend_parser.Telegram.entities.BanCommand;
 import com.example.backend_parser.Telegram.entities.ObtainCommand;
+import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.request.RequestMaker;
+import com.example.backend_parser.splitter.Splitter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TelegramService {
 
@@ -47,6 +52,8 @@ public class TelegramService {
                 ObtainCommand banCommand = getCommandBlocksForGet(messageText);
                 String response = RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
                 getTelegram().sendMessageById(response, chatId);
+            } else if (messageText.startsWith("/exchanges")) {
+                getTelegram().sendMessageById(getExchangesNames(), chatId);
             } else if (messageText.startsWith("/minAmount")) {
                 String response = RequestMaker.getRequest("http://localhost:8080/minAmount");
                 getTelegram().sendMessageById(response, chatId);
@@ -59,7 +66,8 @@ public class TelegramService {
                 + " - *Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT, капсом и вместе" + "\n" + "\n"
                 + " - Чтобы получить список забаненных токенов для какой-то биржи: /list bybit" + "\n" + "\n"
                 + " - Чтобы получить текущий объём, по которой бот считает цену: /minAmount" + "\n" + "\n"
-                + " - Чтобы установить новый минимальный объём: /set minAmount 2000", chatId);
+                + " - Чтобы установить новый минимальный объём: /set minAmount 2000" + "\n" + "\n"
+                + " - Чтобы получить список работающих бирж: /exchanges" + "\n" + "\n", chatId);
             }
         }
     }
@@ -95,6 +103,15 @@ public class TelegramService {
         String exchange = words[1];
 
         return new ObtainCommand(flag, exchange);
+    }
+
+    private static String getExchangesNames() {
+        String names = "";
+        for(Exchange exchange : Splitter.exchanges) {
+            names = names + exchange.getName() + "\n";
+        }
+
+        return names;
     }
 
 }
