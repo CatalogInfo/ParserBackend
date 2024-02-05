@@ -60,9 +60,9 @@ public class SpreadFinder {
                 formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, chain);
             }
 
-            if(!isSpreadStillExists(token1, token2, exchange1, exchange2)) {
-                return;
-            }
+//            if(!isSpreadStillExists(token1, token2, exchange1, exchange2)) {
+//                return;
+//            }
 
             TelegramService.sendMessage(formattedMessage);
             Thread.sleep(1000);

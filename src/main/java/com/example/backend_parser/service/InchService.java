@@ -96,7 +96,7 @@ public class InchService extends Service {
 
     @Override
     public Token parseOrderBookForToken(Token token, int minAmount) {
-        processToken(token, proxies.get(new Random().nextInt(300)), minAmount);
+        processToken(token, proxies.get(new Random().nextInt(101)), minAmount);
         return token;
     }
 
@@ -106,7 +106,7 @@ public class InchService extends Service {
 
         ExecutorService executorService = Executors.newFixedThreadPool(20);
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 6; i++) {
             for (ProxyWithApiToken proxyWithApiToken : proxies) {
                 int finalTokenNumber = tokenNumber;
 
@@ -156,7 +156,6 @@ public class InchService extends Service {
 
         token.setAsk(ask.getPrice());
         token.setBid(bid.getPrice());
-        System.out.println(token);
 
     }
     public PriceAmount getBid(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {

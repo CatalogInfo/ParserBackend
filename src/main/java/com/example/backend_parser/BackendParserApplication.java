@@ -13,6 +13,7 @@ import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.splitter.Splitter;
+import com.example.backend_parser.utils.FileMerger;
 import com.example.backend_parser.utils.RestartUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,6 +29,7 @@ public class BackendParserApplication {
 		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
 
+//		FileMerger.merge();
 		Splitter.init();
 		System.setProperty("java.awt.headless", "false");
 
@@ -35,7 +37,7 @@ public class BackendParserApplication {
 				try {
 					SpreadFinder.findSpreads();
 				} catch (InterruptedException e) {
-					RestartUtils.restartApp();
+//					RestartUtils.restartApp();
 					throw new RuntimeException(e);
 				}
 			}

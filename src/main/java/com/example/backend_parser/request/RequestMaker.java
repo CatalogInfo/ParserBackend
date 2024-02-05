@@ -23,10 +23,7 @@ public class RequestMaker {
     public static String getRequest(String url) {
         InputStream inputStream = null;
         try {
-            HttpClient httpClient = HttpClients.custom()
-                    .setDefaultRequestConfig(RequestConfig.custom()
-                            .setCookieSpec(CookieSpecs.STANDARD).build())
-                    .build();
+            HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             HttpResponse httpResponse = httpClient.execute(httpGet);
 
@@ -44,10 +41,7 @@ public class RequestMaker {
     public static String getRequestWithAuth(String url, String authToken) {
         InputStream inputStream = null;
         try {
-            HttpClient httpClient = HttpClients.custom()
-                    .setDefaultRequestConfig(RequestConfig.custom()
-                            .setCookieSpec(CookieSpecs.STANDARD).build())
-                    .build();
+            HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             // Adding Authorization header
             httpGet.addHeader("Authorization", "Bearer " + authToken);
@@ -61,7 +55,9 @@ public class RequestMaker {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return RequestUtils.readFromConnection(inputStream);
+
+        String response = RequestUtils.readFromConnection(inputStream);
+        return response;
     }
 
 
@@ -70,11 +66,7 @@ public class RequestMaker {
 
         InputStream inputStream = null;
         try {
-            HttpClient httpClient = HttpClients.custom()
-                    .setDefaultRequestConfig(RequestConfig.custom()
-                            .setCookieSpec(CookieSpecs.STANDARD).build())
-                    .build();            // Use URIBuilder to add parameters to the URL
-
+            HttpClient httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(link);
 
             // Adding Authorization header
@@ -82,12 +74,17 @@ public class RequestMaker {
 
             HttpResponse httpResponse = httpClient.execute(httpGet);
 
-            isRequestWorked(httpResponse.getStatusLine().getStatusCode(), link);
+            try {
+                isRequestWorked(httpResponse.getStatusLine().getStatusCode(), link);
+            } catch (Exception e) {
+                System.out.println("AAAAAAAAAAAAAA " + authorizationToken);
+                e.printStackTrace();
+            }
 
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
-            RestartUtils.restartApp();
+//            RestartUtils.restartApp();
             e.printStackTrace();
         }
         return RequestUtils.readFromConnection(inputStream);
@@ -97,10 +94,8 @@ public class RequestMaker {
     public static String postRequest(String url, String body) {
         InputStream inputStream = null;
         try {
-            HttpClient httpClient = HttpClients.custom()
-                    .setDefaultRequestConfig(RequestConfig.custom()
-                            .setCookieSpec(CookieSpecs.STANDARD).build())
-                    .build();            HttpPost httppost = new HttpPost(url);
+            HttpClient httpClient = HttpClients.createDefault();
+            HttpPost httppost = new HttpPost(url);
             httppost.setHeader("Content-Type", "application/json; charset=UTF-8");
 
             StringEntity body_json = new StringEntity(body);
@@ -121,6 +116,7 @@ public class RequestMaker {
 
         if(responseCode == 429){
             System.out.println("LIMIT REACHED " + url);
+            throw new Exception("SOSI HUI");
         }
 
 //        if (responseCode != HttpURLConnection.HTTP_OK) {

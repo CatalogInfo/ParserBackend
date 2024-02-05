@@ -17,19 +17,19 @@ public class Splitter {
 
     public static int loopNumber = 0;
     public static void init() {
-        exchanges.add(new Exchange("binance", "https://www.binance.com/en/trade/", "", "", new BinanceExchange())); // doesn't matter
+//        exchanges.add(new Exchange("binance", "https://www.binance.com/en/trade/", "", "", new BinanceExchange())); // doesn't matter
         exchanges.add(new Exchange("gate", "https://www.gate.io/trade/", "_", "_", new GateExchange())); // BASE_QUOTE, ++
 //        exchanges.add(new Exchange("bitrue", "https://www.bitrue.com/trade/", "", "_", new BitrueExchange())); // BASEQOUTE api, ++
 //        exchanges.add(new Exchange("okx", "https://www.okx.com/trade-spot/", "-", "-", new OkxExchange())); // BASE-QUOTE api, ++
 //        exchanges.add(new Exchange("huobi", "https://www.htx.com/en-us/trade/", "_", "_", true, new HuobiExchange(), "?type=spot")); // basequote api, base_quote link dolboebi
 //        exchanges.add(new Exchange("bybit", "https://www.bybit.com/en-US/trade/spot/", "", "/", new BybitExchange())); // BASEQUOTE , BASE/QUOTE link eblan
-//        exchanges.add(new Exchange("1inch", "https://app.1inch.io/#/1/advanced/swap/", "/", "/", new InchExchange()));
+        exchanges.add(new Exchange("1inch", "https://app.1inch.io/#/1/advanced/swap/", "/", "/", new InchExchange()));
 //        exchanges.add(new Exchange("bitget", "https://www.bitget.com/ru/spot/", "", "", new BitgetExchange())); // BASEQOUTE api, ++
 //        exchanges.add(new Exchange("xtcom", "https://www.xt.com/en/trade/", "_", "_", new XTcomExchange())); // BASEQOUTE api, ++
 //        exchanges.add(new Exchange("kucoin", "kucoin.com/ru/trade/", "-", "-", new KucoinExchange())); // BASEQOUTE api, ++
 
 //        exchanges.add(new Exchange("mexc", "", "", "", new MexcExchange()));
-        exchanges.add(new Exchange("kraken", "", "https://pro.kraken.com/app/trade/", "", new KrakenExchange())); // BASEQUOTE , BASE/QUOTE link eblani
+//        exchanges.add(new Exchange("kraken", "", "https://pro.kraken.com/app/trade/", "", new KrakenExchange())); // BASEQUOTE , BASE/QUOTE link eblani
 
 
     }
@@ -46,6 +46,7 @@ public class Splitter {
         List<List<Token>> outputPairs = findRepeatedBaseAndQuoteElements(arrayOfPairs);
         LogFactory.makeALog("Base and Quotes parsed");
 
+
         for (int i = 0; i < exchanges.size(); i++) {
             exchanges.get(i).setTokens(outputPairs.get(i));
         }
@@ -55,6 +56,7 @@ public class Splitter {
         for (Exchange exchange : exchanges) {
             executorService.execute(() -> exchange.getOrderBook(exchange.getTokens()));
         }
+
         LogFactory.makeALog("Order books parsed");
 
         LogFactory.makeALog("  -- Starting waiting termination");
@@ -64,6 +66,7 @@ public class Splitter {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+
         LogFactory.makeALog("  --  Ending waiting termination");
 
         executorService = Executors.newFixedThreadPool(exchanges.size());

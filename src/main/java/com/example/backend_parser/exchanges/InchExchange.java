@@ -22,7 +22,7 @@ public class InchExchange extends BaseExchange {
     }
     @Override
     protected String getAuthToken() {
-        return "B9PcyyN0hdb1u681DJm15oHpPaMllexg";
+        return "Q8bcWnHcvawk6cUKXIimjADeoT7154Vu";
     }
 
     @Override
