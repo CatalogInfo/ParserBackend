@@ -1,0 +1,17 @@
+package com.example.backend_parser.responses;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Data
+@AllArgsConstructor
+@Getter
+@Setter
+public class ExchangeResponse {
+    String name;
+    int tokens;
+    int chains;
+    int bannedTokens;
+}

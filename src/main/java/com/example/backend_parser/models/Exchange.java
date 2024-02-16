@@ -5,6 +5,7 @@ import com.example.backend_parser.exchanges.BaseExchange;
 import com.example.backend_parser.repos.BanTokenRepo;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.service.BanTokenService;
+import com.example.backend_parser.utils.BanListUtils;
 import com.example.backend_parser.utils.RestartUtils;
 import jdk.swing.interop.SwingInterOpUtils;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class Exchange {
         this.linkSplitter = linkSplitter;
         this.splitter = splitter;
         this.baseExchange = baseExchange;
-        banList.addAll(parseBanTokens());
+        parseBanTokens();
     }
 
     public List<BanToken> parseBanTokens() {
@@ -50,6 +51,8 @@ public class Exchange {
             BanToken banToken = new BanToken(obj.getLong("id"), obj.getString("exchange"), obj.getString("token"));
             tokens.add(banToken);
         }
+        banList.clear();
+        banList.addAll(tokens);
 
         return tokens;
     }
@@ -78,11 +81,14 @@ public class Exchange {
         List<Token> tokensOutput = baseExchange.getTradingPairs();
         List<Token> tokensToUpperCase = new ArrayList<>();
         for (Token token : tokensOutput) {
-            Token token1 = token;
-            token1.setBase(token1.getBase().toUpperCase());
-            tokensToUpperCase.add(token1);
+
+            if(!BanListUtils.tokenInBanList(token, this)) {
+                Token token1 = token;
+                token1.setBase(token1.getBase().toUpperCase());
+                tokensToUpperCase.add(token1);
+            }
         }
-        tokens.addAll(tokensOutput);
+        tokens.addAll(tokensToUpperCase);
     }
 
     public void getChains() {

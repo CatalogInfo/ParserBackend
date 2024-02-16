@@ -28,8 +28,7 @@ public class BackendParserApplication {
 	public static void main(String[] args) throws IOException, AWTException {
 		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
-
-//		FileMerger.merge();
+//
 		Splitter.init();
 		System.setProperty("java.awt.headless", "false");
 

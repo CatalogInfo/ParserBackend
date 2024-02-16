@@ -2,10 +2,12 @@ package com.example.backend_parser.service;
 
 import com.example.backend_parser.entities.BanToken;
 import com.example.backend_parser.repos.BanTokenRepo;
+import com.example.backend_parser.splitter.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BanTokenService implements IBanTokenService {
@@ -21,6 +23,11 @@ public class BanTokenService implements IBanTokenService {
         if(!banTokenRepo.existsByTokenAndExchange(token, exchange)) {
             banTokenRepo.save(banToken);
         }
+        Splitter.exchanges.forEach(exchange1 -> {
+            if(exchange1.getName().equals(exchange)) {
+                exchange1.parseBanTokens();
+            }
+        });
     }
 
     public List<BanToken> getByExchange(String exchange) {

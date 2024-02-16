@@ -36,7 +36,7 @@ public class KrakenMapper extends Mapper {
             String baseAsset = getValue(symbolObject, getKeysMapper().getBaseKey());
             String quoteAsset = getValue(symbolObject, getKeysMapper().getQuoteKey());
 
-            if(quoteAssetAndCustomCheck(symbolObject)) {
+            if(quoteAssetAndCustomCheck(quoteAsset)) {
                 baseQuoteList.add(new Token(symbol, baseAsset, quoteAsset));
             }
         }

@@ -77,14 +77,12 @@ public class RequestMaker {
             try {
                 isRequestWorked(httpResponse.getStatusLine().getStatusCode(), link);
             } catch (Exception e) {
-                System.out.println("AAAAAAAAAAAAAA " + authorizationToken);
                 e.printStackTrace();
             }
 
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
-//            RestartUtils.restartApp();
             e.printStackTrace();
         }
         return RequestUtils.readFromConnection(inputStream);

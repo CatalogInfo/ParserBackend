@@ -26,14 +26,6 @@ public class HuobiMapper extends Mapper {
     }
 
     @Override
-    protected boolean quoteAssetAndCustomCheck(JSONObject symbolObject) {
-        String state = String.valueOf(symbolObject.get("state"));
-        String quoteAsset = getValue(symbolObject, getKeysMapper().getQuoteKey());
-
-        return resolvedQuoteAssets.contains(quoteAsset.toUpperCase()) && state.equals("online");
-    }
-
-    @Override
     public KeysMapper getKeysMapper() {
         return new KeysMapper("sc", "bcdn" ,"qcdn", "bids", "asks");
     }

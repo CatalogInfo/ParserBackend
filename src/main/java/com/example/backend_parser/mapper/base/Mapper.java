@@ -2,6 +2,7 @@ package com.example.backend_parser.mapper.base;
 
 import com.example.backend_parser.calculations.PriceCalculator;
 import com.example.backend_parser.models.*;
+import com.example.backend_parser.utils.BanListUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -39,7 +40,7 @@ public class Mapper extends Converter implements IMapper {
             String baseAsset = getValue(symbolObject, getKeysMapper().getBaseKey());
             String quoteAsset = getValue(symbolObject, getKeysMapper().getQuoteKey());
 
-            if(quoteAssetAndCustomCheck(symbolObject)) {
+            if(quoteAssetAndCustomCheck(quoteAsset)) {
                 baseQuoteList.add(new Token(symbol, baseAsset, quoteAsset));
             }
         }
@@ -47,8 +48,7 @@ public class Mapper extends Converter implements IMapper {
         return baseQuoteList;
     }
 
-    protected boolean quoteAssetAndCustomCheck(JSONObject symbolObject) {
-        String quoteAsset = getValue(symbolObject, getKeysMapper().getQuoteKey());
+    protected boolean quoteAssetAndCustomCheck(String quoteAsset) {
         return resolvedQuoteAssets.contains(quoteAsset.toUpperCase());
     }
 }
