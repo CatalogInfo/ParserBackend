@@ -49,6 +49,7 @@ public class TelegramEndpoint {
 
     @PostMapping("/minAmount")
     public HttpEntity<?> setMinAmount(@RequestBody String minAmount) {
+        System.out.println(minAmount);
          minAmountService.setMinAmount(Integer.parseInt(minAmount));
          return new HttpEntity<>("OK");
     }

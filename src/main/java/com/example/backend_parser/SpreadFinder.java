@@ -13,8 +13,8 @@ import java.util.List;
 
 public class SpreadFinder {
 
-    private static final int MIN_SPREAD = 2;
-    private static final int MAX_SPREAD = 200;
+    public static final int MIN_SPREAD = Splitter.options.getMinSpread();
+    public static final int MAX_SPREAD = Splitter.options.getMaxSpread();
 
     public static void findSpreads() throws InterruptedException {
         Splitter.split();

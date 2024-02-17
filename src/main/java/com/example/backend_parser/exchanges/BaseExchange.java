@@ -4,12 +4,13 @@ package com.example.backend_parser.exchanges;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.service.IExchangeService;
+import com.example.backend_parser.splitter.Splitter;
 
 import java.io.IOException;
 import java.util.List;
 
 public abstract class BaseExchange {
-    public static int MIN_AMOUNT = initMinAmount();
+    public static int MIN_AMOUNT = Splitter.options.getMinAmount();
 
     public List<Token> getTradingPairs() {
         return getService().parseTradingPairs(getAuthToken());

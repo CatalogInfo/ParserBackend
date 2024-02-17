@@ -1,11 +1,13 @@
 package com.example.backend_parser.service.endpoints;
 
+import com.example.backend_parser.SpreadFinder;
+import com.example.backend_parser.exchanges.BaseExchange;
 import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.responses.ExchangeResponse;
+import com.example.backend_parser.dtos.OptionsDto;
 import com.example.backend_parser.splitter.Splitter;
-import com.example.backend_parser.utils.BanListUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +30,14 @@ public class ExchangesService {
 
     public int getBannedTokens(Exchange exchange) {
         return exchange.getBanList().size();
+    }
+
+    public OptionsDto getOptions() {
+        int minAmount = BaseExchange.MIN_AMOUNT;
+        int minSpread = SpreadFinder.MIN_SPREAD;
+        int maxSpread = SpreadFinder.MAX_SPREAD;
+
+        return new OptionsDto(minAmount, minSpread, maxSpread);
     }
 
     private int getChains(Exchange exchange) {

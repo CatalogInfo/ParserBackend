@@ -1,11 +1,14 @@
 package com.example.backend_parser.splitter;
 
+import com.example.backend_parser.dtos.OptionsDto;
+import com.example.backend_parser.entities.Options;
 import com.example.backend_parser.exchanges.*;
 import com.example.backend_parser.logs.LogFactory;
 import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.request.RequestMaker;
 import com.example.backend_parser.utils.ThreadUtils;
+import com.google.gson.Gson;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -16,8 +19,11 @@ import java.util.stream.Collectors;
 public class Splitter {
     public static List<Exchange> exchanges = new ArrayList<>();
 
+    public static OptionsDto options;
     public static int loopNumber = 0;
     public static void init() {
+        options = getOptions();
+
 //        exchanges.add(new Exchange("binance", "https://www.binance.com/en/trade/", "", "", new BinanceExchange())); // doesn't matter
         exchanges.add(new Exchange("gate", "https://www.gate.io/trade/", "_", "_", new GateExchange())); // BASE_QUOTE, ++
 //        exchanges.add(new Exchange("bitrue", "https://www.bitrue.com/trade/", "", "_", new BitrueExchange())); // BASEQOUTE api, ++
@@ -32,7 +38,6 @@ public class Splitter {
 
 //        exchanges.add(new Exchange("mexc", "", "", "", new MexcExchange()));
 //        exchanges.add(new Exchange("kraken", "", "https://pro.kraken.com/app/trade/", "", new KrakenExchange())); // BASEQUOTE , BASE/QUOTE link eblani
-
 
     }
 
@@ -104,5 +109,11 @@ public class Splitter {
 
     private static void sendDataToWebsocket() {
         RequestMaker.getRequest("http://localhost:8080/socket/exchanges");
+    }
+
+    private static OptionsDto getOptions() {
+        Gson gson = new Gson(); // Or use new GsonBuilder().create();
+        OptionsDto options = gson.fromJson(RequestMaker.getRequest("http://localhost:8080/options"), OptionsDto.class);
+        return options;
     }
 }
