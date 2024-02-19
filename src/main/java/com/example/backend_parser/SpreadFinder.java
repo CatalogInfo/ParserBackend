@@ -13,8 +13,8 @@ import java.util.List;
 
 public class SpreadFinder {
 
-    public static final int MIN_SPREAD = Splitter.options.getMinSpread();
-    public static final int MAX_SPREAD = Splitter.options.getMaxSpread();
+    public static int MIN_SPREAD = Splitter.options.getMinSpread();
+    public static int MAX_SPREAD = Splitter.options.getMaxSpread();
 
     public static void findSpreads() throws InterruptedException {
         Splitter.split();
@@ -41,9 +41,7 @@ public class SpreadFinder {
             throws InterruptedException {
         double spread = SpreadCalculator.calculateSpread(token1, token2);
         if (spread > MIN_SPREAD && spread < MAX_SPREAD) {
-            if (BlackListUtils.tokenInBlackList(token1, token2, exchange1, exchange2)
-                    || BanListUtils.tokenInBanList(token1, exchange1)
-                    || BanListUtils.tokenInBanList(token2, exchange2)) {
+            if (BlackListUtils.tokenInBlackList(token1, token2, exchange1, exchange2)) {
                 return;
             }
             BlackListUtils.addToBlackList(token1.getSymbol(), exchange1.getBlackList());

@@ -7,6 +7,4 @@ public class LogFactory {
         StackTraceElement caller = stackTrace[2];
         System.out.println("-------NormalLog::" + time + "  ::  " + message + " -> " + caller.getFileName());
     }
-
-
 }

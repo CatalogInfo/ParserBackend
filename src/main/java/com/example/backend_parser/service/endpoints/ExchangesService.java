@@ -25,6 +25,7 @@ public class ExchangesService {
         for(Exchange exchange : exchanges) {
             exchangeResponses.add(new ExchangeResponse(exchange.getName(), exchange.getTokens().size(), getChains(exchange), getBannedTokens(exchange)));
         }
+
         return exchangeResponses;
     }
 

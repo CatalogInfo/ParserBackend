@@ -10,7 +10,12 @@ public class WebSocketController {
     @MessageMapping("/send/message")
     @SendTo("/topic/receive")
     public String sendMessage(String message) {
-        System.out.println(message);
+        return message;
+    }
+
+    @MessageMapping("/send/parsingTime")
+    @SendTo("/topic/parsingTime")
+    public String sendParsingTime(String message) {
         return message;
     }
 }

@@ -21,7 +21,8 @@ public class ExchangesEndpoint {
     WebSocketController webSocketController;
     @GetMapping("/socket/exchanges")
     public void getExchangesAndSend() {
-        messageService.sendMessageToClients(new HttpEntity<>(exchangesService.getExchanges()));
+        System.out.println("HUI");
+        messageService.sendMessageToClients(new HttpEntity<>(exchangesService.getExchanges()), "/topic/receive");
     }
     @GetMapping("/exchanges")
     public HttpEntity<?> getExchanges() {

@@ -18,11 +18,12 @@ import java.util.stream.Collectors;
 
 public class Splitter {
     public static List<Exchange> exchanges = new ArrayList<>();
-
     public static OptionsDto options;
     public static int loopNumber = 0;
+    public static String parsingTime = "";
     public static void init() {
         options = getOptions();
+        System.out.println(options);
 
 //        exchanges.add(new Exchange("binance", "https://www.binance.com/en/trade/", "", "", new BinanceExchange())); // doesn't matter
         exchanges.add(new Exchange("gate", "https://www.gate.io/trade/", "_", "_", new GateExchange())); // BASE_QUOTE, ++
@@ -42,56 +43,24 @@ public class Splitter {
     }
 
     public static void split() {
+        long startTime = System.currentTimeMillis();
+
         loopNumber++;
         LogFactory.makeALog("Loop number -" + loopNumber + "- has started ");
 
-        List<List<Token>> arrayOfPairs = new ArrayList<>();
-        for (Exchange exchange : exchanges) {
-            exchange.getBaseQuotes();
-            arrayOfPairs.add(exchange.getTokens());
-        }
-        List<List<Token>> outputPairs = findRepeatedBaseAndQuoteElements(arrayOfPairs);
-        LogFactory.makeALog("Base and Quotes parsed");
-
-
-        for (int i = 0; i < exchanges.size(); i++) {
-            exchanges.get(i).setTokens(outputPairs.get(i));
-        }
+        parseBaseAndQuotes();
 
         ExecutorService executorService = Executors.newFixedThreadPool(exchanges.size());
 
-        for (Exchange exchange : exchanges) {
-            executorService.execute(() -> exchange.getOrderBook(exchange.getTokens()));
-        }
-
-        LogFactory.makeALog("Order books parsed");
-
-        LogFactory.makeALog("  -- Starting waiting termination");
-        executorService.shutdown();
-        try {
-            executorService.awaitTermination(3, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        LogFactory.makeALog("  --  Ending waiting termination");
+        parseOrderBooks(executorService);
+        terminate(executorService);
 
         executorService = Executors.newFixedThreadPool(exchanges.size());
 
-        for (Exchange exchange : exchanges) {
-            executorService.execute(exchange::getChains);
-        }
-        LogFactory.makeALog("Chains parsed parsed");
+        parseChains(executorService);
+        terminate(executorService);
 
-
-        LogFactory.makeALog("  -- Starting waiting termination");
-        executorService.shutdown();
-        try {
-            executorService.awaitTermination(3, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        LogFactory.makeALog("  --  Ending waiting termination");
+        parsingTime = findOutExecutionTime(startTime);
         sendDataToWebsocket();
     }
 
@@ -109,11 +78,63 @@ public class Splitter {
 
     private static void sendDataToWebsocket() {
         RequestMaker.getRequest("http://localhost:8080/socket/exchanges");
+        RequestMaker.getRequest("http://localhost:8080/parsingTime");
     }
 
     private static OptionsDto getOptions() {
-        Gson gson = new Gson(); // Or use new GsonBuilder().create();
-        OptionsDto options = gson.fromJson(RequestMaker.getRequest("http://localhost:8080/options"), OptionsDto.class);
-        return options;
+        Gson gson = new Gson();
+        return gson.fromJson(RequestMaker.getRequest("http://localhost:8080/options"), OptionsDto.class);
+    }
+
+    private static void parseBaseAndQuotes() {
+        List<List<Token>> arrayOfPairs = new ArrayList<>();
+        for (Exchange exchange : exchanges) {
+            exchange.getBaseQuotes();
+            arrayOfPairs.add(exchange.getTokens());
+        }
+        List<List<Token>> outputPairs = findRepeatedBaseAndQuoteElements(arrayOfPairs);
+        LogFactory.makeALog("Base and Quotes parsed");
+
+
+        for (int i = 0; i < exchanges.size(); i++) {
+            exchanges.get(i).setTokens(outputPairs.get(i));
+        }
+    }
+
+    private static void parseOrderBooks(ExecutorService executorService) {
+        for (Exchange exchange : exchanges) {
+            executorService.execute(() -> exchange.getOrderBook(exchange.getTokens()));
+        }
+
+        LogFactory.makeALog("Order books parsed");
+    }
+
+    private static void parseChains(ExecutorService executorService) {
+        for (Exchange exchange : exchanges) {
+            executorService.execute(exchange::getChains);
+        }
+        LogFactory.makeALog("Chains parsed parsed");
+    }
+
+    private static void terminate(ExecutorService executorService) {
+        LogFactory.makeALog("  -- Starting waiting termination");
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(3, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        LogFactory.makeALog("  --  Ending waiting termination");
+    }
+
+    private static String findOutExecutionTime(long startTime) {
+        long endTime = System.currentTimeMillis();
+
+        long elapsedTimeMillis = endTime - startTime;
+
+        long minutes = elapsedTimeMillis / (60 * 1000);
+        long seconds = (elapsedTimeMillis / 1000) % 60;
+
+        return String.format("%d:%02d", minutes, seconds);
     }
 }

@@ -12,7 +12,7 @@ public class MessageService {
     SimpMessagingTemplate messagingTemplate;
 
 
-    public void sendMessageToClients(HttpEntity<?> message) {
-        messagingTemplate.convertAndSend("/topic/receive", message);
+    public void sendMessageToClients(HttpEntity<?> message, String url) {
+        messagingTemplate.convertAndSend(url, message);
     }
 }

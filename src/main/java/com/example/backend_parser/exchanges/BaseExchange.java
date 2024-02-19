@@ -42,10 +42,6 @@ public abstract class BaseExchange {
         return MIN_AMOUNT;
     }
 
-    private static int initMinAmount() {
-        return Integer.parseInt(RequestMaker.getRequest("http://localhost:8080/minAmount"));
-    }
-
     public abstract String requestChains() throws IOException;
 
 
