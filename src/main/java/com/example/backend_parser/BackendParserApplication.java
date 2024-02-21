@@ -5,6 +5,7 @@ import com.example.backend_parser.exchanges.BinanceExchange;
 import com.example.backend_parser.exchanges.BitgetExchange;
 import com.example.backend_parser.exchanges.KucoinExchange;
 import com.example.backend_parser.exchanges.XTcomExchange;
+import com.example.backend_parser.logs.LogFactory;
 import com.example.backend_parser.mapper.exchanges.BinanceMapper;
 import com.example.backend_parser.mapper.exchanges.BitgetMapper;
 import com.example.backend_parser.mapper.exchanges.KucoinMapper;
@@ -41,6 +42,7 @@ public class BackendParserApplication {
 				}
 			}
 
+//			LogFactory.makeAnExceptionLog("Exception, ttt");
 
 //		List<Token> tokens1 = Splitter.exchanges.get(0).getTokens();
 //		List<Token> tokens2 = Splitter.exchanges.get(1).getTokens();

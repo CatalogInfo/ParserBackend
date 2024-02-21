@@ -1,5 +1,6 @@
 package com.example.backend_parser.request;
 
+import com.example.backend_parser.logs.LogFactory;
 import com.example.backend_parser.utils.RestartUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
@@ -61,8 +62,8 @@ public class RequestMaker {
     }
 
 
-    public static String inchQuoteRequest(String authorizationToken, String src, String dst, String amount) {
-        String link = "https://api.1inch.dev/fusion/quoter/v1.0/1/quote/receive?fromTokenAddress=" + src + "&toTokenAddress=" + dst + "&amount=" + amount + "&walletAddress=0xb094Cf1aA47891e96d2CA5a3Fd66B3755B349aF2&enableEstimate=true&isLedgerLive=true";
+    public static String inchQuoteRequest(String authorizationToken, String src, String dst, String amount, String walletAddress) {
+        String link = "https://api.1inch.dev/fusion/quoter/v1.0/1/quote/receive?fromTokenAddress=" + src + "&toTokenAddress=" + dst + "&amount=" + amount + "&walletAddress=" + walletAddress + "&enableEstimate=true&isLedgerLive=true";
 
         InputStream inputStream = null;
         try {
@@ -77,12 +78,14 @@ public class RequestMaker {
             try {
                 isRequestWorked(httpResponse.getStatusLine().getStatusCode(), link);
             } catch (Exception e) {
+                LogFactory.makeAnExceptionLog(e.toString());
                 e.printStackTrace();
             }
 
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
+            LogFactory.makeAnExceptionLog(e.toString());
             e.printStackTrace();
         }
         return RequestUtils.readFromConnection(inputStream);

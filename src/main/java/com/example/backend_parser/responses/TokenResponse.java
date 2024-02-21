@@ -11,8 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ExchangeResponse {
-    String name;
-    List<TokenResponse> tokens;
-    List<String> bannedTokens;
+public class TokenResponse {
+    String symbol;
+    String base;
+    String quote;
+    List<ChainResponse> chains;
 }

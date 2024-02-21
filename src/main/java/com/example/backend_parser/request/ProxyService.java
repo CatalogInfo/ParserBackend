@@ -39,6 +39,6 @@ public class ProxyService {
         ProxySelector.setDefault(proxySelector);
 
 
-        return RequestMaker.inchQuoteRequest(authorizationToken, src, dst, amount);
+        return RequestMaker.inchQuoteRequest(authorizationToken, src, dst, amount, proxyWithApiToken.getWallet());
     }
 }

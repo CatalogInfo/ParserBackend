@@ -16,6 +16,6 @@ public class GeneralInfo {
     MessageService messageService;
     @GetMapping("/parsingTime")
     public void getParsingTime() {
-        messageService.sendMessageToClients(new HttpEntity<>(new ParsingTimeResponse(Splitter.parsingTime)), "/parsingTime/receive");
+        messageService.sendMessageToClients(new HttpEntity<>(new ParsingTimeResponse(Splitter.parsingTime)), "/topic/parsingTime");
     }
 }

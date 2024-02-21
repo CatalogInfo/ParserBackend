@@ -1,13 +1,18 @@
 package com.example.backend_parser.service.endpoints;
 
 import com.example.backend_parser.SpreadFinder;
+import com.example.backend_parser.entities.BanToken;
 import com.example.backend_parser.exchanges.BaseExchange;
 import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
+import com.example.backend_parser.responses.ChainResponse;
 import com.example.backend_parser.responses.ExchangeResponse;
 import com.example.backend_parser.dtos.OptionsDto;
+import com.example.backend_parser.responses.TokenResponse;
+import com.example.backend_parser.service.BanTokenService;
 import com.example.backend_parser.splitter.Splitter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,20 +22,29 @@ import java.util.Set;
 
 @Service
 public class ExchangesService {
+
+    @Autowired
+    BanTokenService banTokenService;
     public List<ExchangeResponse> getExchanges() {
         List<Exchange> exchanges = Splitter.exchanges;
 
         List<ExchangeResponse> exchangeResponses = new ArrayList<>();
 
         for(Exchange exchange : exchanges) {
-            exchangeResponses.add(new ExchangeResponse(exchange.getName(), exchange.getTokens().size(), getChains(exchange), getBannedTokens(exchange)));
+            exchangeResponses.add(new ExchangeResponse(exchange.getName(), getTokens(exchange), getBannedTokens(exchange)));
         }
 
         return exchangeResponses;
     }
 
-    public int getBannedTokens(Exchange exchange) {
-        return exchange.getBanList().size();
+    public List<String> getBannedTokens(Exchange exchange) {
+        List<BanToken> tokens = banTokenService.getByExchange(exchange.getName());
+        List<String> bannedTokensResponse = new ArrayList<>();
+
+        for(BanToken banToken : tokens) {
+            bannedTokensResponse.add(banToken.getToken());
+        }
+        return bannedTokensResponse;
     }
 
     public OptionsDto getOptions() {
@@ -41,15 +55,24 @@ public class ExchangesService {
         return new OptionsDto(minAmount, minSpread, maxSpread);
     }
 
-    private int getChains(Exchange exchange) {
-        Set<String> chains = new HashSet<>();
-        for(Token token : exchange.getTokens()) {
-            for(Chain chain : token.getChains()) {
-                chains.add(chain.getName());
-            }
+    private List<ChainResponse> getChains(Token token) {
+        List<ChainResponse> responses = new ArrayList<>();
+
+        for(Chain chain : token.getChains()) {
+            responses.add(new ChainResponse(chain.getName(), chain.isDepositEnabled(), chain.isWithdrawalEnabled(), chain.getFee(), chain.getFeePercent()));
         }
 
-        return chains.size();
+        return responses;
+    }
+
+    private List<TokenResponse> getTokens(Exchange exchange) {
+        List<TokenResponse> responses = new ArrayList<>();
+
+        for(Token token : exchange.getTokens()) {
+            responses.add(new TokenResponse(token.getSymbol(), token.getBase(), token.getQuote(), getChains(token)));
+        }
+
+        return responses;
     }
 
 }

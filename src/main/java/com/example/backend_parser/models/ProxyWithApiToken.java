@@ -13,4 +13,17 @@ public class ProxyWithApiToken {
     String username;
     String password;
     String apiToken;
+    String wallet;
+
+    @Override
+    public String toString() {
+        return "ProxyWithApiToken{" +
+                "host='" + host + '\'' +
+                ", port=" + port +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", apiToken='" + apiToken + '\'' +
+                ", wallet='" + wallet + '\'' +
+                '}';
+    }
 }

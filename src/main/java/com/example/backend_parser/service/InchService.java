@@ -104,9 +104,10 @@ public class InchService extends Service {
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
         int tokenNumber = 0;
 
-        ExecutorService executorService = Executors.newFixedThreadPool(20);
+        ExecutorService executorService = Executors.newFixedThreadPool(50);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
+
             for (ProxyWithApiToken proxyWithApiToken : proxies) {
                 int finalTokenNumber = tokenNumber;
 
@@ -114,13 +115,7 @@ public class InchService extends Service {
                     List<Token> finalTokens = tokens;
                     clearInnerData();
 
-                    executorService.shutdown();
-                    LogFactory.makeALog("Starting termination");
-                    try {
-                        executorService.awaitTermination(3, TimeUnit.MINUTES);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+
                     LogFactory.makeALog("Ending termination");
                     return finalTokens;
                 }
@@ -129,9 +124,12 @@ public class InchService extends Service {
 
                 tokenNumber++;
             }
-
+            try {
+                executorService.awaitTermination(3, TimeUnit.MINUTES);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             LogFactory.makeALog("Waiting started");
-
             try {
                 Thread.sleep(60000);
             } catch (InterruptedException e) {

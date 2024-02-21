@@ -4,6 +4,9 @@ import com.example.backend_parser.Telegram.TelegramService;
 import com.example.backend_parser.entities.BanToken;
 import com.example.backend_parser.service.BanTokenService;
 import com.example.backend_parser.service.MinAmountService;
+import com.example.backend_parser.service.endpoints.ExchangesService;
+import com.example.backend_parser.service.endpoints.MessageService;
+import com.example.backend_parser.service.endpoints.OptionsService;
 import com.example.backend_parser.splitter.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -19,7 +22,10 @@ import java.util.List;
 public class TelegramEndpoint {
     @Autowired
     BanTokenService banTokenService;
-
+    @Autowired
+    ExchangesService exchangesService;
+    @Autowired
+    MessageService messageService;
     @Autowired
     MinAmountService minAmountService;
 
@@ -57,6 +63,7 @@ public class TelegramEndpoint {
     @GetMapping("/ban")
     public HttpEntity<?> ban(@RequestParam(name = "token") String token, @RequestParam(name="exchange") String exchange) {
         banTokenService.addTokenToBanList(token, exchange);
+//        messageService.sendMessageToClients(new HttpEntity<>(exchangesService.getExchanges()), "/topic/receive");
 
         return new HttpEntity<>("OK");
     }
@@ -64,6 +71,7 @@ public class TelegramEndpoint {
     @GetMapping("/unban")
     public HttpEntity<?> unban(@RequestParam(name = "token") String token, @RequestParam(name="exchange") String exchange) {
         banTokenService.removeTokenFromBanList(token, exchange);
+//        messageService.sendMessageToClients(new HttpEntity<>(exchangesService.getExchanges()), "/topic/receive");
 
         return new HttpEntity<>("OK");
     }

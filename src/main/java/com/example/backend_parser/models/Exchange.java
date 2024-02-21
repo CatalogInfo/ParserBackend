@@ -64,6 +64,7 @@ public class Exchange {
         this.splitter = splitter;
         this.toLowerCase = toLowerCase;
         this.baseExchange = baseExchange;
+        parseBanTokens();
     }
 
     public Exchange( String name, String link, String linkSplitter, String splitter, boolean toLowerCase, BaseExchange baseExchange, String endOfLink) {
@@ -74,6 +75,7 @@ public class Exchange {
         this.toLowerCase = toLowerCase;
         this.baseExchange = baseExchange;
         this.endOfLink = endOfLink;
+        parseBanTokens();
     }
 
     public void getBaseQuotes() {

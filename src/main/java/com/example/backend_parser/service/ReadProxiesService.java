@@ -18,8 +18,8 @@ public class ReadProxiesService {
             while (line != null) {
                 String[] parts = line.split(":");
 
-                if (parts.length == 5) {
-                    proxies.add(new ProxyWithApiToken(parts[0], Integer.parseInt(parts[1]), parts[2], parts[3], parts[4]));
+                if (parts.length == 6) {
+                    proxies.add(new ProxyWithApiToken(parts[0], Integer.parseInt(parts[1]), parts[2], parts[3], parts[4], parts[5]));
                 } else {
                     System.err.println("Incorrect line: " + line);
                 }
