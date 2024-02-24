@@ -31,7 +31,7 @@ public class ExchangesService {
         List<ExchangeResponse> exchangeResponses = new ArrayList<>();
 
         for(Exchange exchange : exchanges) {
-            exchangeResponses.add(new ExchangeResponse(exchange.getName(), getTokens(exchange), getBannedTokens(exchange)));
+            exchangeResponses.add(new ExchangeResponse(exchange.getLink(), exchange.getName(), getTokens(exchange), getBannedTokens(exchange)));
         }
 
         return exchangeResponses;
@@ -69,7 +69,7 @@ public class ExchangesService {
         List<TokenResponse> responses = new ArrayList<>();
 
         for(Token token : exchange.getTokens()) {
-            responses.add(new TokenResponse(token.getSymbol(), token.getBase(), token.getQuote(), getChains(token)));
+            responses.add(new TokenResponse(token.getSymbol(), token.getBase(), token.getQuote(), getChains(token), token.getBid(), token.getAsk()));
         }
 
         return responses;

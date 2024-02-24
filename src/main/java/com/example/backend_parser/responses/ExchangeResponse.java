@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ExchangeResponse {
+    String link;
     String name;
     List<TokenResponse> tokens;
     List<String> bannedTokens;

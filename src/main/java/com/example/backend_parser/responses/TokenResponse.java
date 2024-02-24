@@ -16,4 +16,6 @@ public class TokenResponse {
     String base;
     String quote;
     List<ChainResponse> chains;
+    double bid;
+    double ask;
 }
