@@ -107,7 +107,7 @@ public class Splitter {
         LogFactory.makeALog("Order books parsed");
     }
 
-    private static void parseChains(ExecutorService executorService) {
+      private static void parseChains(ExecutorService executorService) {
         for (Exchange exchange : exchanges) {
             executorService.execute(exchange::getChains);
         }

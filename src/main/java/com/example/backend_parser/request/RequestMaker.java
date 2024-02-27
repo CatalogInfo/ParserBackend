@@ -88,7 +88,9 @@ public class RequestMaker {
             LogFactory.makeAnExceptionLog(e.toString());
             e.printStackTrace();
         }
-        return RequestUtils.readFromConnection(inputStream);
+
+        String response = RequestUtils.readFromConnection(inputStream);
+        return response;
     }
 
 
