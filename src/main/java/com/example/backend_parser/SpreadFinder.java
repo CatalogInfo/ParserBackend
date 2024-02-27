@@ -15,6 +15,7 @@ public class SpreadFinder {
 
     public static int MIN_SPREAD = Splitter.options.getMinSpread();
     public static int MAX_SPREAD = Splitter.options.getMaxSpread();
+    public static boolean checkChains = Splitter.options.isCheckChain();
 
     public static void findSpreads() throws InterruptedException {
         Splitter.split();
@@ -48,19 +49,23 @@ public class SpreadFinder {
             BlackListUtils.addToBlackList(token2.getSymbol(), exchange2.getBlackList());
 
             String chain = "ETH";
-//            chain = findAChainWithMinFee(token1, token2, exchange1, exchange2);
-//            if(chain == null) {
-//                return;
-//            }
+
+            if(checkChains) {
+                chain = findAChainWithMinFee(token1, token2, exchange1, exchange2);
+                if(chain == null) {
+                    return;
+                }
+                    if(!isSpreadStillExists(token1, token2, exchange1, exchange2)) {
+                    return;
+                }
+            }
 
             String formattedMessage = MessageUtils.getFormattedMessage(token1, token2, exchange1, exchange2, spread, chain);
             if (token1.getBid() > token2.getAsk()) {
                 formattedMessage = MessageUtils.getFormattedMessage(token2, token1, exchange2, exchange1, spread, chain);
             }
 
-//            if(!isSpreadStillExists(token1, token2, exchange1, exchange2)) {
-//                return;
-//            }
+
 
             TelegramService.sendMessage(formattedMessage);
             Thread.sleep(1000);

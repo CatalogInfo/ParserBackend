@@ -27,9 +27,9 @@ public class Splitter {
 //        exchanges.add(new Exchange("gate", "https://www.gate.io/trade/", "_", "_", new GateExchange())); // BASE_QUOTE, ++
 //        exchanges.add(new Exchange("bitrue", "https://www.bitrue.com/trade/", "", "_", new BitrueExchange())); // BASEQOUTE api, ++
 //        exchanges.add(new Exchange("okx", "https://www.okx.com/trade-spot/", "-", "-", new OkxExchange())); // BASE-QUOTE api, ++
-        exchanges.add(new Exchange("huobi", "https://www.htx.com/en-us/trade/", "_", "_", true, new HuobiExchange(), "?type=spot")); // basequote api, base_quote link dolboebi
+//        exchanges.add(new Exchange("huobi", "https://www.htx.com/en-us/trade/", "_", "_", true, new HuobiExchange(), "?type=spot")); // basequote api, base_quote link dolboebi
 //        exchanges.add(new Exchange("bybit", "https://www.bybit.com/en-US/trade/spot/", "", "/", new BybitExchange())); // BASEQUOTE , BASE/QUOTE link eblan
-//        exchanges.add(new Exchange("1inch", "https://app.1inch.io/#/1/advanced/swap/", "/", "/", new InchExchange()));
+        exchanges.add(new Exchange("1inch", "https://app.1inch.io/#/1/advanced/swap/", "/", "/", new InchExchange()));
 //        exchanges.add(new Exchange("bitget", "https://www.bitget.com/ru/spot/", "", "", new BitgetExchange())); // BASEQOUTE api, ++
 //        exchanges.add(new Exchange("xtcom", "https://www.xt.com/en/trade/", "_", "_", new XTcomExchange())); // BASEQOUTE api, ++
 //        exchanges.add(new Exchange("kucoin", "kucoin.com/ru/trade/", "-", "-", new KucoinExchange())); // BASEQOUTE api, ++

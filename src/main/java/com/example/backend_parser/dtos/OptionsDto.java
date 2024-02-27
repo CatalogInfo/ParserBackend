@@ -11,4 +11,5 @@ public class OptionsDto {
     int minAmount;
     int minSpread;
     int maxSpread;
+    boolean checkChain;
 }

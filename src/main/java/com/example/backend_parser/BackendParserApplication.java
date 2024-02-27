@@ -29,7 +29,7 @@ public class BackendParserApplication {
 	public static void main(String[] args) throws IOException, AWTException {
 		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
-//
+
 		Splitter.init();
 		System.setProperty("java.awt.headless", "false");
 
@@ -41,6 +41,8 @@ public class BackendParserApplication {
 					throw new RuntimeException(e);
 				}
 			}
+
+//			FileMerger.merge();
 
 //			LogFactory.makeAnExceptionLog("Exception, ttt");
 

@@ -6,8 +6,6 @@ import com.example.backend_parser.dtos.OptionsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class OptionsService {
 
@@ -18,13 +16,17 @@ public class OptionsService {
         return new OptionsDto(
                 Integer.parseInt(getOptionValue("minAmount", "2000")),
                 Integer.parseInt(getOptionValue("minSpread", "2")),
-                Integer.parseInt(getOptionValue("maxSpread", "20")));
+                Integer.parseInt(getOptionValue("maxSpread", "20")),
+                Boolean.parseBoolean(getOptionValue("checkChains", "true"))
+                );
     }
 
     public void setOptions(OptionsDto optionsDto) {
         updateOptionOrCreateIt("minAmount", "2000", optionsDto.getMinAmount());
         updateOptionOrCreateIt("minSpread", "2", optionsDto.getMinSpread());
         updateOptionOrCreateIt("maxSpread", "20", optionsDto.getMaxSpread());
+        updateOptionOrCreateIt("checkChains", "true", optionsDto.getMaxSpread());
+
     }
 
     private void updateOptionOrCreateIt(String name, String defaultValue, int value) {

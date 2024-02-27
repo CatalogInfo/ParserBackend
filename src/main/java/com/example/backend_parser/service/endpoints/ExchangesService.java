@@ -51,8 +51,9 @@ public class ExchangesService {
         int minAmount = BaseExchange.MIN_AMOUNT;
         int minSpread = SpreadFinder.MIN_SPREAD;
         int maxSpread = SpreadFinder.MAX_SPREAD;
+        boolean checkChains = true;
 
-        return new OptionsDto(minAmount, minSpread, maxSpread);
+        return new OptionsDto(minAmount, minSpread, maxSpread, checkChains);
     }
 
     private List<ChainResponse> getChains(Token token) {
