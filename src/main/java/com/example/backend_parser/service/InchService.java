@@ -124,11 +124,13 @@ public class InchService extends Service {
 
                 tokenNumber++;
             }
+            executorService.shutdown();
             try {
                 executorService.awaitTermination(3, TimeUnit.MINUTES);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            executorService.shutdown();
             LogFactory.makeALog("Waiting started");
             try {
                 Thread.sleep(60000);
