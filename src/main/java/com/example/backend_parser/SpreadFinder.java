@@ -9,6 +9,7 @@ import com.example.backend_parser.utils.BlackListUtils;
 import com.example.backend_parser.utils.MessageUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SpreadFinder {
@@ -27,7 +28,9 @@ public class SpreadFinder {
         List<String> exchangesNames = new ArrayList<>();
         List<ExchangePair> exchangePairs = new ArrayList<>(parseExchangesPairs(exchangesNames));
 
-        for (ExchangePair pair : exchangePairs) {
+        Iterator<ExchangePair> iterator = exchangePairs.iterator();
+        while (iterator.hasNext()) {
+            ExchangePair pair = iterator.next();
             for (Token token : pair.exchange1.getTokens()) {
                 for (Token token1 : pair.exchange2.getTokens()) {
                     if (token.getBase().equalsIgnoreCase(token1.getBase())) {

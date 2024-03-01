@@ -104,9 +104,9 @@ public class InchService extends Service {
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
         int tokenNumber = 0;
 
-        ExecutorService executorService = Executors.newFixedThreadPool(50);
 
         for (int i = 0; i < 8; i++) {
+            ExecutorService executorService = Executors.newFixedThreadPool(50);
 
             for (ProxyWithApiToken proxyWithApiToken : proxies) {
                 int finalTokenNumber = tokenNumber;
@@ -156,7 +156,11 @@ public class InchService extends Service {
 
         token.setAsk(ask.getPrice());
         token.setBid(bid.getPrice());
-
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
     public PriceAmount getBid(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
         String response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
