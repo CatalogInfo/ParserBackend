@@ -119,6 +119,7 @@ public class RequestMaker {
 
         if(responseCode == 429){
             System.out.println("LIMIT REACHED " + url);
+            System.exit(1);
             throw new Exception("SOSI HUI");
         }
 

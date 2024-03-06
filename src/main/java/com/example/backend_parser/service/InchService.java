@@ -31,6 +31,7 @@ public class InchService extends Service {
     private final String orderBookUrl;
     private final IMapper mapper;
     private String additionalUrlParams = "";
+    private final int LOOPS = 8;
     final String USDT_ADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
     List<ProxyWithApiToken> proxies = ReadProxiesService.readProxies("proxiesWithAPI.txt");
     ProxyWithApiToken proxyForDoubleCheckingPrice = new ProxyWithApiToken("138.128.148.94", 6654, "qoeqmlvv", "oydvaukmtb30", "hz0tmcc7FEzdVQc41C2wBq5qCfjivbaw", "0xb1c5f6831f78106687cf8ce5ee9b1085ca7ae55f");
@@ -102,42 +103,66 @@ public class InchService extends Service {
 
     @Override
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
-        int tokenNumber = 0;
 
+        for (int i = 0; i < LOOPS; i++) {
+            ExecutorService executorServiceAsks = Executors.newFixedThreadPool(proxies.size());
 
-        for (int i = 0; i < 8; i++) {
-            ExecutorService executorService = Executors.newFixedThreadPool(50);
+            for (int j = 0; j < proxies.size(); j ++) {
+                int finalTokenNumber = i * proxies.size() + j;
 
-            for (ProxyWithApiToken proxyWithApiToken : proxies) {
-                int finalTokenNumber = tokenNumber;
+                int finalJ = j;
+                executorServiceAsks.submit(() -> {
+                    processAsk(tokens.get(finalTokenNumber), proxies.get(finalJ), minAmount);
+                    LogFactory.makeALog(proxies.get(finalJ).getApiToken() + " Ask");
+                });
+            }
+            executorServiceAsks.shutdown();
+            try {
+                executorServiceAsks.awaitTermination(3, TimeUnit.MINUTES);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            ExecutorService executorServiceBids = Executors.newFixedThreadPool(proxies.size());
+
+            for (int j = 0; j < proxies.size(); j ++) {
+                int finalTokenNumber = i * proxies.size() + j;
 
                 if (finalTokenNumber == tokens.size() - 1) {
                     List<Token> finalTokens = tokens;
                     clearInnerData();
 
-
                     LogFactory.makeALog("Ending termination");
                     return finalTokens;
                 }
 
-                executorService.submit(() -> processToken(tokens.get(finalTokenNumber), proxyWithApiToken, minAmount));
+                int finalJ = j;
+                executorServiceBids.submit(() -> {
+                    processBid(tokens.get(finalTokenNumber), proxies.get(finalJ));
+                    LogFactory.makeALog(proxies.get(finalJ).getApiToken() + " Bid");
+                });
+            }
 
-                tokenNumber++;
-            }
-            executorService.shutdown();
+            executorServiceBids.shutdown();
             try {
-                executorService.awaitTermination(3, TimeUnit.MINUTES);
+                executorServiceBids.awaitTermination(3, TimeUnit.MINUTES);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
-            executorService.shutdown();
-            LogFactory.makeALog("Waiting started");
+
+            LogFactory.makeALog("Waiting start");
             try {
                 Thread.sleep(60000);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
-            LogFactory.makeALog("Waiting ended");
+            LogFactory.makeALog("Waiting end");
         }
 
         return tokens;
@@ -146,6 +171,7 @@ public class InchService extends Service {
     private void processToken(Token token, ProxyWithApiToken proxyWithApiToken, double minAmount) {
         PriceAmount ask = getAsk(token.getAddress(), (int) (minAmount * Math.pow(10, 6)), proxyWithApiToken, token.getDecimals());
 
+        LogFactory.makeALog(proxyWithApiToken.getApiToken() + " Ask");
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -153,18 +179,30 @@ public class InchService extends Service {
         }
 
         PriceAmount bid = getBid(token.getAddress(), ask.getAmount(), proxyWithApiToken, token.getDecimals());
+        LogFactory.makeALog(proxyWithApiToken.getApiToken() + " Bid");
 
         token.setAsk(ask.getPrice());
         token.setBid(bid.getPrice());
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
+    }
+
+    private void processAsk(Token token, ProxyWithApiToken proxyWithApiToken, double minAmount) {
+        PriceAmount ask = getAsk(token.getAddress(), (int) (minAmount * Math.pow(10, 6)), proxyWithApiToken, token.getDecimals());
+        token.setAsk(ask.getPrice());
+        token.setAskAmount(ask);
+    }
+    private void processBid(Token token, ProxyWithApiToken proxyWithApiToken) {
+        PriceAmount bid = getBid(token.getAddress(), token.getAskAmount().getAmount(), proxyWithApiToken, token.getDecimals());
+        token.setBid(bid.getPrice());
     }
     public PriceAmount getBid(String addressFrom, String minAmountString, ProxyWithApiToken proxyWithApiToken, int decimals) {
         String response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), addressFrom, USDT_ADDRESS, minAmountString);
         JSONObject object = JsonUtils.getJSONObject(response);
+
+        if(response.equals("Your account has been suspended")) {
+            System.out.println("PIZDEC");
+            return new PriceAmount(0, "0");
+        }
 
         if(object.has("statusCode")) {
             return new PriceAmount(0, "0");
@@ -183,7 +221,11 @@ public class InchService extends Service {
             response = ProxyService.requestWithProxy(proxyWithApiToken, proxyWithApiToken.getApiToken(), USDT_ADDRESS, addressTo, String.valueOf(minAmount));
         } catch (Exception e) {
             e.printStackTrace();
+        }   if(response.equals("Your account has been suspended")) {
+            System.out.println("PIZDEC");
+            return new PriceAmount(0, "0");
         }
+
 
         JSONObject object = JsonUtils.getJSONObject(response);
 

@@ -1,5 +1,6 @@
 package com.example.backend_parser.models;
 
+import com.example.backend_parser.service.InchService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class Token {
     String fullName;
     int decimals;
     double bid;
+    InchService.PriceAmount askAmount;
     double ask;
     String base;
     String quote;
