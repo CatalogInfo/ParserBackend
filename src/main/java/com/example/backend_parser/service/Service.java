@@ -53,7 +53,7 @@ public abstract class Service implements IExchangeService {
     }
 
     private List<Token> runParseForOrderBooks(List<String> symbols, int time, int minAmount, String authToken) {
-        ExecutorService executorService = Executors.newFixedThreadPool(20);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         List<Future<Token>> futures = new ArrayList<>();
 
         for (String symbol : symbols) {
