@@ -27,7 +27,7 @@ import java.util.List;
 @SpringBootApplication
 public class BackendParserApplication {
 	public static void main(String[] args) throws IOException, AWTException {
-		TelegramService.registerBot();
+//		TelegramService.registerBot();
 		SpringApplication.run(BackendParserApplication.class, args);
 
 		Splitter.init();
