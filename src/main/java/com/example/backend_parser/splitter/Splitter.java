@@ -62,6 +62,7 @@ public class Splitter {
 
         parsingTime = findOutExecutionTime(startTime);
         sendDataToWebsocket();
+
     }
 
     public static List<List<Token>> findRepeatedBaseAndQuoteElements(List<List<Token>> listOfLists) {
