@@ -85,6 +85,8 @@ public class RequestMaker {
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
+            RestartUtils.restartApp();
+
             LogFactory.makeAnExceptionLog(e.toString());
             e.printStackTrace();
         }

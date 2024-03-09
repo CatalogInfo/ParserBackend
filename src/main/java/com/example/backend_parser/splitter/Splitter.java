@@ -51,13 +51,11 @@ public class Splitter {
         ExecutorService executorService = Executors.newFixedThreadPool(exchanges.size());
 
         parseOrderBooks(executorService);
-        executorService.shutdown();
         terminate(executorService);
 
         ExecutorService executorService1 = Executors.newFixedThreadPool(exchanges.size());
 
         parseChains(executorService1);
-
         terminate(executorService1);
 
         parsingTime = findOutExecutionTime(startTime);
@@ -123,6 +121,7 @@ public class Splitter {
         try {
             executorService.awaitTermination(100, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
+            e.printStackTrace();
             Thread.currentThread().interrupt();
         }
         LogFactory.makeALog("  --  Ending waiting termination");
