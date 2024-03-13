@@ -27,8 +27,12 @@ public class RequestMaker {
     public static String getRequest(String url) {
         InputStream inputStream = null;
         try {
-            HttpClient httpClient = HttpClients.createDefault();
-            HttpGet httpGet = new HttpGet(url);
+            HttpClient httpClient = HttpClientBuilder
+                    .create()
+                    .setConnectionTimeToLive(1000, TimeUnit.MILLISECONDS)
+                    .evictExpiredConnections()
+                    .disableAutomaticRetries()
+                    .build();            HttpGet httpGet = new HttpGet(url);
             HttpResponse httpResponse = httpClient.execute(httpGet);
 
             isRequestWorked(httpResponse.getStatusLine().getStatusCode(), url);
@@ -36,7 +40,6 @@ public class RequestMaker {
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
-            RestartUtils.restartApp();
             e.printStackTrace();
         }
         return RequestUtils.readFromConnection(inputStream);
@@ -45,8 +48,12 @@ public class RequestMaker {
     public static String getRequestWithAuth(String url, String authToken) {
         InputStream inputStream = null;
         try {
-            HttpClient httpClient = HttpClients.createDefault();
-            HttpGet httpGet = new HttpGet(url);
+            HttpClient httpClient = HttpClientBuilder
+                    .create()
+                    .setConnectionTimeToLive(1000, TimeUnit.MILLISECONDS)
+                    .evictExpiredConnections()
+                    .disableAutomaticRetries()
+                    .build();            HttpGet httpGet = new HttpGet(url);
             // Adding Authorization header
             httpGet.addHeader("Authorization", "Bearer " + authToken);
 
@@ -94,7 +101,6 @@ public class RequestMaker {
             HttpEntity entity = httpResponse.getEntity();
             inputStream = entity.getContent();
         } catch (Exception e) {
-            RestartUtils.restartApp();
 
             LogFactory.makeAnExceptionLog(e.toString());
             e.printStackTrace();
@@ -108,8 +114,12 @@ public class RequestMaker {
     public static String postRequest(String url, String body) {
         InputStream inputStream = null;
         try {
-            HttpClient httpClient = HttpClients.createDefault();
-            HttpPost httppost = new HttpPost(url);
+            HttpClient httpClient = HttpClientBuilder
+                    .create()
+                    .setConnectionTimeToLive(1000, TimeUnit.MILLISECONDS)
+                    .evictExpiredConnections()
+                    .disableAutomaticRetries()
+                    .build();            HttpPost httppost = new HttpPost(url);
             httppost.setHeader("Content-Type", "application/json; charset=UTF-8");
 
             StringEntity body_json = new StringEntity(body);
@@ -133,11 +143,5 @@ public class RequestMaker {
             System.exit(1);
             throw new Exception("SOSI HUI");
         }
-
-//        if (responseCode != HttpURLConnection.HTTP_OK) {
-////            RestartUtils.restartApp();
-//            System.out.println(url);
-//            throw new Exception("NOT WORKED");
-//        }
     }
 }
