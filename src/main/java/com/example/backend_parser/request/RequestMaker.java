@@ -12,12 +12,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.NoConnectionReuseStrategy;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 
 public class RequestMaker {
@@ -67,7 +70,12 @@ public class RequestMaker {
 
         InputStream inputStream = null;
         try {
-            HttpClient httpClient = HttpClients.createDefault();
+            HttpClient httpClient = HttpClientBuilder
+                    .create()
+                    .setConnectionTimeToLive(1000, TimeUnit.MILLISECONDS)
+                    .evictExpiredConnections()
+                    .build();
+
             HttpGet httpGet = new HttpGet(link);
 
             // Adding Authorization header
