@@ -74,6 +74,7 @@ public class RequestMaker {
                     .create()
                     .setConnectionTimeToLive(1000, TimeUnit.MILLISECONDS)
                     .evictExpiredConnections()
+                    .disableAutomaticRetries()
                     .build();
 
             HttpGet httpGet = new HttpGet(link);
