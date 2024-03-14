@@ -105,7 +105,7 @@ public class InchService extends Service {
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
 
         for (int i = 0; i < LOOPS; i++) {
-            ExecutorService executorServiceAsks = Executors.newFixedThreadPool(10);
+            ExecutorService executorServiceAsks = Executors.newFixedThreadPool(proxies.size());
 
             for (int j = 0; j < proxies.size(); j ++) {
                 int finalTokenNumber = i * proxies.size() + j;
@@ -129,7 +129,7 @@ public class InchService extends Service {
                 throw new RuntimeException(e);
             }
 
-            ExecutorService executorServiceBids = Executors.newFixedThreadPool(10);
+            ExecutorService executorServiceBids = Executors.newFixedThreadPool(proxies.size());
 
             for (int j = 0; j < proxies.size(); j ++) {
                 int finalTokenNumber = i * proxies.size() + j;
