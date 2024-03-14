@@ -123,6 +123,7 @@ public class Splitter {
             pool.awaitTermination(100, TimeUnit.MINUTES);//minutes means seconds(Library exception)
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         LogFactory.makeALog("  --  Ending waiting termination");
