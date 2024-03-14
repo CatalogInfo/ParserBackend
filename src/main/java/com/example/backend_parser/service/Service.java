@@ -75,7 +75,7 @@ public abstract class Service implements IExchangeService {
         executorService.shutdown();
         LogFactory.makeALog("Starting termination");
         try {
-            executorService.awaitTermination(3, TimeUnit.MINUTES);
+            executorService.awaitTermination(100, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

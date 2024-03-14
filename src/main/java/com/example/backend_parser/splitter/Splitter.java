@@ -120,7 +120,7 @@ public class Splitter {
 
         pool.shutdown(); // Disable new tasks from being submitted
         try {
-            pool.awaitTermination(3, TimeUnit.MINUTES);
+            pool.awaitTermination(100, TimeUnit.MINUTES);//minutes means seconds(Library exception)
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
