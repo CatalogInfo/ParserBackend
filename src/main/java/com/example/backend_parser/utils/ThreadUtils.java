@@ -1,6 +1,7 @@
 package com.example.backend_parser.utils;
 
 import java.util.List;
+import java.util.Random;
 
 public class ThreadUtils {
     public static void waitTillThreadsExecuted(List<Thread> threads) {
@@ -22,6 +23,15 @@ public class ThreadUtils {
             Thread.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void sleepOnRandomTimeBetween(int startTime, int endTime) {
+        int random_integer = new Random().nextInt(endTime-startTime) + startTime;
+        try {
+            Thread.sleep(random_integer);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }

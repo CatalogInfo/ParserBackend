@@ -1,6 +1,7 @@
 package com.example.backend_parser.service;
 
 import com.example.backend_parser.logs.LogFactory;
+import com.example.backend_parser.logs.TimeUtils;
 import com.example.backend_parser.mapper.base.IMapper;
 import com.example.backend_parser.models.ProxyWithApiToken;
 import com.example.backend_parser.models.Token;
@@ -33,10 +34,10 @@ public class InchService extends Service {
     private final IMapper mapper;
     private String additionalUrlParams = "";
     private final int LOOPS = 8;
-    private final int PROXIES_COULD_BE_USED = 50;
+    private final int PROXIES_COULD_BE_USED = 10;
     final String USDT_ADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
     List<ProxyWithApiToken> proxies = ReadProxiesService.readProxies("proxiesWithAPI.txt");
-    ProxyWithApiToken proxyForDoubleCheckingPrice = new ProxyWithApiToken("138.128.148.94", 6654, "qoeqmlvv", "oydvaukmtb30", "hz0tmcc7FEzdVQc41C2wBq5qCfjivbaw", "0xb1c5f6831f78106687cf8ce5ee9b1085ca7ae55f");
+    ProxyWithApiToken proxyForDoubleCheckingPrice = new ProxyWithApiToken("45.151.163.74", 5827, "qoeqmlvv", "oydvaukmtb30", "kshEcZA9EOJVajOrHFRXHjwF4edWCRB7", "0x6cf1624862136c7aa1355ca403613960313e92d7");
     public InchService(String orderBookUrl, String tradingPairsUrl, IMapper mapper) {
         this.orderBookUrl = orderBookUrl;
         this.tradingPairsUrl = tradingPairsUrl;
@@ -113,8 +114,6 @@ public class InchService extends Service {
 
             for (int j = 0; j < PROXIES_COULD_BE_USED; j ++) {
                 int finalTokenNumber = i * PROXIES_COULD_BE_USED + j;
-
-
                 System.out.println(proxyWithApiTokensCopyBids.size());
                 Collections.shuffle(proxyWithApiTokensCopyBids);
                 for (ProxyWithApiToken proxy : proxyWithApiTokensCopyBids) {
@@ -134,11 +133,7 @@ public class InchService extends Service {
                 e.printStackTrace();
             }
 
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            ThreadUtils.sleepOnRandomTimeBetween(2000, 3400);
 
             ExecutorService executorServiceBids = Executors.newFixedThreadPool(proxies.size());
             ArrayList<ProxyWithApiToken> proxyWithApiTokensCopyAsks = new ArrayList<>(proxies);
@@ -175,11 +170,7 @@ public class InchService extends Service {
             }
 
             LogFactory.makeALog("Waiting start");
-            try {
-                Thread.sleep(60000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ThreadUtils.sleepOnRandomTimeBetween(50000, 62112);
             LogFactory.makeALog("Waiting end");
         }
 
