@@ -25,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 public class RequestMaker {
     public static String getRequest(String url) {
+        System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
+
         InputStream inputStream = null;
         try {
             HttpClient httpClient = HttpClientBuilder

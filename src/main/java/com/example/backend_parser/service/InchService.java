@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -32,6 +33,7 @@ public class InchService extends Service {
     private final IMapper mapper;
     private String additionalUrlParams = "";
     private final int LOOPS = 8;
+    private final int PROXIES_COULD_BE_USED = 50;
     final String USDT_ADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
     List<ProxyWithApiToken> proxies = ReadProxiesService.readProxies("proxiesWithAPI.txt");
     ProxyWithApiToken proxyForDoubleCheckingPrice = new ProxyWithApiToken("138.128.148.94", 6654, "qoeqmlvv", "oydvaukmtb30", "hz0tmcc7FEzdVQc41C2wBq5qCfjivbaw", "0xb1c5f6831f78106687cf8ce5ee9b1085ca7ae55f");
@@ -105,16 +107,25 @@ public class InchService extends Service {
     public List<Token> parseOrderBooks(List<Token> tokens, int time, int minAmount, String authToken) {
 
         for (int i = 0; i < LOOPS; i++) {
+            ArrayList<ProxyWithApiToken> proxyWithApiTokensCopyBids = new ArrayList<>(proxies);
+
             ExecutorService executorServiceAsks = Executors.newFixedThreadPool(proxies.size());
 
-            for (int j = 0; j < proxies.size(); j ++) {
-                int finalTokenNumber = i * proxies.size() + j;
+            for (int j = 0; j < PROXIES_COULD_BE_USED; j ++) {
+                int finalTokenNumber = i * PROXIES_COULD_BE_USED + j;
 
-                int finalJ = j;
-                executorServiceAsks.submit(() -> {
-                    processAsk(tokens.get(finalTokenNumber), proxies.get(finalJ), minAmount);
-                    LogFactory.makeALog(proxies.get(finalJ).getApiToken() + " Ask");
-                });
+
+                System.out.println(proxyWithApiTokensCopyBids.size());
+                Collections.shuffle(proxyWithApiTokensCopyBids);
+                for (ProxyWithApiToken proxy : proxyWithApiTokensCopyBids) {
+                    proxyWithApiTokensCopyBids.remove(proxy);
+
+                    executorServiceAsks.submit(() -> {
+                        processAsk(tokens.get(finalTokenNumber), proxy, minAmount);
+                        LogFactory.makeALog(proxy.getApiToken() + " Ask");
+                    });
+                    break;
+                }
             }
             executorServiceAsks.shutdown();
             try {
@@ -130,9 +141,10 @@ public class InchService extends Service {
             }
 
             ExecutorService executorServiceBids = Executors.newFixedThreadPool(proxies.size());
+            ArrayList<ProxyWithApiToken> proxyWithApiTokensCopyAsks = new ArrayList<>(proxies);
 
-            for (int j = 0; j < proxies.size(); j ++) {
-                int finalTokenNumber = i * proxies.size() + j;
+            for (int j = 0; j < PROXIES_COULD_BE_USED; j ++) {
+                int finalTokenNumber = i * PROXIES_COULD_BE_USED + j;
 
                 if (finalTokenNumber == tokens.size() - 1) {
                     List<Token> finalTokens = tokens;
@@ -142,11 +154,17 @@ public class InchService extends Service {
                     return finalTokens;
                 }
 
-                int finalJ = j;
-                executorServiceBids.submit(() -> {
-                    processBid(tokens.get(finalTokenNumber), proxies.get(finalJ));
-                    LogFactory.makeALog(proxies.get(finalJ).getApiToken() + " Bid");
-                });
+                Collections.shuffle(proxyWithApiTokensCopyAsks);
+
+                for (ProxyWithApiToken proxy : proxyWithApiTokensCopyAsks) {
+                    proxyWithApiTokensCopyAsks.remove(proxy);
+
+                    executorServiceBids.submit(() -> {
+                        processBid(tokens.get(finalTokenNumber), proxy);
+                        LogFactory.makeALog(proxy.getApiToken() + " Bid");
+                    });
+                    break;
+                }
             }
 
             executorServiceBids.shutdown();
