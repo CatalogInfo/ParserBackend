@@ -34,7 +34,7 @@ public class InchService extends Service {
     private final IMapper mapper;
     private String additionalUrlParams = "";
     private final int LOOPS = 8;
-    private final int PROXIES_COULD_BE_USED = 10;
+    private final int PROXIES_COULD_BE_USED = 2;
     final String USDT_ADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
     List<ProxyWithApiToken> proxies = ReadProxiesService.readProxies("proxiesWithAPI.txt");
     ProxyWithApiToken proxyForDoubleCheckingPrice = new ProxyWithApiToken("45.151.163.74", 5827, "qoeqmlvv", "oydvaukmtb30", "kshEcZA9EOJVajOrHFRXHjwF4edWCRB7", "0x6cf1624862136c7aa1355ca403613960313e92d7");

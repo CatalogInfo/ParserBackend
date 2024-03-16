@@ -1,6 +1,7 @@
 package com.example.backend_parser.request;
 import com.example.backend_parser.exchanges.OkxExchange;
 import com.example.backend_parser.mapper.exchanges.OkxMapper;
+import com.example.backend_parser.utils.RestartUtils;
 import org.apache.commons.codec.binary.Hex;
 
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ public class RequestUtils {
             }
             in.close();
         } catch (IOException e) {
+            RestartUtils.restartApp();
             e.printStackTrace();
         }
         return response.toString();

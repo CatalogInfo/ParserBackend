@@ -25,11 +25,21 @@ public class OptionsService {
         updateOptionOrCreateIt("minAmount", "2000", optionsDto.getMinAmount());
         updateOptionOrCreateIt("minSpread", "2", optionsDto.getMinSpread());
         updateOptionOrCreateIt("maxSpread", "20", optionsDto.getMaxSpread());
-        updateOptionOrCreateIt("checkChains", "true", optionsDto.getMaxSpread());
+        updateOptionOrCreateIt("checkChains", "true", optionsDto.isCheckChain());
 
     }
 
     private void updateOptionOrCreateIt(String name, String defaultValue, int value) {
+        if(optionsRepo.existsByName(name)) {
+            Options option = optionsRepo.findByName(name).get(0);
+            option.setValue(String.valueOf(value));
+            optionsRepo.save(option);
+        } else {
+            optionsRepo.save(new Options(name, defaultValue));
+        }
+    }
+
+    private void updateOptionOrCreateIt(String name, String defaultValue, boolean value) {
         if(optionsRepo.existsByName(name)) {
             Options option = optionsRepo.findByName(name).get(0);
             option.setValue(String.valueOf(value));
