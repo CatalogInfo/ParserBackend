@@ -16,4 +16,5 @@ public class ExchangeResponse {
     String name;
     List<TokenResponse> tokens;
     List<String> bannedTokens;
+    String linkSplitter;
 }

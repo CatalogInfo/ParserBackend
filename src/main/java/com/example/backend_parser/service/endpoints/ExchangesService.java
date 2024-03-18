@@ -31,7 +31,7 @@ public class ExchangesService {
         List<ExchangeResponse> exchangeResponses = new ArrayList<>();
 
         for(Exchange exchange : exchanges) {
-            exchangeResponses.add(new ExchangeResponse(exchange.getLink(), exchange.getName(), getTokens(exchange), getBannedTokens(exchange)));
+            exchangeResponses.add(new ExchangeResponse(exchange.getLink(), exchange.getName(), getTokens(exchange), getBannedTokens(exchange), exchange.getSplitter()));
         }
 
         return exchangeResponses;
