@@ -34,6 +34,10 @@ public class ExchangesEndpoint {
         return new HttpEntity<>(optionsService.getOptions());
     }
 
+    @GetMapping("/default")
+    public HttpEntity<?> getDefaultOptions() {
+        return new HttpEntity<>(optionsService.getDefaultOptions());
+    }
     @PostMapping("/options")
     public HttpEntity<?> setOptions(@RequestBody OptionsDto optionsDto) {
         System.out.println(optionsDto);

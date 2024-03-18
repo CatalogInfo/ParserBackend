@@ -21,6 +21,14 @@ public class OptionsService {
                 );
     }
 
+    public OptionsDto getDefaultOptions() {
+        updateOptionOrCreateIt("minAmount", "2000", 2000);
+        updateOptionOrCreateIt("minSpread", "2", 2);
+        updateOptionOrCreateIt("maxSpread", "20", 20);
+        updateOptionOrCreateIt("checkChains", "true", true);
+        return new OptionsDto(2000, 2, 20, true);
+    }
+
     public void setOptions(OptionsDto optionsDto) {
         updateOptionOrCreateIt("minAmount", "2000", optionsDto.getMinAmount());
         updateOptionOrCreateIt("minSpread", "2", optionsDto.getMinSpread());
