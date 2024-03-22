@@ -76,13 +76,13 @@ public class Splitter {
     }
 
     private static void sendDataToWebsocket() {
-        RequestMaker.getRequest("http://localhost:8080/socket/exchanges");
-        RequestMaker.getRequest("http://localhost:8080/parsingTime");
+        RequestMaker.makeAuthRequest("http://localhost:8080/socket/exchanges");
+        RequestMaker.makeAuthRequest("http://localhost:8080/parsingTime");
     }
 
     private static OptionsDto getOptions() {
         Gson gson = new Gson();
-        return gson.fromJson(RequestMaker.getRequest("http://localhost:8080/options"), OptionsDto.class);
+        return gson.fromJson(RequestMaker.makeAuthRequest("http://localhost:8080/options"), OptionsDto.class);
     }
 
     private static void parseBaseAndQuotes() {

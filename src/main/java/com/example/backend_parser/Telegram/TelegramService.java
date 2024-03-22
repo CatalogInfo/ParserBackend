@@ -44,21 +44,21 @@ public class TelegramService {
             if (messageText.startsWith("/ban")) {
                 BanCommand banCommand = getCommandBlocks(messageText);
 
-                RequestMaker.getRequest("http://localhost:8080/ban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
+                RequestMaker.makeAuthRequest("http://localhost:8080/ban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
                 getTelegram().sendMessageById("чтобы разбанить - /unban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
             } else if (messageText.startsWith("/unban")) {
                 BanCommand banCommand = getCommandBlocks(messageText);
 
-                RequestMaker.getRequest("http://localhost:8080/unban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
+                RequestMaker.makeAuthRequest("http://localhost:8080/unban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
                 getTelegram().sendMessageById("чтобы забанить - /ban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
             } else if (messageText.startsWith("/list")) {
                 ObtainCommand banCommand = getCommandBlocksForGet(messageText);
-                String response = RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
+                String response = RequestMaker.makeAuthRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
                 getTelegram().sendMessageById(getBannedTokensForExchange(response), chatId);
             } else if (messageText.startsWith("/exchanges")) {
                 getTelegram().sendMessageById(getExchangesNames(), chatId);
             } else if (messageText.startsWith("/minAmount")) {
-                String response = RequestMaker.getRequest("http://localhost:8080/minAmount");
+                String response = RequestMaker.makeAuthRequest("http://localhost:8080/minAmount");
                 getTelegram().sendMessageById(response, chatId);
             } else if (messageText.startsWith("/set minAmount")) {
                 String response = RequestMaker.postRequest("http://localhost:8080/minAmount", getMinAmount(messageText));

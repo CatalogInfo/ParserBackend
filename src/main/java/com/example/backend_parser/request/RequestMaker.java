@@ -1,6 +1,7 @@
 package com.example.backend_parser.request;
 
 import com.example.backend_parser.logs.LogFactory;
+import com.example.backend_parser.responses.AuthResponse;
 import com.example.backend_parser.utils.RestartUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
@@ -15,6 +16,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.NoConnectionReuseStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +26,12 @@ import java.util.concurrent.TimeUnit;
 
 
 public class RequestMaker {
+    public static String makeAuthRequest(String url) {
+        String authResponse = postRequest("http://localhost:8080/api/v1/auth/login", "{\"username\":\"root\",\"password\":\"password\"}");
+        JSONObject obj = new JSONObject(authResponse);
+        return getRequestWithAuth(url, obj.getString("token"));
+    }
+
     public static String getRequest(String url) {
         System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 

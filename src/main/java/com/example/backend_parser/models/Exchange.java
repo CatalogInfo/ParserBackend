@@ -44,7 +44,7 @@ public class Exchange {
 
     public List<BanToken> parseBanTokens() {
         List<BanToken> tokens = new ArrayList<>();
-        String response = RequestMaker.getRequest("http://localhost:8080/banList?exchange=" + name);
+        String response = RequestMaker.makeAuthRequest("http://localhost:8080/banList?exchange=" + name);
         JSONArray jsonArray = new JSONArray(response);
         for(int i = 0; i < jsonArray.length(); i ++) {
             JSONObject obj = jsonArray.getJSONObject(i);
