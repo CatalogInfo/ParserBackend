@@ -1,21 +1,9 @@
 package com.example.backend_parser;
 
-import com.example.backend_parser.Telegram.TelegramService;
-import com.example.backend_parser.exchanges.BinanceExchange;
-import com.example.backend_parser.exchanges.BitgetExchange;
-import com.example.backend_parser.exchanges.KucoinExchange;
-import com.example.backend_parser.exchanges.XTcomExchange;
-import com.example.backend_parser.logs.LogFactory;
-import com.example.backend_parser.mapper.exchanges.BinanceMapper;
-import com.example.backend_parser.mapper.exchanges.BitgetMapper;
-import com.example.backend_parser.mapper.exchanges.KucoinMapper;
-import com.example.backend_parser.mapper.exchanges.XTcomMapper;
+import com.example.backend_parser.telegram.services.TelegramService;
 import com.example.backend_parser.models.Chain;
-import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.splitter.Splitter;
-import com.example.backend_parser.utils.FileMerger;
-import com.example.backend_parser.utils.RestartUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -1,19 +1,13 @@
 package com.example.backend_parser.models;
 
-import com.example.backend_parser.entities.BanToken;
+import com.example.backend_parser.api.table_entities.BanToken;
 import com.example.backend_parser.exchanges.BaseExchange;
-import com.example.backend_parser.repos.BanTokenRepo;
 import com.example.backend_parser.request.RequestMaker;
-import com.example.backend_parser.service.BanTokenService;
 import com.example.backend_parser.utils.BanListUtils;
 import com.example.backend_parser.utils.RestartUtils;
-import jdk.swing.interop.SwingInterOpUtils;
 import lombok.Getter;
-import lombok.Setter;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;

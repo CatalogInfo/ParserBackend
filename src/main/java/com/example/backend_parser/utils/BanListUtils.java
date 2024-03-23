@@ -1,6 +1,6 @@
 package com.example.backend_parser.utils;
 
-import com.example.backend_parser.entities.BanToken;
+import com.example.backend_parser.api.table_entities.BanToken;
 import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
 

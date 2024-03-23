@@ -2,9 +2,8 @@ package com.example.backend_parser;
 
 import com.example.backend_parser.calculations.SpreadCalculator;
 import com.example.backend_parser.models.*;
-import com.example.backend_parser.service.TelegramService;
 import com.example.backend_parser.splitter.Splitter;
-import com.example.backend_parser.utils.BanListUtils;
+import com.example.backend_parser.telegram.services.TelegramService;
 import com.example.backend_parser.utils.BlackListUtils;
 import com.example.backend_parser.utils.MessageUtils;
 

@@ -1,27 +1,17 @@
 package com.example.backend_parser.request;
 
-import com.example.backend_parser.logs.LogFactory;
-import com.example.backend_parser.responses.AuthResponse;
 import com.example.backend_parser.utils.RestartUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.NoConnectionReuseStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 
@@ -105,7 +95,6 @@ public class RequestMaker {
             try {
                 isRequestWorked(httpResponse.getStatusLine().getStatusCode(), link);
             } catch (Exception e) {
-                LogFactory.makeAnExceptionLog(e.toString());
                 e.printStackTrace();
             }
 
@@ -113,7 +102,6 @@ public class RequestMaker {
             inputStream = entity.getContent();
         } catch (Exception e) {
 
-            LogFactory.makeAnExceptionLog(e.toString());
             e.printStackTrace();
         }
 

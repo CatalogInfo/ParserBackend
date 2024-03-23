@@ -1,6 +1,6 @@
 package com.example.backend_parser.splitter;
 
-import com.example.backend_parser.dtos.OptionsDto;
+import com.example.backend_parser.api.dtos.OptionsDto;
 import com.example.backend_parser.exchanges.*;
 import com.example.backend_parser.logs.LogFactory;
 import com.example.backend_parser.models.Exchange;
