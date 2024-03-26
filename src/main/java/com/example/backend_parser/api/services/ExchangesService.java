@@ -1,16 +1,13 @@
 package com.example.backend_parser.api.services;
 
-import com.example.backend_parser.SpreadFinder;
 import com.example.backend_parser.api.table_entities.BanToken;
-import com.example.backend_parser.exchanges.BaseExchange;
 import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Exchange;
 import com.example.backend_parser.models.Token;
 import com.example.backend_parser.api.responses.ChainResponse;
 import com.example.backend_parser.api.responses.ExchangeResponse;
-import com.example.backend_parser.api.dtos.OptionsDto;
 import com.example.backend_parser.api.responses.TokenResponse;
-import com.example.backend_parser.splitter.Splitter;
+import com.example.backend_parser.parser.splitter.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,15 +39,6 @@ public class ExchangesService {
             bannedTokensResponse.add(banToken.getToken());
         }
         return bannedTokensResponse;
-    }
-
-    public OptionsDto getOptions() {
-        int minAmount = BaseExchange.MIN_AMOUNT;
-        int minSpread = SpreadFinder.MIN_SPREAD;
-        int maxSpread = SpreadFinder.MAX_SPREAD;
-        boolean checkChains = true;
-
-        return new OptionsDto(minAmount, minSpread, maxSpread, checkChains);
     }
 
     private List<ChainResponse> getChains(Token token) {

@@ -3,7 +3,7 @@ package com.example.backend_parser;
 import com.example.backend_parser.telegram.services.TelegramService;
 import com.example.backend_parser.models.Chain;
 import com.example.backend_parser.models.Token;
-import com.example.backend_parser.splitter.Splitter;
+import com.example.backend_parser.parser.splitter.Splitter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

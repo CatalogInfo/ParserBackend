@@ -1,7 +1,7 @@
 package com.example.backend_parser.api.services;
 
 import com.example.backend_parser.api.table_entities.MinAmount;
-import com.example.backend_parser.exchanges.BaseExchange;
+import com.example.backend_parser.parser.exchanges.BaseExchange;
 import com.example.backend_parser.api.repositories.MinAmountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

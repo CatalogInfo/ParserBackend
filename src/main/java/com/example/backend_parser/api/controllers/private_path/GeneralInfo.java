@@ -5,7 +5,7 @@ import com.example.backend_parser.api.responses.ParsingTimeResponse;
 import com.example.backend_parser.api.services.MinAmountService;
 import com.example.backend_parser.api.websockets.services.MessageService;
 import com.example.backend_parser.api.services.OptionsService;
-import com.example.backend_parser.splitter.Splitter;
+import com.example.backend_parser.parser.splitter.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +29,7 @@ public class GeneralInfo {
 
     @GetMapping("/options")
     public HttpEntity<?> getOptions() {
+        System.out.println("BUICTYU");
         return new HttpEntity<>(optionsService.getOptions());
     }
 

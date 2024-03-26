@@ -2,7 +2,7 @@ package com.example.backend_parser.api.services;
 
 import com.example.backend_parser.api.table_entities.BanToken;
 import com.example.backend_parser.api.repositories.BanTokenRepo;
-import com.example.backend_parser.splitter.Splitter;
+import com.example.backend_parser.parser.splitter.Splitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

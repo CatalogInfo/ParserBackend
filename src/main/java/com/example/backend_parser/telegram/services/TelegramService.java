@@ -1,11 +1,11 @@
 package com.example.backend_parser.telegram.services;
 
+import com.example.backend_parser.parser.ApiCommunicator;
 import com.example.backend_parser.telegram.Telegram;
 import com.example.backend_parser.telegram.entities.BanCommand;
 import com.example.backend_parser.telegram.entities.ObtainCommand;
 import com.example.backend_parser.models.Exchange;
-import com.example.backend_parser.request.RequestMaker;
-import com.example.backend_parser.splitter.Splitter;
+import com.example.backend_parser.parser.splitter.Splitter;
 import com.example.backend_parser.utils.JsonUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +19,8 @@ import java.net.URLDecoder;
 public class TelegramService {
 
     static Telegram telegram = new Telegram();
+
+    public static ApiCommunicator apiCommunicator = new ApiCommunicator();
 
     public static Telegram getTelegram() {
         return telegram;
@@ -54,36 +56,37 @@ public class TelegramService {
             if (messageText.startsWith("/ban")) {
                 BanCommand banCommand = getCommandBlocks(messageText);
 
-                RequestMaker.makeAuthRequest("http://localhost:8080/ban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
+                apiCommunicator.banToken(banCommand.getToken(), banCommand.getExchange());
                 getTelegram().sendMessageById("чтобы разбанить - /unban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
             } else if (messageText.startsWith("/unban")) {
                 BanCommand banCommand = getCommandBlocks(messageText);
 
-                RequestMaker.makeAuthRequest("http://localhost:8080/unban?token=" + banCommand.getToken() + "&exchange=" + banCommand.getExchange());
+                apiCommunicator.unbanToken(banCommand.getToken(), banCommand.getExchange());
                 getTelegram().sendMessageById("чтобы забанить - /ban " + banCommand.getExchange() + " " + banCommand.getToken(), chatId);
-            } else if (messageText.startsWith("/list")) {
-                ObtainCommand banCommand = getCommandBlocksForGet(messageText);
-                String response = RequestMaker.makeAuthRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
-                getTelegram().sendMessageById(getBannedTokensForExchange(response), chatId);
-            } else if (messageText.startsWith("/exchanges")) {
-                getTelegram().sendMessageById(getExchangesNames(), chatId);
-            } else if (messageText.startsWith("/minAmount")) {
-                String response = RequestMaker.makeAuthRequest("http://localhost:8080/minAmount");
-                getTelegram().sendMessageById(response, chatId);
-            } else if (messageText.startsWith("/set minAmount")) {
-                String response = RequestMaker.postRequest("http://localhost:8080/minAmount", getMinAmount(messageText));
-                getTelegram().sendMessageById(response, chatId);
-            } else if (messageText.equals("/info")) {
-                getTelegram().sendMessageById(
-                " - чтобы  забанить токен на бирже: напиши /ban exchange TOKENUSDT" + "\n" + "\n"
-                + " - чтобы  разбанить токен на бирже: напиши /unban exchange TOKENUSDT" + "\n" + "\n"
-                + " - *Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT, капсом и вместе" + "\n" + "\n"
-                + " - Чтобы получить список забаненных токенов для какой-то биржи: /list bybit" + "\n" + "\n"
-                + " - Чтобы получить текущий объём, по которой бот считает цену: /minAmount" + "\n" + "\n"
-                + " - Чтобы установить новый минимальный объём: /set minAmount 2000" + "\n" + "\n"
-                + " - Чтобы получить список работающих бирж: /exchanges" + "\n" + "\n",
-                chatId);
             }
+//            else if (messageText.startsWith("/list")) {
+//                ObtainCommand banCommand = getCommandBlocksForGet(messageText);
+//                String response = RequestMaker.makeAuthRequest("http://localhost:8080/banList?exchange=" + banCommand.getExchange());
+//                getTelegram().sendMessageById(getBannedTokensForExchange(response), chatId);
+//            } else if (messageText.startsWith("/exchanges")) {
+//                getTelegram().sendMessageById(getExchangesNames(), chatId);
+//            } else if (messageText.startsWith("/minAmount")) {
+//                String response = RequestMaker.makeAuthRequest("http://localhost:8080/minAmount");
+//                getTelegram().sendMessageById(response, chatId);
+//            } else if (messageText.startsWith("/set minAmount")) {
+//                String response = RequestMaker.postRequest("http://localhost:8080/minAmount", getMinAmount(messageText));
+//                getTelegram().sendMessageById(response, chatId);
+//            } else if (messageText.equals("/info")) {
+//                getTelegram().sendMessageById(
+//                " - чтобы  забанить токен на бирже: напиши /ban exchange TOKENUSDT" + "\n" + "\n"
+//                + " - чтобы  разбанить токен на бирже: напиши /unban exchange TOKENUSDT" + "\n" + "\n"
+//                + " - *Объясняю* /ban/unban, название биржи маленьким шрифтом, токен вместе с приставкой USDT, капсом и вместе" + "\n" + "\n"
+//                + " - Чтобы получить список забаненных токенов для какой-то биржи: /list bybit" + "\n" + "\n"
+//                + " - Чтобы получить текущий объём, по которой бот считает цену: /minAmount" + "\n" + "\n"
+//                + " - Чтобы установить новый минимальный объём: /set minAmount 2000" + "\n" + "\n"
+//                + " - Чтобы получить список работающих бирж: /exchanges" + "\n" + "\n",
+//                chatId);
+//            }
         }
     }
 

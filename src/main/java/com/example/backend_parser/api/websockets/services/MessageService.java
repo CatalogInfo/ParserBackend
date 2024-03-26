@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
-
     @Autowired
     SimpMessagingTemplate messagingTemplate;
-
 
     public void sendMessageToClients(HttpEntity<?> message, String url) {
         messagingTemplate.convertAndSend(url, message);

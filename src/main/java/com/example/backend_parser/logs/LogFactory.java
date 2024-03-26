@@ -1,5 +1,7 @@
 package com.example.backend_parser.logs;
 
+import com.example.backend_parser.utils.TimeUtils;
+
 public class LogFactory {
     public static void makeALog(String message) {
         String time = TimeUtils.getTime();
