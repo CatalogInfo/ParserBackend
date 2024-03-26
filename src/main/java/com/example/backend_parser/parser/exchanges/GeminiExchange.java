@@ -29,7 +29,7 @@ public class GeminiExchange extends BaseExchange {
 
     public String requestChains() throws IOException {
         try {
-            return HttpClientMaker.get("https://api.bitget.com/api/v2/spot/public/coins");
+            return HttpClientMaker.get("https://api.bitget.com/api/v2/spot/public/coins", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

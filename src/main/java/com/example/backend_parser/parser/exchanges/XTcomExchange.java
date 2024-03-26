@@ -31,7 +31,7 @@ public class XTcomExchange extends BaseExchange {
 
     public String requestChains() throws IOException {
         try {
-            return HttpClientMaker.get("https://sapi.xt.com/v4/public/wallet/support/currency");
+            return HttpClientMaker.get("https://sapi.xt.com/v4/public/wallet/support/currency", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

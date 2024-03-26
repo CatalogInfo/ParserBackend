@@ -30,7 +30,7 @@ public class KucoinExchange extends BaseExchange {
 
     public String requestChains() throws IOException {
         try {
-            return HttpClientMaker.get("https://api.kucoin.com/api/v3/currencies");
+            return HttpClientMaker.get("https://api.kucoin.com/api/v3/currencies", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

@@ -60,7 +60,7 @@ public class BinanceExchange extends BaseExchange {
 
         String time = null;
         try {
-            time = HttpClientMaker.get("https://api.binance.com/api/v3/time");
+            time = HttpClientMaker.get("https://api.binance.com/api/v3/time", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -82,7 +82,7 @@ public class BinanceExchange extends BaseExchange {
         headers.put("X-MBX-APIKEY", apiKey);
 
         try {
-            return HttpClientMaker.get(url, headers);
+            return HttpClientMaker.get(url, null, headers);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

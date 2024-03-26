@@ -28,7 +28,7 @@ public class MexcExchange extends BaseExchange {
     }
     public String requestChains() throws IOException {
         try {
-            return HttpClientMaker.get("https://www.mexc.com/open/api/v2/market/coin/list");
+            return HttpClientMaker.get("https://www.mexc.com/open/api/v2/market/coin/list", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

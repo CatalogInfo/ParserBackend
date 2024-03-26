@@ -10,7 +10,7 @@ public class ProxiedRequestMaker {
     public static String makeRequestWithProxy(String url, ProxyWithApiToken proxyWithApiToken) {
         ProxyService.applyProxy(proxyWithApiToken);
         try {
-            return HttpClientMaker.get(url, proxyWithApiToken.getApiToken());
+            return HttpClientMaker.get(url, proxyWithApiToken.getApiToken(), null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

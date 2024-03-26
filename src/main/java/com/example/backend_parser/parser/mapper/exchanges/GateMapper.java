@@ -66,7 +66,7 @@ public class GateMapper extends Mapper {
         String url = "https://api.gateio.ws/api/v4/spot/currencies";
         String response = null;
         try {
-            response = HttpClientMaker.get(url);
+            response = HttpClientMaker.get(url, null, null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

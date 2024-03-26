@@ -55,7 +55,7 @@ public class GateExchange extends BaseExchange {
 
         String response = null;
         try {
-            response = HttpClientMaker.get("https://api.gateio.la/api2/1/private/feelist", headers);
+            response = HttpClientMaker.get("https://api.gateio.la/api2/1/private/feelist", null, headers);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ApiCommunicator {
@@ -19,7 +20,7 @@ public class ApiCommunicator {
     public String login() {
         String authResponse = "";
         try {
-            authResponse = HttpClientMaker.post("http://localhost:8080/api/v1/auth/login", "{\"username\":\"root\",\"password\":\"password\"}");
+            authResponse = HttpClientMaker.post("http://localhost:8080/api/v1/auth/login", "{\"username\":\"root\",\"password\":\"password\"}", null , null);
         } catch (IOException | java.io.IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -32,7 +33,7 @@ public class ApiCommunicator {
 
         String response = null;
         try {
-            response = HttpClientMaker.get("http://localhost:8080/api/v1/exchange/banList?exchange=" + exchangeName, login());
+            response = HttpClientMaker.get("http://localhost:8080/api/v1/exchange/banList?exchange=" + exchangeName, login(), null);
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -51,14 +52,14 @@ public class ApiCommunicator {
 
     public void sendDataToClient() {
         try {
-            HttpClientMaker.get("http://localhost:8080/api/v1/socket/exchange/exchanges", login());
+            HttpClientMaker.get("http://localhost:8080/api/v1/exchange/socket/exchanges", login(), null);
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
         try {
-            HttpClientMaker.get("http://localhost:8080/api/v1/general_info/parsingTime", login());
+            HttpClientMaker.get("http://localhost:8080/api/v1/general/parsingTime", login(), null);
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -70,7 +71,7 @@ public class ApiCommunicator {
     public OptionsDto getOptions() {
         Gson gson = new Gson();
         try {
-            return gson.fromJson(HttpClientMaker.get("http://localhost:8080/api/v1/general_info/options", login()), OptionsDto.class);
+            return gson.fromJson(HttpClientMaker.get("http://localhost:8080/api/v1/general/options", login(), null), OptionsDto.class);
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -80,7 +81,7 @@ public class ApiCommunicator {
 
     public void banToken(String token, String exchange) {
         try {
-            HttpClientMaker.get("http://localhost:8080/api/v1/exchange/ban?token=" + token + "&exchange=" + exchange, login());
+            HttpClientMaker.get("http://localhost:8080/api/v1/exchange/ban?token=" + token + "&exchange=" + exchange, login(), null);
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -90,7 +91,7 @@ public class ApiCommunicator {
 
     public void unbanToken(String token, String exchange) {
         try {
-            HttpClientMaker.get("http://localhost:8080/api/v1/unban?token=" + token + "&exchange=" + exchange, login());
+            HttpClientMaker.get("http://localhost:8080/api/v1/unban?token=" + token + "&exchange=" + exchange, login(), null);
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

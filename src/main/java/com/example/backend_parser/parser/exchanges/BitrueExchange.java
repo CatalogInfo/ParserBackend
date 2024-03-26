@@ -30,7 +30,7 @@ public class BitrueExchange extends BaseExchange {
 
     public String requestChains() throws IOException {
         try {
-            return HttpClientMaker.get("https://openapi.bitrue.com/api/v1/exchangeInfo");
+            return HttpClientMaker.get("https://openapi.bitrue.com/api/v1/exchangeInfo", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

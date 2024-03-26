@@ -44,7 +44,7 @@ public class BybitExchange extends BaseExchange {
 
         String time = null;
         try {
-            time = HttpClientMaker.get("https://api.bybit.com/v3/public/time");
+            time = HttpClientMaker.get("https://api.bybit.com/v3/public/time", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -69,7 +69,7 @@ public class BybitExchange extends BaseExchange {
 
         String response = null;
         try {
-            response = HttpClientMaker.get("https://api.bybit.com/v5/asset/coin/query-info", headers);
+            response = HttpClientMaker.get("https://api.bybit.com/v5/asset/coin/query-info", null, headers);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

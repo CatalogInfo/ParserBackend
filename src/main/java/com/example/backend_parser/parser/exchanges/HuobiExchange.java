@@ -29,7 +29,7 @@ public class HuobiExchange extends BaseExchange {
     }
     public String requestChains() throws IOException {
         try {
-            return HttpClientMaker.get("https://api.huobi.pro/v2/reference/currencies");
+            return HttpClientMaker.get("https://api.huobi.pro/v2/reference/currencies", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

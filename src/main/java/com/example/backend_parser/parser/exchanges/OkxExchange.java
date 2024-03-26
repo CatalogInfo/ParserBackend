@@ -65,7 +65,7 @@ public class OkxExchange extends BaseExchange {
         headers.put("OK-ACCESS-PASSPHRASE", passphrase);
         String response = null;
         try {
-            response = HttpClientMaker.get("https://www.okx.com/api/v5/asset/currencies");
+            response = HttpClientMaker.get("https://www.okx.com/api/v5/asset/currencies", null, null);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

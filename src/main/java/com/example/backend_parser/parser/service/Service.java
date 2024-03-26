@@ -1,5 +1,6 @@
 package com.example.backend_parser.parser.service;
 
+import com.example.backend_parser.http.AsyncRequestWithDelay;
 import com.example.backend_parser.http.HttpClientMaker;
 import com.example.backend_parser.logs.LogFactory;
 import com.example.backend_parser.parser.mapper.base.IMapper;
@@ -7,6 +8,7 @@ import com.example.backend_parser.models.Token;
 import com.example.backend_parser.utils.ThreadUtils;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -17,7 +19,7 @@ public abstract class Service implements IExchangeService {
     public List<Token> parseTradingPairs(String authToken) {
         IMapper mapper = getMapper();
         try {
-            return mapper.convertBaseQuote(HttpClientMaker.get(getTradingPairsUrl()));
+            return mapper.convertBaseQuote(HttpClientMaker.get(getTradingPairsUrl(), null, null));
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -45,56 +47,52 @@ public abstract class Service implements IExchangeService {
         return symbolList;
     }
 
-    private String getOrderBookForSymbol(String symbol, String authToken) {
+    private String getOrderBookUrlForSymbol(String symbol) {
+        return getOrderBookUrl() + symbol + getAdditionalUrlParams();
+    }
+
+    @Override
+    public Token parseOrderBookForToken(Token token, int minAmount) {
         try {
-            return HttpClientMaker.get(getOrderBookUrl() + symbol + getAdditionalUrlParams());
+            return getMapper().convertResponseToToken(HttpClientMaker.get(
+                    getOrderBookUrlForSymbol(token.getSymbol()), null, null),
+                    token.getSymbol(),
+                    minAmount);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    @Override
-    public Token parseOrderBookForToken(Token token, int minAmount) {
-        return parseOrderBookForSymbol(token.getSymbol(), getMapper(), minAmount, "");
+    private String extractSymbolFromLink(String url) {
+        int startIndex = getOrderBookUrl().length();
+        int endIndex = url.indexOf(getAdditionalUrlParams());
+
+        if(endIndex == 0) {
+            return url.substring(startIndex);
+        }
+        return url.substring(startIndex, endIndex);
     }
 
-    private Token parseOrderBookForSymbol(String symbol, IMapper mapper, int minAmount, String authToken) {
-        String response = getOrderBookForSymbol(symbol, authToken);
-
+    private Token parseOrderBookForSymbol(String symbol, IMapper mapper, int minAmount, String response) {
         return mapper.convertResponseToToken(response, symbol, minAmount);
     }
 
     private List<Token> runParseForOrderBooks(List<String> symbols, int time, int minAmount, String authToken) {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-        List<Future<Token>> futures = new ArrayList<>();
-
+        List<String> urls = new ArrayList<>();
         for (String symbol : symbols) {
-            Future<Token> future = executorService.submit(() -> parseOrderBookForSymbol(symbol, getMapper(), minAmount, authToken));
-            futures.add(future);
-            ThreadUtils.sleepOnTime(time);
+            urls.add(getOrderBookUrlForSymbol(symbol));
         }
+        LogFactory.makeALog("Started making requests");
+        List<HttpResponse<String>> responses = AsyncRequestWithDelay.pollingGetRequest(urls, time, null, null);
+        LogFactory.makeALog("Ending making requests");
 
         List<Token> tokens = new ArrayList<>();
-        for (Future<Token> future : futures) {
-            try {
-                Token token = future.get();
-                tokens.add(token);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+        for(int i = 0; i < responses.size(); i ++) {
+            Token token = parseOrderBookForSymbol(extractSymbolFromLink(urls.get(i)), getMapper(), minAmount, responses.get(i).body());
+            tokens.add(token);
         }
-
-        executorService.shutdown();
-        LogFactory.makeALog("Starting termination");
-        try {
-            executorService.awaitTermination(100, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        LogFactory.makeALog("Ending termination");
 
         return tokens;
     }

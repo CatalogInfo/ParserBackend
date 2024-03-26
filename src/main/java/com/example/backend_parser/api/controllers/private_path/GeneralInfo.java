@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("${base-path}/general_info")
+@RequestMapping("${base-path}/general")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class GeneralInfo {
     @Autowired
